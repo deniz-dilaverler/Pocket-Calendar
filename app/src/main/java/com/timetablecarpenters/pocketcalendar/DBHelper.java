@@ -1,0 +1,53 @@
+package com.timetablecarpenters.pocketcalendar;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import androidx.annotation.Nullable;
+
+public class DBHelper extends SQLiteOpenHelper {
+
+    private static final String EVENTS_TABLE = "events_table";
+    private static final String YEAR = "year";
+    private static final String MONTH = "month";
+    private static final String DAY = "day";
+    private static final String EVENT_TYPE = "event_type";
+    private static final String EVENT_NAME = "event_name";
+    private static final String NOTES = "notes";
+    private static final String LATITUDE = "latitude";
+    private static final String LONGITUDE = "longitude";
+    private static final String NOTIF_TIME = "notification_time";
+
+
+
+    // constructor
+    public DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory) {
+        super(context, "evemts.db", factory, 1);
+    }
+
+    // methods
+    // first time DB is created
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String createTableStatement = "CREATE TABLE " + EVENTS_TABLE + " ( " +
+                YEAR + " INTEGER," +
+                MONTH + " INTEGER, " +
+                DAY + " INTEGER, " +
+                EVENT_TYPE + " TEXT, " +
+                EVENT_NAME + " TEXT," +
+                LONGITUDE + " REAL," +
+                LATITUDE + " REAL," +
+                NOTES + " TEXT);";
+
+        db.execSQL(createTableStatement);
+
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+
+    
+}

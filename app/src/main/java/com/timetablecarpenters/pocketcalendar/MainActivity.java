@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        
+        // DBHelper is not finished yet. Comment out if causes problems
+        DBHelper dbHelper = new DBHelper(MainActivity.this, null, null);
 
 
     }
