@@ -13,7 +13,9 @@
         <activity
             android:name=".DayActivity"
             android:label="@string/title_activity_day"
-            android:theme="@style/Theme.PocketCalendar.NoActionBar"></activity>
+            android:theme="@style/Theme.PocketCalendar.NoActionBar">
+
+        </activity>
         <activity
             android:name=".WeekActivity"
             android:label="@string/title_activity_week"
