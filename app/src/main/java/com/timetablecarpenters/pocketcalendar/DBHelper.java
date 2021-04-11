@@ -51,7 +51,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-    /*
+/*
     public boolean addOne(CalenderEvent event) {
         ContentValues cv = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
@@ -67,15 +67,8 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(NOTIF_TIME, event.getNotifTime());
 
         long insert = db.insert(EVENTS_TABLE, null, cv);
-        if (insert <= 0) {
-            return true;
-        } else {
-            return false;
-        }
-
-        return true;
+        return insert <= 0;
     }
-    */
-
+*/
     
 }
