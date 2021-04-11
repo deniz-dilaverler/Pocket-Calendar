@@ -1,5 +1,6 @@
 package com.timetablecarpenters.pocketcalendar;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -38,7 +39,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 EVENT_NAME + " TEXT," +
                 LONGITUDE + " REAL," +
                 LATITUDE + " REAL," +
-                NOTES + " TEXT);";
+                NOTES + " TEXT, " +
+                NOTIF_TIME + " TEXT);";
+
 
         db.execSQL(createTableStatement);
 
@@ -48,6 +51,31 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+    /*
+    public boolean addOne(CalenderEvent event) {
+        ContentValues cv = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        cv.put(YEAR, event.getYear());
+        cv.put(MONTH, event.getMonth());
+        cv.put(DAY, event.getDay());
+        cv.put(EVENT_TYPE, event.getType());
+        cv.put(EVENT_NAME, event.getName());
+        cv.put(NOTES, event.getNotes());
+        cv.put(LONGITUDE, event.getLogitude());
+        cv.put(LATITUDE, event.getLatitued());
+        cv.put(NOTIF_TIME, event.getNotifTime());
+
+        long insert = db.insert(EVENTS_TABLE, null, cv);
+        if (insert <= 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+    */
 
     
 }

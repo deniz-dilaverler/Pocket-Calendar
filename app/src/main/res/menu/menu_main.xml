@@ -1,10 +1,32 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.timetablecarpenters.pocketcalendar.MainActivity">
+    tools:context="com.timetablecarpenters.pocketcalendar.MonthActivity">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/Upcoming"
+        android:icon="@drawable/outline_view_list_black_24dp"
+        android:orderInCategory="101"
+        android:title="Coming Up"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/About_Devs"
+        android:orderInCategory="102"
+        android:title="About The Devs" />
+    <item
+        android:orderInCategory="103"
+        android:title="Achivements" />
+    <item
+        android:orderInCategory="104"
+        android:title="Customization" />
+    <item
+        android:id="@+id/To_Calender"
+        android:icon="@drawable/outline_calendar_today_black_24dp"
+        android:orderInCategory="105"
+        android:title="Calender"
+        app:showAsAction="ifRoom" />
 </menu>
