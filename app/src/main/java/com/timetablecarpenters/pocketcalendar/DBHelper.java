@@ -31,18 +31,18 @@ public class DBHelper extends SQLiteOpenHelper {
     // first time DB is created
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTableStatement = "CREATE TABLE " + EVENTS_TABLE + " ( " +
+        String createTableStatement = "CREATE TABLE " + EVENTS_TABLE + " ( " +     
                 YEAR + " INTEGER," +
                 MONTH + " INTEGER, " +
                 DAY + " INTEGER, " +
                 EVENT_TYPE + " TEXT, " +
                 EVENT_NAME + " TEXT," +
+
+
                 LONGITUDE + " REAL," +
                 LATITUDE + " REAL," +
                 NOTES + " TEXT, " +
                 NOTIF_TIME + " TEXT);";
-
-
         db.execSQL(createTableStatement);
 
     }
