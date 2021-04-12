@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 
 /**
  * BaseActivity supplies the common functionalities like the menu and the toolbar for the other
- * sub-class activities.
+ * sub-class activities.   AAAAAA :)
  *
  */
 public class BaseActivity extends AppCompatActivity {
