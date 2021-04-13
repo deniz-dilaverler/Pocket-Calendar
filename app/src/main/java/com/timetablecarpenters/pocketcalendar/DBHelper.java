@@ -10,14 +10,14 @@ import androidx.annotation.Nullable;
 
 public class DBHelper extends SQLiteOpenHelper {
 
+    private static final String EVENTS_TABLE = "events_table";
     private static final String YEAR = "year";
     private static final String MONTH = "month";
     private static final String DAY = "day";
-    private static final String EVENTS_TABLE = "events_table";
     private static final String EVENT_TYPE = "event_type";
     private static final String EVENT_NAME = "event_name";
-    private static final String EVENT_START = "event_name";
-    private static final String EVENT_END = "event_name";
+    private static final String EVENT_START = "event_start";
+    private static final String EVENT_END = "event_end";
     private static final String NOTES = "notes";
     private static final String LATITUDE = "latitude";
     private static final String LONGITUDE = "longitude";
@@ -90,20 +90,39 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean checkIsDataAlreadyInDB( CalenderEvent event) {
         SQLiteDatabase db = getReadableDatabase();
 
-        String Query = "Select * from " + EVENTS_TABLE + " where " + YEAR + " = " + event.getYear() + " AND "
+        String query = "Select * from " + EVENTS_TABLE + " where " + YEAR + " = " + event.getYear() + " AND "
                                                                    + MONTH + " = " + event.getMonth() + " AND "
                                                                    + DAY + " = " + event.getDay() + " AND "
                                                                    + EVENT_NAME + " = " + event.getName() + " AND "
                                                                    + EVENT_START + " = " + event.getStart() + " AND "
                                                                    + EVENT_END + " = " + event.getEnd() + " ;"
                 ;
-        Cursor cursor = db.rawQuery(Query, null);
+        Cursor cursor = db.rawQuery(query, null);
         if(cursor.getCount() <= 0){
             cursor.close();
             return false;
         }
         cursor.close();
         return true;
+    }
+
+    /**
+     * retrieves all the events within a givin day interval
+     * @param year
+     * @param month
+     * @param dayFrom
+     * @param dayTo
+     * @return Cursor that houses the data of an event.
+     */
+    public Cursor getEventsInAnInterval(int year, int month, int dayFrom, int dayTo) {
+        String query = "Select * from " + EVENTS_TABLE + " where " + YEAR + " = " + year + " AND "
+                + MONTH + " = " + month + " AND "
+                + DAY + " BETWEEN "  + dayFrom + " AND " + dayTo
+                + " ORDER BY " + DAY + " ;";
+        SQLiteDatabase db = getReadableDatabase();
+
+        return db.rawQuery(query, new String[] {"Year", "Month", "Day", "Event Type", "Event Name", "Event Start", "Event End", "Notes", "Latitued", "Longitude", "Notification"});
+
     }
 
     
