@@ -87,7 +87,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean checkIsDataAlreadyInDB( CalenderEvent event) {
+    public boolean checkIsDataAlreadyInDB(CalenderEvent event) {
         SQLiteDatabase db = getReadableDatabase();
 
         String query = "Select * from " + EVENTS_TABLE + " where " + YEAR + " = " + event.getYear() + " AND "
@@ -104,6 +104,22 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return true;
+    }
+
+    public boolean deleteEvent(CalendarEvent event) {
+        String sqlStatement = "Delete * From " + EVENTS_TABLE + " where " + YEAR + " = " + event.getYear() + " AND "
+                                                                        + MONTH + " = " + event.getMonth() + " AND "
+                                                                        + DAY + " = " + event.getDay() + " AND "
+                                                                        + EVENT_NAME + " = " + event.getName() + " AND "
+                                                                        + EVENT_START + " = " + event.getStart() + " AND "
+                                                                        + EVENT_END + " = " + event.getEnd() + " ;";
+        SQLiteDatabase db = getWritableDatabase();
+         if (!checkIsDataAlreadyInDB(event)) {
+             return false;
+         } else {
+             db.execSQL(sqlStatement);
+             return true;
+         }
     }
 
     /**
@@ -124,6 +140,9 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, new String[] {"Year", "Month", "Day", "Event Type", "Event Name", "Event Start", "Event End", "Notes", "Latitued", "Longitude", "Notification"});
 
     }
+
+
+
 
     
 }
