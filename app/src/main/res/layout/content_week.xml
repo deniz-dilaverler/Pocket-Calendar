@@ -1,6 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"></androidx.constraintlayout.widget.ConstraintLayout>
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <Button
+        android:id="@+id/weekButton"
+        android:layout_width="99dp"
+        android:layout_height="34dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/accent"
+        android:text="Monthly"
+        android:textColor="@color/primary_text"
+        android:textSize="12sp"
+        app:cornerRadius="10dp"
+        app:iconTint="@color/primary"
+        app:layout_constraintBaseline_toBaselineOf="@+id/monthButton"
+        app:layout_constraintEnd_toStartOf="@+id/monthButton" />
+
+    <Button
+        android:id="@+id/dayButton"
+        android:layout_width="99dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/primary"
+        android:text="Daily"
+        android:textColor="@color/primary_text"
+        android:textSize="12sp"
+        app:cornerRadius="10dp"
+        app:iconTint="@color/primary"
+        app:layout_constraintBaseline_toBaselineOf="@+id/monthButton"
+        app:layout_constraintStart_toEndOf="@+id/monthButton" />
+
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textAlignment="center"
+        android:textColor="@color/primary_text"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="May 1 - May 7" />
+
+    <Button
+        android:id="@+id/monthButton"
+        android:layout_width="99dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/primary"
+        android:text="Weekly"
+        android:textColor="@color/primary_text"
+        android:textSize="12sp"
+        app:cornerRadius="10dp"
+        app:iconTint="@color/primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateText" />
+
+    <GridLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:columnCount="1"
+        android:rowCount="7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/monthButton"
+        app:layout_constraintVertical_bias="0.0">
+
+        <include
+            android:id="@+id/monday_row"
+            layout="@layout/week_grid_element"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/tuesday_row"
+            layout="@layout/week_grid_element"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/wednesday_row"
+            layout="@layout/week_grid_element"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/thursday_row"
+            layout="@layout/week_grid_element"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+             />
+
+        <include
+            android:id="@+id/friday_row"
+            layout="@layout/week_grid_element"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/saturday_row"
+            layout="@layout/week_grid_element"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/sunday_row"
+            layout="@layout/week_grid_element"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
