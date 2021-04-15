@@ -62,6 +62,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param event
      * @return row number if event is succesful, -1 if an error has occured, -2 if the event already exists
      */
+    /*
     public long insertEvent(CalenderEvent event) {
         ContentValues cv = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
@@ -121,7 +122,7 @@ public class DBHelper extends SQLiteOpenHelper {
              return true;
          }
     }
-
+*/
     /**
      * retrieves all the events within a givin day interval
      * @param year
