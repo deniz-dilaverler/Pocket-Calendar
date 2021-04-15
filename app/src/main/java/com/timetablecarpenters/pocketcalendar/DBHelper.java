@@ -10,18 +10,18 @@ import androidx.annotation.Nullable;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final String EVENTS_TABLE = "events_table";
-    private static final String YEAR = "year";
-    private static final String MONTH = "month";
-    private static final String DAY = "day";
-    private static final String EVENT_TYPE = "event_type";
-    private static final String EVENT_NAME = "event_name";
-    private static final String EVENT_START = "event_start";
-    private static final String EVENT_END = "event_end";
-    private static final String NOTES = "notes";
-    private static final String LATITUDE = "latitude";
-    private static final String LONGITUDE = "longitude";
-    private static final String NOTIF_TIME = "notification_time";
+    public static final String EVENTS_TABLE = "events_table";
+    public static final String YEAR = "year";
+    public static final String MONTH = "month";
+    public static final String DAY = "day";
+    public static final String EVENT_TYPE = "event_type";
+    public static final String EVENT_NAME = "event_name";
+    public static final String EVENT_START = "event_start";
+    public static final String EVENT_END = "event_end";
+    public static final String NOTES = "notes";
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE = "longitude";
+    public static final String NOTIF_TIME = "notification_time";
 
 
 

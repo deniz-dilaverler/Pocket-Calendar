@@ -1,33 +1,45 @@
 package com.timetablecarpenters.pocketcalendar;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import androidx.annotation.Nullable;
 
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class WeekActivity extends BaseActivity {
-
+    public int[] rowIds = {R.id.monday_row, R.id.tuesday_row, R.id.wednesday_row, R.id.thursday_row, R.id.friday_row, R.id.saturday_row, R.id.sunday_row  };
+    public Calendar startOfWeek;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week);
-        SQLiteOpenHelper dbHelper = new DBHelper(this, "calendar.db", null);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Date monday;
-        Date tuesday;
-        Date wednesday;
-        Date thursday;
-        Date friday;
-        Date saturday;
-        Date sunday;
+        Calendar day;
+        Cursor cursor;
+        if (startOfWeek != null) {
+            startOfWeek = Calendar.getInstance();
+            startOfWeek.set(Calendar.DATE, 1);
+        }
 
-        SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.week_view_list_item,db.getEventsInInterval() );
+        day = startOfWeek.getInstance();
+        DBHelper dbHelper = new DBHelper(this, "calendar.db", null);
+        for(Integer i : rowIds) {
+            cursor = dbHelper.getEventsInAnInterval(day.get(Calendar.YEAR), day.get(Calendar.MONTH),
+                    day.get(Calendar.DAY_OF_MONTH), day.get(Calendar.DAY_OF_MONTH));
+            if (cursor != null ) {
+                ((ListView) findViewById(R.id.week_content).findViewById(i).findViewById(R.id.events_of_day_list)).setAdapter(new weekViewAdapter(this, cursor));
+            }
+            day.add(Calendar.DATE, 1);
+        }
+
+
 
     }
 }

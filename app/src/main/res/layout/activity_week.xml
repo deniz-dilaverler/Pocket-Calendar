@@ -20,6 +20,8 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_week" />
+    <include
+        android:id="@+id/week_content"
+        layout="@layout/content_week" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
