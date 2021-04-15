@@ -14,11 +14,13 @@ import androidx.appcompat.widget.Toolbar;
  *
  */
 public class BaseActivity extends AppCompatActivity {
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
     }
 
 
