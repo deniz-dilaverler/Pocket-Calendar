@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String EVENTS_TABLE = "events_table";
+    public static final String ID = "_id";
     public static final String YEAR = "year";
     public static final String MONTH = "month";
     public static final String DAY = "day";
@@ -35,8 +36,8 @@ public class DBHelper extends SQLiteOpenHelper {
     // first time DB is created
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTableStatement = "CREATE TABLE " + EVENTS_TABLE + " ( " +     
-
+        String createTableStatement = "CREATE TABLE " + EVENTS_TABLE + " ( " +
+                ID + " INTEGER, " +
                 EVENT_TYPE + " TEXT, " +
                 EVENT_NAME + " TEXT," +
                 YEAR + " INTEGER," +
@@ -68,6 +69,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         if (checkIsDataAlreadyInDB(event)) {
+            cv.put(ID, event.getId());
             cv.put(YEAR, event.getYear());
             cv.put(MONTH, event.getMonth());
             cv.put(DAY, event.getDay());
@@ -138,7 +140,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + " ORDER BY " + DAY + " ;";
         SQLiteDatabase db = getReadableDatabase();
 
-        return db.rawQuery(query, new String[] {"Year", "Month", "Day", "Event Type", "Event Name", "Event Start", "Event End", "Notes", "Latitued", "Longitude", "Notification"});
+        return db.rawQuery(query, new String[] {"_Id","Year", "Month", "Day", "Event Type", "Event Name", "Event Start", "Event End", "Notes", "Latitued", "Longitude", "Notification"});
 
     }
 

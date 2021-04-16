@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -15,12 +16,14 @@ import java.util.Calendar;
 
 
 public class WeekActivity extends BaseActivity {
-    public int[] rowIds = {R.id.monday_row, R.id.tuesday_row, R.id.wednesday_row, R.id.thursday_row, R.id.friday_row, R.id.saturday_row, R.id.sunday_row  };
+    private static final String TAG = "WeekActivity";
+    public int[] rowIds = {R.id.monday_row, R.id.tuesday_row, R.id.wednesday_row, R.id.thursday_row, R.id.friday_row, R.id.saturday_row, R.id.sunday_row};
     public Calendar startOfWeek;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week);
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: Starts" );
         Calendar day;
         Cursor cursor;
         if (startOfWeek != null) {

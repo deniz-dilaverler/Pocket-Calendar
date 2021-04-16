@@ -1,20 +1,16 @@
 package com.timetablecarpenters.pocketcalendar;
 
 import android.os.Bundle;
+import android.util.Log;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.view.View;
 
 public class DayActivity extends BaseActivity {
-
+    private static final String TAG = "DayActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day);
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: Starts");
+
     }
 }
