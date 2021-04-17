@@ -2,8 +2,11 @@ package com.timetablecarpenters.pocketcalendar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -14,9 +17,17 @@ import androidx.appcompat.widget.Toolbar;
 /**
  * BaseActivity supplies the common functionalities like the menu and the toolbar for the other
  * sub-class activities.
+ * @author Deniz Mert Dilaverler
+ * @version 17.04.21
  *
  */
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
+    private static final String TAG = "BaseActivity";
+    protected static final String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+    protected static final String[] dateNames = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+    protected static float x1, x2, y1, y2;
+    protected static final float MIN_DISTANCE = 100;
+    protected  GestureDetector gestureDetector;
     
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,7 +41,10 @@ public class BaseActivity extends AppCompatActivity {
         weeklyButton.setOnClickListener(new BaseActivity.ViewChangeClickListener());
         dailyButton.setOnClickListener(new BaseActivity.ViewChangeClickListener());
 
+        this.gestureDetector = new GestureDetector(BaseActivity.this, this);
+
     }
+
 
 
     @Override
@@ -44,7 +58,7 @@ public class BaseActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
+ 
         return super.onOptionsItemSelected(item);
     }
 
@@ -78,7 +92,71 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                y1 = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                y2 = event.getY();
 
+                // horizontal swipe
+                float valueX = x2 - x1;
+                // vertical swipe
+                float valueY = y2 - y1;
 
+                if (Math.abs(valueX) > MIN_DISTANCE) {
+                    // detect left to right swipe
+                    if (x2 > x1) {
+                        rightSwipe();
+                    }
+                    else {
+                        leftSwipe();
+                    }
+                }
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
 
+    public void leftSwipe() {
+        Log.d(TAG, "leftSwipe: ");
+    }
+    public void rightSwipe() {
+        Log.d(TAG, "rightSwipe: ");
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return false;
+    }
 }

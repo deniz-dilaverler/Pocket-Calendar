@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
+/**
+ * @author Deniz Mert Dilaverler
+ * @version 17.04.21
+ */
 public class weekViewAdapter extends CursorAdapter {
     public weekViewAdapter(Context context, Cursor c) {
         super(context, c, 0);

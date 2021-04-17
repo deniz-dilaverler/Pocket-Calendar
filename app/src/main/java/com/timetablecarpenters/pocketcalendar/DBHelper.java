@@ -29,7 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // constructor
     public DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory) {
-        super(context, "evemts.db", factory, 1);
+        super(context, "events.db", factory, 3);
     }
 
     // methods
@@ -134,13 +134,13 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return Cursor that houses the data of an event.
      */
     public Cursor getEventsInAnInterval(int year, int month, int dayFrom, int dayTo) {
-        String query = "Select * from " + EVENTS_TABLE + " where " + YEAR + " = " + year + " AND "
-                + MONTH + " = " + month + " AND "
-                + DAY + " BETWEEN "  + dayFrom + " AND " + dayTo
+        String query = "Select * from " + EVENTS_TABLE + " where " + YEAR + " = ? " + " AND "
+                + MONTH + " = ? " + " AND "
+                + DAY + " BETWEEN "  + " ? " + " AND " + " ? "
                 + " ORDER BY " + DAY + " ;";
         SQLiteDatabase db = getReadableDatabase();
 
-        return db.rawQuery(query, new String[] {"_Id","Year", "Month", "Day", "Event Type", "Event Name", "Event Start", "Event End", "Notes", "Latitued", "Longitude", "Notification"});
+        return db.rawQuery(query, new String[] {year+"", month+"", dayFrom+"", dayTo+"" });
 
     }
 

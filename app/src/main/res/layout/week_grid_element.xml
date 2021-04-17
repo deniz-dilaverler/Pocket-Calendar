@@ -6,7 +6,7 @@
     app:layoutDescription="@xml/week_grid_element_scene">
 
     <TextView
-        android:id="@+id/date_name_text"
+        android:id="@+id/text_date_name"
         android:layout_width="91dp"
         android:layout_height="90dp"
         android:text="Someday" />
@@ -15,8 +15,8 @@
         android:id="@+id/events_of_day_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/date_name_text"
+        android:layout_alignBottom="@+id/text_date_name"
         android:layout_marginLeft="0dp"
         android:layout_marginBottom="0dp"
-        android:layout_toRightOf="@+id/date_name_text" />
+        android:layout_toRightOf="@+id/text_date_name" />
 </RelativeLayout>
