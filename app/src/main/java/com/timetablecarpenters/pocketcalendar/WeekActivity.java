@@ -1,9 +1,13 @@
 package com.timetablecarpenters.pocketcalendar;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,12 +27,12 @@ public class WeekActivity extends BaseActivity {
     public Calendar first;
     TextView dateText;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate: Starts" );
         setContentView(R.layout.activity_week);
         super.onCreate(savedInstanceState);
-        Intent intent;
         Calendar day;
         Calendar last;
         Calendar today;
@@ -69,8 +73,15 @@ public class WeekActivity extends BaseActivity {
                     day.get(Calendar.DAY_OF_MONTH), day.get(Calendar.DAY_OF_MONTH));
             // check if there are any events on that day
             if (cursor.getColumnCount() > 0) {
+                ListView list = row.findViewById(R.id.events_of_day_list);
+                list.setAdapter(new weekViewAdapter(this, cursor));
+                list.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return onTouchEvent(event);
+                    }
 
-                ((ListView) row.findViewById(R.id.events_of_day_list)).setAdapter(new weekViewAdapter(this, cursor));
+                });
             }
             day.add(Calendar.DATE, 1);
         }
@@ -80,20 +91,24 @@ public class WeekActivity extends BaseActivity {
     @Override
     public void leftSwipe() {
         super.leftSwipe();
-        first.add(Calendar.DATE, -7);
+        first.add(Calendar.DATE, 7);
         finish();
-        Intent intent = new Intent(this, Calendar.class);
+        Intent intent = new Intent(this, WeekActivity.class);
         intent.putExtra(INTENT_KEY, first);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override
     public void rightSwipe() {
         super.rightSwipe();
-        first.add(Calendar.DATE, 7);
+        first.add(Calendar.DATE, -7);
         finish();
-        Intent intent = new Intent(this, Calendar.class);
+        Intent intent = new Intent(this, WeekActivity.class);
         intent.putExtra(INTENT_KEY, first);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+
     }
 }

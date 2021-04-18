@@ -94,7 +94,6 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        gestureDetector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 x1 = event.getX();
@@ -111,7 +110,7 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
 
                 if (Math.abs(valueX) > MIN_DISTANCE) {
                     // detect left to right swipe
-                    if (x2 > x1) {
+                    if (valueX > 0) {
                         rightSwipe();
                     }
                     else {
