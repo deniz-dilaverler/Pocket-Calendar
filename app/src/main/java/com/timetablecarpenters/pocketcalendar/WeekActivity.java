@@ -1,5 +1,6 @@
 package com.timetablecarpenters.pocketcalendar;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,9 +8,8 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
 
-import java.sql.RowId;
+
 import java.util.Calendar;
 
 /**
@@ -17,24 +17,29 @@ import java.util.Calendar;
  * @version 17.04.21
  */
 public class WeekActivity extends BaseActivity {
+    private final static String INTENT_KEY = "first_date";
     private static final String TAG = "WeekActivity";
     public int[] rowIds = {R.id.monday_row, R.id.tuesday_row, R.id.wednesday_row, R.id.thursday_row, R.id.friday_row, R.id.saturday_row, R.id.sunday_row};
     public Calendar first;
-    private View content;
     TextView dateText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: Starts" );
         setContentView(R.layout.activity_week);
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: Starts" );
+        Intent intent;
         Calendar day;
         Calendar last;
         Calendar today;
         Cursor cursor;
         String dateString;
+        Bundle extras;
 
-        content = findViewById(R.id.week_content);
+        extras = getIntent().getExtras();
+        if (extras != null)
+            first = (Calendar) extras.get(INTENT_KEY);
+        View content = findViewById(R.id.week_content);
         if (first == null) {
             Log.d(TAG, "onCreate: SA" );
             // set the date
@@ -71,21 +76,24 @@ public class WeekActivity extends BaseActivity {
         }
     }
 
-    
 
     @Override
     public void leftSwipe() {
         super.leftSwipe();
         first.add(Calendar.DATE, -7);
-        Bundle tempBundle = new Bundle();
-        onCreate(tempBundle);
+        finish();
+        Intent intent = new Intent(this, Calendar.class);
+        intent.putExtra(INTENT_KEY, first);
+        startActivity(intent);
     }
 
     @Override
     public void rightSwipe() {
         super.rightSwipe();
         first.add(Calendar.DATE, 7);
-        Bundle tempBundle = new Bundle();
-        onCreate(tempBundle);
+        finish();
+        Intent intent = new Intent(this, Calendar.class);
+        intent.putExtra(INTENT_KEY, first);
+        startActivity(intent);
     }
 }
