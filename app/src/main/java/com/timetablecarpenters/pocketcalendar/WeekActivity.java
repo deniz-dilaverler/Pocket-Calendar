@@ -27,6 +27,11 @@ public class WeekActivity extends BaseActivity {
     public Calendar first;
     TextView dateText;
 
+    /**
+     * Set's up the weekActivity view and its functionalities
+     * calls methods to calculate todays date, change the date, fill the grid elements
+     * @param savedInstanceState
+     */
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +92,9 @@ public class WeekActivity extends BaseActivity {
         }
     }
 
-
+    /**
+     * when a leftSwipe is notifed by the super class adds a week to the date of weekView and refreshes the activity
+     */
     @Override
     public void leftSwipe() {
         super.leftSwipe();
@@ -99,6 +106,9 @@ public class WeekActivity extends BaseActivity {
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
+    /**
+     * when a rightSwipe is notifed by the super class subtracts a week from the date of weekView and refreshes the activity
+     */
     @Override
     public void rightSwipe() {
         super.rightSwipe();

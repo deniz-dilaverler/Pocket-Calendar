@@ -28,7 +28,13 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
     protected static float x1, x2, y1, y2;
     protected static final float MIN_DISTANCE = 100;
     protected  GestureDetector gestureDetector;
-    
+
+    /**
+     * assigns the buttons as variables and assigns a clickListener on to them
+     * initializes a GestureDetector to detect swiping functions
+     * initializes the toolbar at the top
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +52,11 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
     }
 
 
-
+    /**
+     * listens to the inputs of the menu items
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -62,6 +72,11 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * creates the menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -69,7 +84,14 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         return true;
     }
 
+    /**
+     * ClickListener that checks for "Monthly" , "Daily" , "Weekly" button clicks
+     */
     public class ViewChangeClickListener implements View.OnClickListener {
+        /**
+         * when clicked creates an intent of the desired activity and starts the activity
+         * @param v
+         */
         @Override
         public void onClick(View v) {
             Intent intent;
@@ -92,6 +114,14 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         }
     }
 
+    /**
+     * called when a click is registered
+     * if the click travels enough distance to be registered as a swipe
+     * depending on the direction swipe methods are called. These methods don't have a function in this class
+     * however they can be overridden for various uses
+     * @param event
+     * @return
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
@@ -122,13 +152,21 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         return super.onTouchEvent(event);
     }
 
+    /**
+     * Override to add functionality
+     */
     public void leftSwipe() {
         Log.d(TAG, "leftSwipe: ");
     }
+
+    /**
+     * override to add functionality
+     */
     public void rightSwipe() {
         Log.d(TAG, "rightSwipe: ");
     }
 
+    // these methods are a part of the OngestureListener interface and currently has no uses
     @Override
     public boolean onDown(MotionEvent e) {
         return false;
