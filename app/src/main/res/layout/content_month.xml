@@ -4,122 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    <GridLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        android:columnCount="1"
-        android:rowCount="7"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weekly_button">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="29dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView14"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="MON"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="TUE"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/textView16"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="WED"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/textView17"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="THU"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/textView18"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="FRI"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/textView19"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="SAT"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="SUN"
-                android:textAlignment="center" />
-        </LinearLayout>
-
-        <include
-            android:id="@+id/week1_row"
-            layout="@layout/month_view_list_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <include
-            android:id="@+id/week2_row"
-            layout="@layout/month_view_list_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <include
-            android:id="@+id/week3_row"
-            layout="@layout/month_view_list_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <include
-            android:id="@+id/week4_row"
-            layout="@layout/month_view_list_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <include
-            android:id="@+id/week5_row"
-            layout="@layout/month_view_list_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <include
-            android:id="@+id/week6_row"
-            layout="@layout/month_view_list_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </GridLayout>
+    app:flow_horizontalAlign="center"
+    app:flow_horizontalStyle="packed">
 
     <TextView
         android:id="@+id/dateText"
@@ -166,6 +52,124 @@
         app:layout_constraintEnd_toStartOf="@+id/weekly_button"
         app:layout_constraintHorizontal_bias="0.884"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/month_view_rows"
+        android:layout_width="0dp"
+        android:layout_height="625dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:divider="?android:dividerVertical"
+        android:dividerPadding="2dp"
+        android:orientation="vertical"
+        android:showDividers="middle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weekly_button">
+
+        <LinearLayout
+            android:id="@+id/days_row"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:divider="?android:dividerHorizontal"
+            android:dividerPadding="2dp"
+            android:orientation="horizontal"
+            android:showDividers="middle"
+            android:textAlignment="center">
+
+            <TextView
+                android:id="@+id/monday"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="MON"
+                android:textAlignment="inherit" />
+
+            <TextView
+                android:id="@+id/textView13y"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="TUE"
+                android:textAlignment="inherit" />
+
+            <TextView
+                android:id="@+id/wednesday"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="WED"
+                android:textAlignment="inherit" />
+
+            <TextView
+                android:id="@+id/thursday"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="THU"
+                android:textAlignment="inherit" />
+
+            <TextView
+                android:id="@+id/friday"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="FRI"
+                android:textAlignment="inherit" />
+
+            <TextView
+                android:id="@+id/saturday"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="SAT"
+                android:textAlignment="inherit" />
+
+            <TextView
+                android:id="@+id/sunday"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="SUN"
+                android:textAlignment="inherit" />
+        </LinearLayout>
+
+        <include
+            android:id="@+id/week1_row"
+            layout="@layout/month_view_list_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/week2_row"
+            layout="@layout/month_view_list_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/week3_row"
+            layout="@layout/month_view_list_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/week4_row"
+            layout="@layout/month_view_list_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/week5_row"
+            layout="@layout/month_view_list_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            layout="@layout/month_view_list_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

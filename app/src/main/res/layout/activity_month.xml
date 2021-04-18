@@ -20,6 +20,11 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_month" />
+    <include
+        android:id="@+id/month_content"
+        layout="@layout/content_month"
+        android:layout_width="match_parent"
+        android:layout_height="677dp"
+        android:layout_gravity="bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
