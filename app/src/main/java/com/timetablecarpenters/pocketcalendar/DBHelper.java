@@ -137,7 +137,9 @@ public class DBHelper extends SQLiteOpenHelper {
         String query = "Select * from " + EVENTS_TABLE + " where " + YEAR + " = ? " + " AND "
                 + MONTH + " = ? " + " AND "
                 + DAY + " BETWEEN "  + " ? " + " AND " + " ? "
-                + " ORDER BY " + DAY + " ;";
+                + " ORDER BY " + DAY + " ASC, "
+                + EVENT_START + " ASC, "
+                + EVENT_END + " ASC;" ;
         SQLiteDatabase db = getReadableDatabase();
 
         return db.rawQuery(query, new String[] {year+"", month+"", dayFrom+"", dayTo+"" });

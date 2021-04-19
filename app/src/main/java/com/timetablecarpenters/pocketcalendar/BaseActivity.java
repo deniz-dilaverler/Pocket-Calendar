@@ -64,11 +64,17 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        Intent intent = null;
+        switch (id) {
+            case R.id.To_Calender:
+                intent = new Intent(this, MonthActivity.class);
+                break;
+
         }
- 
+
+        if (intent != null) {
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
