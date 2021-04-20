@@ -1,12 +1,10 @@
 package com.timetablecarpenters.pocketcalendar;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
@@ -74,12 +72,11 @@ public class WeekActivity extends BaseActivity {
             View row = content.findViewById(rowIds[i]);
             ((TextView) row.findViewById(R.id.text_date_name)).setText(dateNames[i]);
             Log.d(TAG, "onCreate: day = " + day.get(Calendar.YEAR)+ " "+ day.get(Calendar.MONTH)+ " " + day.get(Calendar.DAY_OF_MONTH));
-            cursor = dbHelper.getEventsInAnInterval(day.get(Calendar.YEAR), day.get(Calendar.MONTH),
-                    day.get(Calendar.DAY_OF_MONTH), day.get(Calendar.DAY_OF_MONTH));
+            cursor = dbHelper.getEventsInAnInterval(day, day);
             // check if there are any events on that day
             if (cursor.getColumnCount() > 0) {
                 ListView list = row.findViewById(R.id.events_of_day_list);
-                list.setAdapter(new weekViewAdapter(this, cursor));
+                list.setAdapter(new WeekViewAdapter(this, cursor));
                 list.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {

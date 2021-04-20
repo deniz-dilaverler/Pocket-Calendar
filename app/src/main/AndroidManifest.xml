@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PocketCalendar">
         <activity
-            android:name=".upcoming_events"
+            android:name=".UpcomingEvents"
             android:label="@string/title_activity_upcoming_events"
             android:theme="@style/Theme.PocketCalendar.NoActionBar"></activity>
         <activity

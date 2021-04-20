@@ -28,6 +28,7 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
     protected static float x1, x2, y1, y2;
     protected static final float MIN_DISTANCE = 100;
     protected  GestureDetector gestureDetector;
+    protected Toolbar toolbar;
 
     /**
      * assigns the buttons as variables and assigns a clickListener on to them
@@ -38,14 +39,16 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Button monthlyButton = findViewById(R.id.monthly_button);
-        Button weeklyButton = findViewById(R.id.weekly_button);
-        Button dailyButton = findViewById(R.id.daily_button);
-        monthlyButton.setOnClickListener(new BaseActivity.ViewChangeClickListener());
-        weeklyButton.setOnClickListener(new BaseActivity.ViewChangeClickListener());
-        dailyButton.setOnClickListener(new BaseActivity.ViewChangeClickListener());
+        if (findViewById(R.id.monthly_button) != null) {
+            Button monthlyButton = findViewById(R.id.monthly_button);
+            Button weeklyButton = findViewById(R.id.weekly_button);
+            Button dailyButton = findViewById(R.id.daily_button);
+            monthlyButton.setOnClickListener(new BaseActivity.ViewChangeClickListener());
+            weeklyButton.setOnClickListener(new BaseActivity.ViewChangeClickListener());
+            dailyButton.setOnClickListener(new BaseActivity.ViewChangeClickListener());
+        }
 
         this.gestureDetector = new GestureDetector(BaseActivity.this, this);
 
@@ -66,10 +69,12 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
 
         Intent intent = null;
         switch (id) {
-            case R.id.To_Calender:
+            case R.id.to_calender:
                 intent = new Intent(this, MonthActivity.class);
                 break;
-
+            case R.id.upcoming:
+                intent = new Intent(this, UpcomingEvents.class);
+                break;
         }
 
         if (intent != null) {
