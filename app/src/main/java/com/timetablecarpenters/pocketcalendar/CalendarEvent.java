@@ -45,8 +45,8 @@ public class CalendarEvent {
         this.color = color;
         eventStart = Calendar.getInstance();
         eventEnd = Calendar.getInstance();
-        this.eventStart.set( day, month, year, startingHour, startingMinute, 0);
-        this.eventEnd.set( day, month, year, endingHour, endingMinute, 0);
+        this.eventStart.set( year, month, day, startingHour, startingMinute, 0);
+        this.eventEnd.set( year, month, day, endingHour, endingMinute, 0);
         this.color = color;
         this.notifTime = notifTime;
         this.notes = notes;
@@ -119,16 +119,16 @@ public class CalendarEvent {
         return year;
     }
 
+    public void setYear(int year) {
+        this.year = year;
+    }
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
     }
 
     public String getType() {

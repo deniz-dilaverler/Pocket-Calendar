@@ -82,8 +82,8 @@ public class DBHelper extends SQLiteOpenHelper {
             cv.put(EVENT_TYPE, event.getType());
             cv.put(EVENT_NAME, event.getName());
             cv.put(NOTES, event.getNotes());
-            cv.put(LONGITUDE, event.getLogitude());
-            cv.put(LATITUDE, event.getLatitued());
+            cv.put(LONGITUDE, event.getLongitude());
+            cv.put(LATITUDE, event.getLatitude());
             cv.put(NOTIF_TIME, event.getNotifTime());
             cv.put(EVENT_START, event.getEventStart());
             cv.put(EVENT_END, event.getEventEnd());
