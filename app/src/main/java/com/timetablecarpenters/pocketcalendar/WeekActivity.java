@@ -61,7 +61,7 @@ public class WeekActivity extends BaseActivity {
         last = (Calendar) first.clone();
         last.add(Calendar.DAY_OF_YEAR, 6);
 
-        dateText = findViewById(R.id.dateText);
+        dateText = (TextView) findViewById(R.id.dateText);
         dateString = monthNames[first.get(Calendar.MONTH)] + " " + first.get(Calendar.DATE) + "  -  " +
                 monthNames[last.get(Calendar.MONTH)] + " " + last.get(Calendar.DATE);
         dateText.setText(dateString);

@@ -14,8 +14,6 @@ public class MonthActivity extends BaseActivity {
         Log.d(TAG, "onCreate: starts");
         super.onCreate(savedInstanceState);
 
-
-
     }
 
 
