@@ -1,13 +1,14 @@
 package com.timetablecarpenters.pocketcalendar;
 
 import android.location.Location;
+import 	java.util.Calendar;
 
 
 /**
  * @author Elifsena Öz
  * @version 20.04.2021
  */
-public abstract class CalendarEvent {
+public class CalendarEvent {
     protected int day;
     protected int month;
     protected int year;
@@ -15,15 +16,47 @@ public abstract class CalendarEvent {
     protected String type;
     protected String name;
     protected String color;
-    protected String eventStart;
-    protected String eventEnd;
+    protected Calendar eventStart;
+    protected Calendar eventEnd;
     protected String notifTime;
     protected StringBuffer notes;
     protected boolean hasNotification;
 
-    public CalendarEvent() {
+    public CalendarEvent(int day, int month, int year, int startingHour, int startingMinute, String id, String type, String name,
+                         int endingHour, int endingMinute, String color, String notifTime,StringBuffer notes)
+    {
+        this.day = day;
+        this.month = month;
+        this.year = year;
+        this.id = id;
+        this.type = type;
+        this.name = name;
+        this.color = color;
+        this.eventStart.set( day, month, year, startingHour, startingMinute, 0);
+        this.eventEnd.set( day, month, year, endingHour, endingMinute, 0);
+        this.color = color;
+        this.notifTime = notifTime;
+        this.notes = notes;
 
     }
+    public CalendarEvent(int day, int month, int year, Calendar eventStart, String id, String type, String name,
+                        Calendar eventEnd, String color, String notifTime,StringBuffer notes)
+    {
+        this.day = day;
+        this.month = month;
+        this.year = year;
+        this.id = id;
+        this.type = type;
+        this.name = name;
+        this.color = color;
+        this.eventStart = eventStart;
+        this.eventEnd = eventEnd;
+        this.color = color;
+        this.notifTime = notifTime;
+        this.notes = notes;
+
+    }
+
 
     public void setNotification() {}
 
@@ -83,19 +116,19 @@ public abstract class CalendarEvent {
         this.color = color;
     }
 
-    public String getEventStart() {
+    public Calendar getEventStart() {
         return eventStart;
     }
 
-    public void setEventStart(String eventStart) {
+    public void setEventStart(Calendar eventStart) {
         this.eventStart = eventStart;
     }
 
-    public String getEventEnd() {
+    public Calendar getEventEnd() {
         return eventEnd;
     }
 
-    public void setEventEnd(String eventEnd) {
+    public void setEventEnd(Calendar eventEnd) {
         this.eventEnd = eventEnd;
     }
 
