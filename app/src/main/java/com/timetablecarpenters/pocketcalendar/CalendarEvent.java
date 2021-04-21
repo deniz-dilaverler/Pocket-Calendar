@@ -32,6 +32,8 @@ public class CalendarEvent {
         this.type = type;
         this.name = name;
         this.color = color;
+        eventStart = Calendar.getInstance();
+        eventEnd = Calendar.getInstance();
         this.eventStart.set( day, month, year, startingHour, startingMinute, 0);
         this.eventEnd.set( day, month, year, endingHour, endingMinute, 0);
         this.color = color;
@@ -49,6 +51,8 @@ public class CalendarEvent {
         this.type = type;
         this.name = name;
         this.color = color;
+        eventStart = Calendar.getInstance();
+        eventEnd = Calendar.getInstance();
         this.eventStart = eventStart;
         this.eventEnd = eventEnd;
         this.color = color;

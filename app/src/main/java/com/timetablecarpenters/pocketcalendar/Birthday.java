@@ -18,6 +18,6 @@ public class Birthday extends CalendarEvent{
     public void setGiftBought(boolean giftBought) {
         this.giftBought = giftBought;
     }
-    
+
 
 }
