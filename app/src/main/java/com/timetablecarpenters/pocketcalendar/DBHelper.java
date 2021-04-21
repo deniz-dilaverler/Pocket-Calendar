@@ -5,10 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.time.Month;
+import java.util.Calendar;
+
 public class DBHelper extends SQLiteOpenHelper {
+    public static String DB_NAME = "events.db";
+    private static final String TAG = "DBHelper";
 
     public static final String EVENTS_TABLE = "events_table";
     public static final String ID = "_id";
@@ -29,7 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // constructor
     public DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory) {
-        super(context, "events.db", factory, 3);
+        super(context, name, factory, 3);
     }
 
     // methods
@@ -63,7 +69,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param event
      * @return row number if event is succesful, -1 if an error has occured, -2 if the event already exists
      */
-    /*
+/*
     public long insertEvent(CalenderEvent event) {
         ContentValues cv = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
@@ -126,21 +132,49 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 */
     /**
-     * retrieves all the events within a givin day interval
-     * @param year
-     * @param month
-     * @param dayFrom
-     * @param dayTo
+     * retrieves all the events within a given day interval
+     * don't pass the dates being 2 months apart
+     * @param from
+     * @Param to
      * @return Cursor that houses the data of an event.
      */
-    public Cursor getEventsInAnInterval(int year, int month, int dayFrom, int dayTo) {
-        String query = "Select * from " + EVENTS_TABLE + " where " + YEAR + " = ? " + " AND "
-                + MONTH + " = ? " + " AND "
-                + DAY + " BETWEEN "  + " ? " + " AND " + " ? "
-                + " ORDER BY " + DAY + " ;";
-        SQLiteDatabase db = getReadableDatabase();
+    public Cursor getEventsInAnInterval(Calendar from, Calendar to) {
+        String queryStart = "Select * from " + EVENTS_TABLE + " where ";
+        String queryMiddle;
 
-        return db.rawQuery(query, new String[] {year+"", month+"", dayFrom+"", dayTo+"" });
+        if (to.getTime().getTime() - from.getTime().getTime() < 0)
+            return null;
+        // if both are in the same month
+        else if (from.get(Calendar.MONTH) == to.get(Calendar.MONTH)) {
+            queryMiddle = YEAR + " =  " + to.get(Calendar.YEAR) + " AND "
+                + MONTH + " = " + to.get(Calendar.MONTH) + " AND "
+                + DAY + " BETWEEN "  + from.get(Calendar.DATE) + " AND " + to.get(Calendar.DATE);
+            Log.d(TAG, "getEventsInAnInterval: On the same month");
+        }
+        // if in consecutive months
+        else {
+            queryMiddle = YEAR + " =  " + from.get(Calendar.YEAR) + " AND "
+                    + MONTH + " = " + from.get(Calendar.MONTH) + " AND "
+                    + DAY + " BETWEEN "  + from.get(Calendar.DATE) + " AND " + 31 + " OR " +
+                     YEAR + " =  " + to.get(Calendar.YEAR) + " AND "
+                    + MONTH + " = " + to.get(Calendar.MONTH) + " AND "
+                    + DAY + " BETWEEN "  + 1 + " AND " + to.get(Calendar.DATE);
+            Log.d(TAG, "getEventsInAnInterval: Not on the same month");
+        }
+
+
+
+        String orderStatement = " ORDER BY "
+                + YEAR + " ASC, "
+                + MONTH + " ASC, "
+                + DAY + " ASC, "
+                + EVENT_START + " ASC, "
+                + EVENT_END + " ASC;" ;
+        SQLiteDatabase db = getReadableDatabase();
+        String query = queryStart + queryMiddle + orderStatement;
+        Log.d(TAG, "getEventsInAnInterval: SQL statement: " + query);
+
+        return db.rawQuery(query, new String[] {});
 
     }
 

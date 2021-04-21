@@ -8,7 +8,7 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
-        android:id="@+id/Upcoming"
+        android:id="@+id/upcoming"
         android:icon="@drawable/outline_view_list_black_24dp"
         android:orderInCategory="101"
         android:title="Coming Up"
@@ -24,7 +24,7 @@
         android:orderInCategory="104"
         android:title="Customization" />
     <item
-        android:id="@+id/To_Calender"
+        android:id="@+id/to_calender"
         android:icon="@drawable/outline_calendar_today_black_24dp"
         android:orderInCategory="105"
         android:title="Calender"

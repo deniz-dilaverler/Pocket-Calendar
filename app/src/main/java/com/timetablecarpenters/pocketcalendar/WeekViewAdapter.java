@@ -9,19 +9,33 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 /**
+ * Takes a Cursor from the DB and inflates the elements of a list with the data
  * @author Deniz Mert Dilaverler
  * @version 17.04.21
  */
-public class weekViewAdapter extends CursorAdapter {
-    public weekViewAdapter(Context context, Cursor c) {
+public class WeekViewAdapter extends CursorAdapter {
+    public WeekViewAdapter(Context context, Cursor c) {
         super(context, c, 0);
     }
 
+    /**
+     * inflates an empty list element for the adapter to fill
+     * @param context
+     * @param cursor
+     * @param parent
+     * @return
+     */
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.week_view_list_item, parent, false );
     }
 
+    /**
+     * extracts the data out of the cursor and fills the inflated listElement with it
+     * @param view
+     * @param context
+     * @param cursor
+     */
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView timeText = (TextView) view.findViewById(R.id.time_text);
@@ -31,7 +45,7 @@ public class weekViewAdapter extends CursorAdapter {
 
         timeTextString = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_START));
         eventEndString = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_END));
-        if (eventEndString == null || eventEndString.equalsIgnoreCase(timeTextString)) {
+        if (eventEndString != null && !eventEndString.equalsIgnoreCase(timeTextString)) {
             timeTextString = timeTextString + " - " + eventEndString;
         }
         timeText.setText(timeTextString);
