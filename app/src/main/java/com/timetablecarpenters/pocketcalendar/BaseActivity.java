@@ -28,25 +28,38 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
     protected static float x1, x2, y1, y2;
     protected static final float MIN_DISTANCE = 100;
     protected  GestureDetector gestureDetector;
-    
+    protected Toolbar toolbar;
+
+    /**
+     * assigns the buttons as variables and assigns a clickListener on to them
+     * initializes a GestureDetector to detect swiping functions
+     * initializes the toolbar at the top
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Button monthlyButton = findViewById(R.id.monthly_button);
-        Button weeklyButton = findViewById(R.id.weekly_button);
-        Button dailyButton = findViewById(R.id.daily_button);
-        monthlyButton.setOnClickListener(new BaseActivity.ViewChangeClickListener());
-        weeklyButton.setOnClickListener(new BaseActivity.ViewChangeClickListener());
-        dailyButton.setOnClickListener(new BaseActivity.ViewChangeClickListener());
+        if (findViewById(R.id.monthly_button) != null) {
+            Button monthlyButton = findViewById(R.id.monthly_button);
+            Button weeklyButton = findViewById(R.id.weekly_button);
+            Button dailyButton = findViewById(R.id.daily_button);
+            monthlyButton.setOnClickListener(new BaseActivity.ViewChangeClickListener());
+            weeklyButton.setOnClickListener(new BaseActivity.ViewChangeClickListener());
+            dailyButton.setOnClickListener(new BaseActivity.ViewChangeClickListener());
+        }
 
         this.gestureDetector = new GestureDetector(BaseActivity.this, this);
 
     }
 
 
-
+    /**
+     * listens to the inputs of the menu items
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -54,14 +67,27 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        Intent intent = null;
+        switch (id) {
+            case R.id.to_calender:
+                intent = new Intent(this, MonthActivity.class);
+                break;
+            case R.id.upcoming:
+                intent = new Intent(this, UpcomingEvents.class);
+                break;
         }
- 
+
+        if (intent != null) {
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * creates the menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -69,7 +95,14 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         return true;
     }
 
+    /**
+     * ClickListener that checks for "Monthly" , "Daily" , "Weekly" button clicks
+     */
     public class ViewChangeClickListener implements View.OnClickListener {
+        /**
+         * when clicked creates an intent of the desired activity and starts the activity
+         * @param v
+         */
         @Override
         public void onClick(View v) {
             Intent intent;
@@ -92,9 +125,16 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         }
     }
 
+    /**
+     * called when a click is registered
+     * if the click travels enough distance to be registered as a swipe
+     * depending on the direction swipe methods are called. These methods don't have a function in this class
+     * however they can be overridden for various uses
+     * @param event
+     * @return
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        gestureDetector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 x1 = event.getX();
@@ -111,7 +151,7 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
 
                 if (Math.abs(valueX) > MIN_DISTANCE) {
                     // detect left to right swipe
-                    if (x2 > x1) {
+                    if (valueX > 0) {
                         rightSwipe();
                     }
                     else {
@@ -123,13 +163,21 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         return super.onTouchEvent(event);
     }
 
+    /**
+     * Override to add functionality
+     */
     public void leftSwipe() {
         Log.d(TAG, "leftSwipe: ");
     }
+
+    /**
+     * override to add functionality
+     */
     public void rightSwipe() {
         Log.d(TAG, "rightSwipe: ");
     }
 
+    // these methods are a part of the OngestureListener interface and currently has no uses
     @Override
     public boolean onDown(MotionEvent e) {
         return false;
