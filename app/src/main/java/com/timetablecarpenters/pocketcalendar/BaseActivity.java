@@ -21,7 +21,6 @@ import androidx.appcompat.widget.Toolbar;
  * @version 17.04.21
  *
  */
-// hi bitches
 public class BaseActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
     private static final String TAG = "BaseActivity";
     protected static final String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
