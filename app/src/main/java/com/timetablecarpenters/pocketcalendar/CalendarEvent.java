@@ -12,6 +12,8 @@ public class CalendarEvent {
     protected int day;
     protected int month;
     protected int year;
+    protected String latitude;
+    protected String longitude;
     protected String id;
     protected String type;
     protected String name;
@@ -22,8 +24,17 @@ public class CalendarEvent {
     protected StringBuffer notes;
     protected boolean hasNotification;
 
-    public CalendarEvent(int day, int month, int year, int startingHour, int startingMinute, String id, String type, String name,
-                         int endingHour, int endingMinute, String color, String notifTime,StringBuffer notes)
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public CalendarEvent(int day, int month, int year, int startingHour, int startingMinute, String id,
+                         String type, String name, int endingHour, int endingMinute, String color,
+                         String notifTime, StringBuffer notes, String latitude, String longitude )
     {
         this.day = day;
         this.month = month;
@@ -39,6 +50,8 @@ public class CalendarEvent {
         this.color = color;
         this.notifTime = notifTime;
         this.notes = notes;
+        this.latitude = latitude;
+        this.longitude = longitude;
 
     }
     public CalendarEvent(int day, int month, int year, Calendar eventStart, String id, String type, String name,
