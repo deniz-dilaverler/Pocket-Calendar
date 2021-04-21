@@ -1,5 +1,14 @@
 package com.timetablecarpenters.pocketcalendar;
 
+import android.location.Location;
+import 	java.util.Calendar;
+
+
+/**
+ * @author Yarkın Sakıncı
+ * @version 21.04.2021
+ */
+
 public class Birthday extends CalendarEvent{
     boolean giftBought;
 

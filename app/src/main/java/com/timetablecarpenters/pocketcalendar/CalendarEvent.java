@@ -5,8 +5,8 @@ import 	java.util.Calendar;
 
 
 /**
- * @author Elifsena Öz
- * @version 20.04.2021
+ * @author Yarkın Sakıncı
+ * @version 21.04.2021
  */
 public class CalendarEvent {
     protected int day;
@@ -71,6 +71,28 @@ public class CalendarEvent {
         this.color = color;
         this.notifTime = notifTime;
         this.notes = notes;
+
+    }
+    public CalendarEvent(int day, int month, int year, int dueHour, int dueMinute, String id,
+                         String type, String name, String color,
+                         String notifTime, StringBuffer notes, String latitude, String longitude )
+    {
+        this.day = day;
+        this.month = month;
+        this.year = year;
+        this.id = id;
+        this.type = type;
+        this.name = name;
+        this.color = color;
+        eventStart = Calendar.getInstance();
+        eventEnd = Calendar.getInstance();
+        this.eventStart.set( day, month, year, dueHour, dueMinute, 0);
+        this.eventEnd.set( day, month, year, dueHour, dueMinute, 0);
+        this.color = color;
+        this.notifTime = notifTime;
+        this.notes = notes;
+        this.latitude = latitude;
+        this.longitude = longitude;
 
     }
 
