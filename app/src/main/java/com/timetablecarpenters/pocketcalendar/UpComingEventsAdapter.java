@@ -2,6 +2,7 @@ package com.timetablecarpenters.pocketcalendar;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +11,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
-import org.w3c.dom.Text;
-
-import java.time.Month;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 public class UpComingEventsAdapter extends CursorAdapter {
+    private static final String TAG = "UpComingEventsAdapter";
     final static int MAX_DAYS = 14;
     Calendar today;
 
@@ -34,11 +33,12 @@ public class UpComingEventsAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         View cardViewContents = view.findViewById(R.id.cardview_content);
-        TextView dateText = (TextView) cardViewContents.findViewById(R.id.dateText);
-        TextView timeText = (TextView) cardViewContents.findViewById(R.id.time_text);
-        TextView remainingTimeText = (TextView) cardViewContents.findViewById(R.id.remaining_text);
-        TextView eventDescText = (TextView) cardViewContents.findViewById(R.id.event_desc_text);
-        ProgressBar progressBar = (ProgressBar) cardViewContents.findViewById(R.id.progressBar);
+
+        TextView dateText =  cardViewContents.findViewById(R.id.date_text);
+        TextView timeText =  cardViewContents.findViewById(R.id.hour_text);
+        TextView remainingTimeText = cardViewContents.findViewById(R.id.remaining_text);
+        TextView eventDescText =  cardViewContents.findViewById(R.id.event_desc_text);
+        ProgressBar progressBar = cardViewContents.findViewById(R.id.progressBar);
 
         String startTime = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_START));
         String endTime = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_END));
@@ -72,7 +72,7 @@ public class UpComingEventsAdapter extends CursorAdapter {
             remainingTimeTextString = minuteDifference + " Minutes";
         else
             remainingTimeTextString = "Event Passed!";
-
+        remainingTimeText.setText(remainingTimeTextString);
         Calendar max = (Calendar) today.clone();
         max.add(Calendar.DATE, MAX_DAYS + 1);
         max.set(Calendar.HOUR, 0);
@@ -82,6 +82,7 @@ public class UpComingEventsAdapter extends CursorAdapter {
         int todayToMax =  (int) TimeUnit.MINUTES.convert(max.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS);
         progressBar.setMax(todayToMax);
         progressBar.setProgress(todayToMax - minuteDifference);
+        Log.d(TAG, "bindView: Yeah Boiii");
 
 
 

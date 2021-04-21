@@ -67,11 +67,11 @@ public class WeekActivity extends BaseActivity {
         dateText.setText(dateString);
 
         day = (Calendar) first.clone();
-        DBHelper dbHelper = new DBHelper(this, "calendar.db", null);
+        DBHelper dbHelper = new DBHelper(this, DBHelper.DB_NAME, null);
         for(int i = 0 ; i < 7 ; i++) {
             View row = content.findViewById(rowIds[i]);
             ((TextView) row.findViewById(R.id.text_date_name)).setText(dateNames[i]);
-            Log.d(TAG, "onCreate: day = " + day.get(Calendar.YEAR)+ " "+ day.get(Calendar.MONTH)+ " " + day.get(Calendar.DAY_OF_MONTH));
+            Log.d(TAG, "onCreate: day = " + day.get(Calendar.YEAR)+ " " + day.get(Calendar.MONTH)+ " " + day.get(Calendar.DAY_OF_MONTH));
             cursor = dbHelper.getEventsInAnInterval(day, day);
             // check if there are any events on that day
             if (cursor.getColumnCount() > 0) {
