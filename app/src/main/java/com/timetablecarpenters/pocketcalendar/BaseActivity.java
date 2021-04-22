@@ -76,6 +76,8 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
             case R.id.upcoming:
                 intent = new Intent(this, UpcomingEvents.class);
                 break;
+            case R.id.action_settings:
+                intent = new Intent(this, SettingsActivity.class);
         }
 
         if (intent != null) {

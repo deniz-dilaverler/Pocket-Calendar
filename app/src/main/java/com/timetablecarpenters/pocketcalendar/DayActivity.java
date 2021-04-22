@@ -42,7 +42,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(DayActivity.this, "YAZILIM ÖĞEREN", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DayActivity.this, "YAZILIM ÖĞREN", Toast.LENGTH_SHORT).show();
                 openDialog();
             }
         });
