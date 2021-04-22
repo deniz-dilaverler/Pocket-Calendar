@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.ListView;
@@ -16,10 +17,12 @@ import android.widget.ListView;
 import java.util.Calendar;
 
 public class UpcomingEvents extends BaseActivity {
+    private static final String TAG = "UpcomingEvents";
     Calendar today;
     final int TOTAL_DAYS = 14;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: Starts");
         setContentView(R.layout.activity_upcoming_events);
         super.onCreate(savedInstanceState);
         toolbar.setTitle("Upcoming");
