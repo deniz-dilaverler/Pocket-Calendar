@@ -36,6 +36,7 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
      * initializes the toolbar at the top
      * @param savedInstanceState
      */
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

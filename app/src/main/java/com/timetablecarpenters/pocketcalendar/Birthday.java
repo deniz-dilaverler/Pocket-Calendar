@@ -15,7 +15,7 @@ public class Birthday extends CalendarEvent{
     public Birthday (int day, int month, int year, String id, String type, String name, int endingHour, int endingMinute,
                      String color, String notifTime, StringBuffer notes, boolean giftBought, String latitude, String longitude )
     {
-        super (year, month, day, 0, 0, id,  type, name,
+        super (day, month, year, 0, 0, id,  type, name,
                 23, 59 , color, notifTime, notes, latitude, longitude);
         this.giftBought = giftBought;
     }
