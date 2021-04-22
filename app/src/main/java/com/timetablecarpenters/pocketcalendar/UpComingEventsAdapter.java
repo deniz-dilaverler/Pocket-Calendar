@@ -48,7 +48,7 @@ public class UpComingEventsAdapter extends CursorAdapter {
         String title = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_NAME));
         String eventType = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_TYPE));
 
-        String dateTextString = String.format("%d.%d.%d.", day, month, year);
+        String dateTextString = String.format("%d.%d.%d", day, month, year);
         dateText.setText(dateTextString);
 
         String timeTextString = startTime;
@@ -64,10 +64,11 @@ public class UpComingEventsAdapter extends CursorAdapter {
         eventDate.set(year, month, day, Integer.parseInt(startTime.substring(0, 2)), Integer.parseInt(startTime.substring(3)));
         int minuteDifference = (int) TimeUnit.MINUTES.convert(eventDate.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS);
 
-        if (minuteDifference > 60 * 24 )
-            remainingTimeTextString = minuteDifference / (24 * 60) + " Days " + minuteDifference / 60 + " Hours left";
+        if (minuteDifference > 60 * 24 ) {
+            remainingTimeTextString = minuteDifference / (24 * 60) + " Days " + minuteDifference % (60 * 24) / 60 + " Hours left";
+        }    
         else if (minuteDifference <= 24 * 60)
-            remainingTimeTextString = minuteDifference / 60 + " Hours " + minuteDifference + " Minutes";
+            remainingTimeTextString = minuteDifference / 60 + " Hours " + minuteDifference % 60 + " Minutes";
         else if (minuteDifference < 60)
             remainingTimeTextString = minuteDifference + " Minutes";
         else
