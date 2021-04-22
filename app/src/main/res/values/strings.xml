@@ -12,6 +12,7 @@
     <string name="title_activity_week">WeekActivity</string>
     <string name="title_activity_day">DayActivity</string>
     <string name="title_activity_upcoming_events">upcoming_events</string>
+    <string name="_02_00">02:00</string>
 
     <string-array name="event_types">
         <item>Meeting</item>
