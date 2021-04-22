@@ -10,17 +10,22 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.PocketCalendar">
+
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings"
+            android:theme="@style/Theme.PocketCalendar.NoActionBar" />
         <activity
             android:name=".UpcomingEvents"
-            android:label="@string/title_activity_upcoming_events"
-            android:theme="@style/Theme.PocketCalendar.NoActionBar"></activity>
+            android:label="Upcoming Events"
+            android:theme="@style/Theme.PocketCalendar.NoActionBar" />
         <activity
             android:name=".DayActivity"
-            android:label="@string/title_activity_day"
+            android:label="Daily View"
             android:theme="@style/Theme.PocketCalendar.NoActionBar" />
         <activity
             android:name=".WeekActivity"
-            android:label="@string/title_activity_week"
+            android:label="Weekly View"
             android:theme="@style/Theme.PocketCalendar.NoActionBar" />
         <activity
             android:name=".MonthActivity"
