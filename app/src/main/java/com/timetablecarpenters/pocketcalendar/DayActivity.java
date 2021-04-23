@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Calendar;
+
 
 public class DayActivity extends BaseActivity implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "DayActivity";
@@ -23,6 +25,12 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private Spinner event_type_spinner;
     private EditText event_name_edit;
     private LinearLayout addEventPopupView;
+
+    private CalendarEvent[] events; //the events in day
+    // first [] for hours of day, next [] for the event starting times and end times in order.
+    private String[][] textsOfHours;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +42,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(DayActivity.this, "YAZILIM ÖĞEREN", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DayActivity.this, "YAZILIM ÖĞREN", Toast.LENGTH_SHORT).show();
                 openDialog();
             }
         });
@@ -69,4 +77,33 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    private void pullEventsOfDay() {
+
+    }
+    private void getTextsOfEvents( ) {
+        textsOfHours = new String[24][];
+        int[] eventCount = new int[24];
+        for ( int i = 0; i < events.length ; i++) {
+            eventCount[ events[i].getEventStart().get(Calendar.HOUR) ] += 1;
+            eventCount[ events[i].getEventEnd().get(Calendar.HOUR) ] += 1;
+        }
+
+        for ( int i = 0; i < events.length ; i++) {
+            textsOfHours[ events[i].getEventStart().get(Calendar.HOUR) ][ eventCount[i]] =
+                            events[i].getEventStart().get(Calendar.HOUR) + ":" +
+                            events[i].getEventStart().get(Calendar.MINUTE);
+            textsOfHours[ events[i].getEventEnd().get(Calendar.HOUR) ][ eventCount[i]] =
+                            events[i].getEventStart().get(Calendar.HOUR) + ":" +
+                            events[i].getEventStart().get(Calendar.MINUTE) + " " +
+                            events[i].getName();
+        }
+
+    }
+    private void setTextViews( ) {
+
+    }
+
+
+
 }

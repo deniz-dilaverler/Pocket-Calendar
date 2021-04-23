@@ -158,8 +158,8 @@ public class CalendarEvent extends BaseActivity{
         this.color = color;
         eventStart = Calendar.getInstance();
         eventEnd = Calendar.getInstance();
-        this.eventStart.set( day, month, year, dueHour, dueMinute, 0);
-        this.eventEnd.set( day, month, year, dueHour, dueMinute, 0);
+        this.eventStart.set( year, month, day, dueHour, dueMinute, 0);
+        this.eventEnd.set( year, month, day, dueHour, dueMinute, 0);
         this.color = color;
         this.notifTime = notifTime;
         this.notes = notes;
