@@ -22,4 +22,9 @@
     <style name="Theme.PocketCalendar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.PocketCalendar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ThemeOverlay.PocketCalendar.AppWidgetContainer" parent="">
+        <item name="appWidgetBackgroundColor">@color/light_blue_900</item>
+        <item name="appWidgetTextColor">@color/light_blue_200</item>
+    </style>
 </resources>

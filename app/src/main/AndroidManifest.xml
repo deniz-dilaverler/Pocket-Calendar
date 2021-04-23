@@ -10,6 +10,15 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.PocketCalendar">
+        <receiver android:name=".UpComingEventsWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/up_comming_events_widget_info" />
+        </receiver>
 
         <activity
             android:name=".SettingsActivity"

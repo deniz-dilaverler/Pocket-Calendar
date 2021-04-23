@@ -13,4 +13,6 @@
     <string name="title_activity_day">DayActivity</string>
     <string name="title_activity_upcoming_events">upcoming_events</string>
     <string name="_02_00">02:00</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

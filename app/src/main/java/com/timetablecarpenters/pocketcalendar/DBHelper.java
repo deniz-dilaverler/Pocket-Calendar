@@ -2,6 +2,7 @@ package com.timetablecarpenters.pocketcalendar;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -73,6 +74,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public long insertEvent(CalendarEvent event) {
         ContentValues cv = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
+
 
         if (checkIsDataAlreadyInDB(event)) {
             cv.put(ID, event.getId());
