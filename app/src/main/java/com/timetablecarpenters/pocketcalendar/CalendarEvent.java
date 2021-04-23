@@ -190,9 +190,7 @@ public class CalendarEvent extends BaseActivity{
     public void repeateMonthly( int i) {
 
 
-        WeekActivity weekActivity = new WeekActivity();
-
-        DBHelper dbHelper = new DBHelper(weekActivity, DBHelper.DB_NAME, null);
+        DBHelper dbHelper = new DBHelper(this, DBHelper.DB_NAME, null);
         Calendar nextEventStart = (Calendar) eventStart.clone();
         Calendar nextEventEnd = (Calendar) eventEnd.clone();
         for( int a = 0; a < i; a++)
@@ -206,13 +204,46 @@ public class CalendarEvent extends BaseActivity{
         }
     }
     public void repeateDaily(int i){
+        DBHelper dbHelper = new DBHelper(this, DBHelper.DB_NAME, null);
+        Calendar nextEventStart = (Calendar) eventStart.clone();
+        Calendar nextEventEnd = (Calendar) eventEnd.clone();
+        for( int a = 0; a < i; a++)
+        {
 
+            nextEventStart.add( Calendar.DAY_OF_MONTH, 1);
+            nextEventEnd.add( Calendar.DAY_OF_MONTH, 1);
+            dbHelper.insertEvent( new CalendarEvent(nextEventStart, nextEventEnd,this.id, this.type,this.name,
+                    this.color, this.notifTime, this.notes,this.latitude,this.longitude));
+
+        }
 
     }
-    public void repeateWeekly(int i){}
-    public void repeateAnnually(int i){}
+    public void repeateWeekly(int i) {
+        DBHelper dbHelper = new DBHelper(this, DBHelper.DB_NAME, null);
+        Calendar nextEventStart = (Calendar) eventStart.clone();
+        Calendar nextEventEnd = (Calendar) eventEnd.clone();
+        for (int a = 0; a < i; a++) {
 
+            nextEventStart.add(Calendar.DAY_OF_MONTH, 7);
+            nextEventEnd.add(Calendar.DAY_OF_MONTH, 7);
+            dbHelper.insertEvent(new CalendarEvent(nextEventStart, nextEventEnd, this.id, this.type, this.name,
+                    this.color, this.notifTime, this.notes, this.latitude, this.longitude));
 
+        }
+    }
+    public void repeateAnnually(int i) {
+        DBHelper dbHelper = new DBHelper(this, DBHelper.DB_NAME, null);
+        Calendar nextEventStart = (Calendar) eventStart.clone();
+        Calendar nextEventEnd = (Calendar) eventEnd.clone();
+        for (int a = 0; a < i; a++) {
+
+            nextEventStart.add(Calendar.YEAR, 1);
+            nextEventEnd.add(Calendar.YEAR, 1);
+            dbHelper.insertEvent(new CalendarEvent(nextEventStart, nextEventEnd, this.id, this.type, this.name,
+                    this.color, this.notifTime, this.notes, this.latitude, this.longitude));
+
+        }
+    }
 
     public void setNotification() {}
 
