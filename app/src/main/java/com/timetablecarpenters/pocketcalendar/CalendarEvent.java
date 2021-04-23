@@ -167,68 +167,42 @@ public class CalendarEvent extends BaseActivity{
         this.longitude = longitude;
 
     }
+
+    public CalendarEvent( Calendar eventStart, Calendar eventEnd, String id, String type,String name, String color,
+                          String notifTime, StringBuffer notes, String latitude, String longitude)
+    {
+        this.day = eventStart.get( Calendar.DAY_OF_MONTH);
+        this.year = eventStart.get( Calendar.YEAR );
+        this.month = eventStart.get( Calendar.MONTH);
+        this.id = id;
+        this.type = type;
+        this.name = name;
+        this.color = color;
+        this.color = color;
+        this.notifTime = notifTime;
+        this.notes = notes;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.eventStart = eventStart;
+        this.eventEnd = eventEnd;
+
+    }
     public void repeateMonthly( int i) {
-        Log.d(TAG, "onCreate: Starts" );
-        setContentView(R.layout.activity_week);
-        super.onCreate(savedInstanceState);
-        Calendar day;
-        Calendar last;
-        Calendar today;
-        Cursor cursor;
-        String dateString;
-        Bundle extras;
 
-        extras = getIntent().getExtras();
-        if (extras != null)
-            first = (Calendar) extras.get(INTENT_KEY);
-        View content = findViewById(R.id.week_content);
-        if (first == null) {
-            Log.d(TAG, "onCreate: SA" );
-            // set the date
-            today = Calendar.getInstance();
-            today.setFirstDayOfWeek(Calendar.MONDAY);
-            // "calculate" the start date of the week
-            first = (Calendar) today.clone();
-            first.add(Calendar.DAY_OF_WEEK,
-                    first.getFirstDayOfWeek() - first.get(Calendar.DAY_OF_WEEK));
-        }
-        // and add six days to the end date
-        last = (Calendar) first.clone();
-        last.add(Calendar.DAY_OF_YEAR, 6);
 
-        dateText = (TextView) findViewById(R.id.dateText);
-        dateString = monthNames[first.get(Calendar.MONTH)] + " " + first.get(Calendar.DATE) + "  -  " +
-                monthNames[last.get(Calendar.MONTH)] + " " + last.get(Calendar.DATE);
-        dateText.setText(dateString);
         WeekActivity weekActivity = new WeekActivity();
 
-        day = (Calendar) first.clone();
         DBHelper dbHelper = new DBHelper(weekActivity, DBHelper.DB_NAME, null);
-        for(int i1 = 0 ; i1 < 7 ; i1++) {
-            View row = content.findViewById(rowIds[i1]);
-            ((TextView) row.findViewById(R.id.text_date_name)).setText(dateNames[i1]);
-            Log.d(TAG, "onCreate: day = " + day.get(Calendar.YEAR)+ " " + day.get(Calendar.MONTH)+ " " + day.get(Calendar.DAY_OF_MONTH));
-            cursor = dbHelper.getEventsInAnInterval(day, day);
-            // check if there are any events on that day
-            if (cursor.getColumnCount() > 0) {
-                ListView list = row.findViewById(R.id.events_of_day_list);
-                list.setAdapter(new WeekViewAdapter(weekActivity, cursor));
-                list.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        return onTouchEvent(event);
-                    }
+        Calendar nextEventStart = (Calendar) eventStart.clone();
+        Calendar nextEventEnd = (Calendar) eventEnd.clone();
+        for( int a = 0; a < i; a++)
+        {
 
-                });
-            }
-                day.add(Calendar.DATE, 1);
-            /*
-            Calendar nextEventStart = eventStart.clone();
-            Calendar nextEventEnd = eventEnd.clone();
             nextEventStart.add( Calendar.MONTH, 1);
             nextEventEnd.add( Calendar.MONTH, 1);
-
-             */
+            dbHelper.insertEvent( new CalendarEvent(nextEventStart, nextEventEnd,this.id, this.type,this.name,
+            this.color, this.notifTime, this.notes,this.latitude,this.longitude));
+            
         }
     }
     public void repeateDaily(int i){

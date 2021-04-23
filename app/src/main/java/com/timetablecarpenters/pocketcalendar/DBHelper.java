@@ -69,8 +69,8 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param event
      * @return row number if event is succesful, -1 if an error has occured, -2 if the event already exists
      */
-/*
-    public long insertEvent(CalenderEvent event) {
+
+    public long insertEvent(CalendarEvent event) {
         ContentValues cv = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -81,12 +81,12 @@ public class DBHelper extends SQLiteOpenHelper {
             cv.put(DAY, event.getDay());
             cv.put(EVENT_TYPE, event.getType());
             cv.put(EVENT_NAME, event.getName());
-            cv.put(NOTES, event.getNotes());
+            cv.put(NOTES, event.getNotes().toString());
             cv.put(LONGITUDE, event.getLongitude());
             cv.put(LATITUDE, event.getLatitude());
             cv.put(NOTIF_TIME, event.getNotifTime());
-            cv.put(EVENT_START, event.getEventStart());
-            cv.put(EVENT_END, event.getEventEnd());
+            cv.put(EVENT_START, event.getEventStart().toString());
+            cv.put(EVENT_END, event.getEventEnd().toString());
 
             long insert = db.insert(EVENTS_TABLE, null, cv);
             return insert;
@@ -96,15 +96,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean checkIsDataAlreadyInDB(CalenderEvent event) {
+    public boolean checkIsDataAlreadyInDB(CalendarEvent event) {
         SQLiteDatabase db = getReadableDatabase();
 
         String query = "Select * from " + EVENTS_TABLE + " where " + YEAR + " = " + event.getYear() + " AND "
                                                                    + MONTH + " = " + event.getMonth() + " AND "
                                                                    + DAY + " = " + event.getDay() + " AND "
                                                                    + EVENT_NAME + " = " + event.getName() + " AND "
-                                                                   + EVENT_START + " = " + event.getStart() + " AND "
-                                                                   + EVENT_END + " = " + event.getEnd() + " ;"
+                                                                   + EVENT_START + " = " + event.getEventStart() + " AND "
+                                                                   + EVENT_END + " = " + event.getEventEnd() + " ;"
                 ;
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.getCount() <= 0){
@@ -120,8 +120,8 @@ public class DBHelper extends SQLiteOpenHelper {
                                                                         + MONTH + " = " + event.getMonth() + " AND "
                                                                         + DAY + " = " + event.getDay() + " AND "
                                                                         + EVENT_NAME + " = " + event.getName() + " AND "
-                                                                        + EVENT_START + " = " + event.getStart() + " AND "
-                                                                        + EVENT_END + " = " + event.getEnd() + " ;";
+                                                                        + EVENT_START + " = " + event.getEventStart() + " AND "
+                                                                        + EVENT_END + " = " + event.getEventEnd() + " ;";
         SQLiteDatabase db = getWritableDatabase();
          if (!checkIsDataAlreadyInDB(event)) {
              return false;
@@ -130,7 +130,7 @@ public class DBHelper extends SQLiteOpenHelper {
              return true;
          }
     }
-*/
+
     /**
      * retrieves all the events within a given day interval
      * don't pass the dates being 2 months apart

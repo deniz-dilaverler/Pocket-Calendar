@@ -14,7 +14,7 @@ import android.content.Intent;
 
 import 	java.util.Calendar;
 /**
- * @author Yarkın badboy_karizmatik!
+ * @author Yarkın Sakıncı
  * @version 21.04.2021
  */
 
