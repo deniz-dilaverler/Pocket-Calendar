@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="event_types">
+        <item>Meeting</item>
+        <item>Lecture</item>
+        <item>Assignment</item>
+        <item>Exam</item>
+        <item>Study</item>
+        <item>Birthday</item>
+        <item>Free Time</item>
+    </string-array>
+
+    <string-array name="repetition_types">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
+
+
+</resources>
