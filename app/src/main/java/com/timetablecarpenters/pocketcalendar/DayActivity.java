@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -31,6 +32,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private String eventType, eventName;
 
     private CalendarEvent[] events; //the events in day
+    private CalendarEvent[] orderedEventEnds; //the events in day
     // first [] for hours of day, next [] for the event starting times and end times in order.
     private String[][] textsOfHours;
 
@@ -206,16 +208,45 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      * orders today's events in chronological order and puts the result value to events property
      * @author Alperen Utku Yalçın
      */
-    private void setOrderedEvents() {
+    private void setOrderedEventStarts() {
         boolean exit = false;
-        CalendarEvent earliest;
         CalendarEvent[] result = new CalendarEvent[ events.length];
-
-        while ( ! exit) {
-            for ( int i = 0; i < result.length; i++) {
-
+        for ( int i = 0; i < events.length; i++) {
+            result[i] = events[i];
+        }
+        for ( int i = 0; i < result.length; i++) {
+            for ( int a = i + 1; a < result.length; a++) {
+                if ( result[i].getEventStart().get( Calendar.HOUR * 60 + Calendar.MINUTE)
+                        < result[a].getEventEnd().get( Calendar.HOUR * 60 + Calendar.MINUTE)) {
+                    moveEventArrayByOne( result, a);
+                    result[a] = result[ i];
+                    discardEventArrayByOne( result, i);
+                }
             }
         }
+        events = result;
+    }
+    /**
+     * orders today's events in chronological order and puts the result value to events property
+     * @author Alperen Utku Yalçın
+     */
+    private void setOrderedEventEnds() {
+        int length = events.length;
+        CalendarEvent[] result = new CalendarEvent[ length];
+        for ( int i = 0; i < length; i++) {
+            result[i] = events[i];
+        }
+        for ( int i = result.length - 1; i >= 0; i--) {
+            for ( int a = i - 1; a >= 0; a--) {
+                if ( result[i].getEventStart().get( Calendar.HOUR * 60 + Calendar.MINUTE)
+                        < result[a].getEventEnd().get( Calendar.HOUR * 60 + Calendar.MINUTE)) {
+                    moveEventArrayByOne( result, i);
+                    result[ i] = result[ a];
+                    discardEventArrayByOne( result, a);
+                }
+            }
+        }
+        orderedEventEnds = result;
     }
     /**
      * helper method for setOrderedEvents()
@@ -238,10 +269,14 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      * @author Alperen Utku Yalçın
      */
     private CalendarEvent[] discardEventArrayByOne( CalendarEvent[] eventArray, int index) {
-        for (int i = index; i - 1 < eventArray.length; i++) {
-            eventArray[i] = eventArray[i-1];
+        CalendarEvent[] newEventArray = new CalendarEvent[ eventArray.length - 1];
+        for ( int i = 0; i < index; i++) {
+            newEventArray[i] = eventArray[i];
         }
-        return eventArray;
+        for ( int i = index; i - 1 < eventArray.length; i++) {
+            newEventArray[i] = eventArray[i-1];
+        }
+        return newEventArray;
     }
     /**
      * finds the appropriate texts for each event start time and end time for the textViews.
@@ -272,6 +307,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      */
     private void setTextViews( ) {
         //todo
+        TextView textView1a;
     }
     /* TO BE ADDED: ( by Alperen)
     - find a way to make a line for each event.
