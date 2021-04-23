@@ -1,9 +1,18 @@
 package com.timetablecarpenters.pocketcalendar;
 
+
+import android.annotation.SuppressLint;
+import android.database.Cursor;
 import android.location.Location;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.content.Intent;
+
 import 	java.util.Calendar;
-
-
 /**
  * @author Yarkın badboy_karizmatik!
  * @version 21.04.2021
