@@ -195,9 +195,58 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
 
     }
 
+    /**
+     * gets today's events and puts them all in an array as events property
+     * @author Alperen Utku Yalçın
+     */
     private void pullEventsOfDay() {
-
+        //todo - once the other methods work
     }
+    /**
+     * orders today's events in chronological order and puts the result value to events property
+     * @author Alperen Utku Yalçın
+     */
+    private void setOrderedEvents() {
+        boolean exit = false;
+        CalendarEvent earliest;
+        CalendarEvent[] result = new CalendarEvent[ events.length];
+
+        while ( ! exit) {
+            for ( int i = 0; i < result.length; i++) {
+
+            }
+        }
+    }
+    /**
+     * helper method for setOrderedEvents()
+     * lengthens the array by one from a specified index
+     * @author Alperen Utku Yalçın
+     */
+    private CalendarEvent[] moveEventArrayByOne( CalendarEvent[] eventArray, int index) {
+        CalendarEvent[] result = new CalendarEvent[ eventArray.length + 1];
+        for ( int i = 0; i <= index; i ++ ) {
+            result[i] = eventArray[i];
+        }
+        for (int i = index + 1; i <= eventArray.length; i++) {
+            result[i] = eventArray[ i - 1];
+        }
+        return  result;
+    }
+    /**
+     * helper method for setOrderedEvents()
+     * discards a value in an array. Array does not get shortened.
+     * @author Alperen Utku Yalçın
+     */
+    private CalendarEvent[] discardEventArrayByOne( CalendarEvent[] eventArray, int index) {
+        for (int i = index; i - 1 < eventArray.length; i++) {
+            eventArray[i] = eventArray[i-1];
+        }
+        return eventArray;
+    }
+    /**
+     * finds the appropriate texts for each event start time and end time for the textViews.
+     * @author Alperen Utku Yalçın
+     */
     private void getTextsOfEvents( ) {
         textsOfHours = new String[24][];
         int[] eventCount = new int[24];
@@ -217,10 +266,18 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         }
 
     }
+    /**
+     * Creates and sets the textViews with appropriate texts
+     * @author Alperen Utku Yalçın
+     */
     private void setTextViews( ) {
-
+        //todo
     }
-
-
-
+    /* TO BE ADDED: ( by Alperen)
+    - find a way to make a line for each event.
+    - a method that finds which textviews are in an interval
+                of events and gives them gaps at their start
+    - get events from database
+     and other methods I haven't thought about yet....
+    */
 }
