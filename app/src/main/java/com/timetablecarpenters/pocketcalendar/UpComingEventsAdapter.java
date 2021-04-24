@@ -64,14 +64,17 @@ public class UpComingEventsAdapter extends CursorAdapter {
         eventDate.set(year, month, day, Integer.parseInt(startTime.substring(0, 2)), Integer.parseInt(startTime.substring(3)));
         int minuteDifference = (int) TimeUnit.MINUTES.convert(eventDate.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS);
 
-        if (minuteDifference > 60 * 24 )
+        if (minuteDifference <= 0)
+            remainingTimeTextString = "Event Passed!";
+        else if (minuteDifference > 60 * 24 )
             remainingTimeTextString = minuteDifference / (24 * 60) + " Days " + minuteDifference / 60 + " Hours left";
         else if (minuteDifference <= 24 * 60)
             remainingTimeTextString = minuteDifference / 60 + " Hours " + minuteDifference + " Minutes";
-        else if (minuteDifference < 60)
+        else if (minuteDifference < 60 )
             remainingTimeTextString = minuteDifference + " Minutes";
         else
-            remainingTimeTextString = "Event Passed!";
+            remainingTimeTextString = "";
+
         remainingTimeText.setText(remainingTimeTextString);
         Calendar max = (Calendar) today.clone();
         max.add(Calendar.DATE, MAX_DAYS + 1);

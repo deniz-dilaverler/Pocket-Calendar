@@ -36,7 +36,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // constructor
     public DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory) {
-        super(context, name, factory, 3);
+        super(context, name, factory, 5);
     }
 
     // methods
