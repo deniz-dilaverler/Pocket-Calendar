@@ -83,12 +83,12 @@ public class DBHelper extends SQLiteOpenHelper {
             cv.put(DAY, event.getDay());
             cv.put(EVENT_TYPE, event.getType());
             cv.put(EVENT_NAME, event.getName());
-            cv.put(NOTES, event.getNotes().toString());
-            cv.put(LONGITUDE, event.getLongitude());
-            cv.put(LATITUDE, event.getLatitude());
+            cv.put(NOTES, event.getNotes());
+            cv.put(LONGITUDE, event.getLocation().getLatitude());
+            cv.put(LATITUDE, event.getLocation().getLongitude());
             cv.put(NOTIF_TIME, event.getNotifTime());
-            cv.put(EVENT_START, event.getEventStart().toString());
-            cv.put(EVENT_END, event.getEventEnd().toString());
+            cv.put(EVENT_START, event.getEventStartTime().toString());
+            cv.put(EVENT_END, event.getEventEndTime().toString());
 
             long insert = db.insert(EVENTS_TABLE, null, cv);
             return insert;
@@ -105,8 +105,8 @@ public class DBHelper extends SQLiteOpenHelper {
                                                                    + MONTH + " = " + event.getMonth() + " AND "
                                                                    + DAY + " = " + event.getDay() + " AND "
                                                                    + EVENT_NAME + " = " + event.getName() + " AND "
-                                                                   + EVENT_START + " = " + event.getEventStart() + " AND "
-                                                                   + EVENT_END + " = " + event.getEventEnd() + " ;"
+                                                                   + EVENT_START + " = " + event.getEventStartTime() + " AND "
+                                                                   + EVENT_END + " = " + event.getEventEndTime() + " ;"
                 ;
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.getCount() <= 0){
@@ -122,8 +122,8 @@ public class DBHelper extends SQLiteOpenHelper {
                                                                         + MONTH + " = " + event.getMonth() + " AND "
                                                                         + DAY + " = " + event.getDay() + " AND "
                                                                         + EVENT_NAME + " = " + event.getName() + " AND "
-                                                                        + EVENT_START + " = " + event.getEventStart() + " AND "
-                                                                        + EVENT_END + " = " + event.getEventEnd() + " ;";
+                                                                        + EVENT_START + " = " + event.getEventStartTime() + " AND "
+                                                                        + EVENT_END + " = " + event.getEventEndTime() + " ;";
         SQLiteDatabase db = getWritableDatabase();
          if (!checkIsDataAlreadyInDB(event)) {
              return false;
