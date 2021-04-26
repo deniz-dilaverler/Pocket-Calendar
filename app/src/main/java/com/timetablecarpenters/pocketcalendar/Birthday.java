@@ -1,5 +1,7 @@
 package com.timetablecarpenters.pocketcalendar;
 
+import java.util.Calendar;
+
 /**
  * Birthday class that extends CalendarEvent, therefore using its methods and properties also with its own giftBought property
  * @author Yarkın Sakıncı
@@ -9,27 +11,17 @@ public class Birthday extends CalendarEvent{
     boolean giftBought;
 
     /**
-     * Inıitialises the birthday object by calling the super's constructor, repeating annualy and initialising giftBought
-     * @param year
-     * @param month
-     * @param day
+     * Inıitialises the birthday object by calling the super's constructor and initialising giftBought
+     * @param eventStart
+     * @param eventEnd
+     * @param name
      * @param id
      * @param type
-     * @param name
-     * @param color
-     * @param notifTime
-     * @param notes
-     * @param giftBought
-     * @param latitude
-     * @param longitude
      */
-    public Birthday (int year, int month, int day, String id, String type, String name, String color, String notifTime,
-                     StringBuffer notes, boolean giftBought, String latitude, String longitude )
+    public Birthday (Calendar eventStart, Calendar eventEnd, String name, long id, String type)
     {
 
-        super (year, month, day, 0, 0, id,  type, name,
-                23, 59 , color, notifTime, notes, latitude, longitude, "annually", 100);
-        repeateAnnually(100);
+        super (eventStart,eventEnd, name, id, type);
 
         this.giftBought = giftBought;
     }
