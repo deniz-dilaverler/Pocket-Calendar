@@ -5,6 +5,7 @@ package com.timetablecarpenters.pocketcalendar;
  * @author Yarkın Sakıncı
  * @version 23.04.2021
  */
+//TODO: class must be adjusted to the newly changed Calendar event
 public class Birthday extends CalendarEvent{
     boolean giftBought;
 
@@ -23,15 +24,15 @@ public class Birthday extends CalendarEvent{
      * @param latitude
      * @param longitude
      */
+
     public Birthday (int year, int month, int day, String id, String type, String name, String color, String notifTime,
                      StringBuffer notes, boolean giftBought, String latitude, String longitude )
     {
 
-        super (year, month, day, 0, 0, id,  type, name,
-                23, 59 , color, notifTime, notes, latitude, longitude, "annually", 100);
-        repeateAnnually(100);
+        super (null, null, null, 1, null);
+       // repeateAnnually(100);
 
-        this.giftBought = giftBought;
+      //  this.giftBought = giftBought;
     }
 
 
@@ -50,4 +51,5 @@ public class Birthday extends CalendarEvent{
     public void setGiftBought(boolean giftBought) {
         this.giftBought = giftBought;
     }
+
 }
