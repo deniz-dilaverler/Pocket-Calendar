@@ -1,8 +1,10 @@
 package com.timetablecarpenters.pocketcalendar;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -49,7 +51,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
 
 
         //initiate...
-
+        //pullEventsOfDay();
+        //initiateRelativeLayouts();
+        //System.out.println( "Alprın AAAA");
 
         FloatingActionButton fab = findViewById(R.id.add_event_button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -210,6 +214,24 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      */
     private void pullEventsOfDay() {
         //todo - once the other methods work
+        //for now..
+        Calendar calendar = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+        events = new CalendarEvent[2];
+
+        calendar.set( Calendar.HOUR , 1);
+        calendar.set( Calendar.MINUTE , 1);
+        calendar2.set( Calendar.HOUR , 1);
+        calendar2.set( Calendar.MINUTE , 3);
+        events[0] = new CalendarEvent( calendar, calendar2, "You Have A Meeting", 1, "Meeting");
+
+
+        calendar.set( Calendar.HOUR , 2);
+        calendar.set( Calendar.MINUTE , 1);
+        calendar2.set( Calendar.HOUR , 2);
+        calendar2.set( Calendar.MINUTE , 3);
+        events[1] = new CalendarEvent( calendar, calendar2, "You Have A Meeting", 2, "Meeting");
+
     }
     /**
      * orders today's events in chronological order and puts the result value to events property
@@ -223,8 +245,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         }
         for ( int i = 0; i < result.length; i++) {
             for ( int a = i + 1; a < result.length; a++) {
-                if ( result[i].getEventStart().get( Calendar.HOUR * 60 + Calendar.MINUTE)
-                        < result[a].getEventEnd().get( Calendar.HOUR * 60 + Calendar.MINUTE)) {
+                if ( result[i].getEventStart().get( Calendar.HOUR) * 60 + result[i].getEventStart().get( Calendar.MINUTE)
+                        < result[a].getEventEnd().get( Calendar.HOUR) * 60 + result[a].getEventEnd().get( Calendar.MINUTE)) {
                     moveEventArrayByOne( result, a);
                     result[a] = result[ i];
                     discardEventArrayByOne( result, i);
@@ -245,8 +267,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         }
         for ( int i = result.length - 1; i >= 0; i--) {
             for ( int a = i - 1; a >= 0; a--) {
-                if ( result[i].getEventStart().get( Calendar.HOUR * 60 + Calendar.MINUTE)
-                        < result[a].getEventEnd().get( Calendar.HOUR * 60 + Calendar.MINUTE)) {
+                if ( result[i].getEventStart().get( Calendar.HOUR) * 60 + result[i].getEventStart().get( Calendar.MINUTE)
+                        < result[a].getEventEnd().get( Calendar.HOUR) * 60 + result[a].getEventEnd().get( Calendar.MINUTE)) {
                     moveEventArrayByOne( result, i);
                     result[ i] = result[ a];
                     discardEventArrayByOne( result, a);
@@ -277,12 +299,16 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      */
     private CalendarEvent[] discardEventArrayByOne( CalendarEvent[] eventArray, int index) {
         CalendarEvent[] newEventArray = new CalendarEvent[ eventArray.length - 1];
-        for ( int i = 0; i < index; i++) {
+
+        if ( eventArray.length > 1) {
+            for ( int i = 0; i < index; i++) {
             newEventArray[i] = eventArray[i];
+            }
+            for ( int i = index + 1; i < eventArray.length; i++) {
+                newEventArray[ i - 1] = eventArray[ i];
+            }
         }
-        for ( int i = index; i - 1 < eventArray.length; i++) {
-            newEventArray[i] = eventArray[i-1];
-        }
+
         return newEventArray;
     }
     /**
@@ -308,22 +334,39 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         }
 
     }
+    /**
+     * Creates an event arraqy with chronologically ordered event start-end times.
+     * @author Alperen Utku Yalçın
+     */
     public void EventChronologyCreate() {
+        int counter = 0;
         setOrderedEventStarts();
         setOrderedEventEnds();
-
-        // discardEventArrayByOne
-        // moveEventArrayByOne
+        boolean breaker = false;
 
         allEventsChron = new CalendarEvent[( events.length + orderedEventEnds.length) - 1];
         isEventStart = new boolean[(events.length + orderedEventEnds.length) - 1];
-        for( int i = 0; i < events.length; i++) {
-            for ( int a = 0; i < orderedEventEnds.length; i++) {
 
+        for( int i = 0; i < events.length; i++) {
+            breaker = false;
+            for ( int a = 0; i < orderedEventEnds.length; i++) {
+                if ( orderedEventEnds[a].getEventEnd().get( Calendar.HOUR) * 60
+                        + orderedEventEnds[a].getEventEnd().get( Calendar.MINUTE)
+                        < events[i].getEventStart().get( Calendar.HOUR) * 60
+                        + events[i].getEventStart().get( Calendar.MINUTE) && ! breaker) {
+                    allEventsChron[counter] = orderedEventEnds[a];
+                    orderedEventEnds = discardEventArrayByOne( orderedEventEnds, a);
+                    isEventStart[counter] = false;
+                }
+                else {
+                    allEventsChron[counter] = events[i];
+                    events = discardEventArrayByOne( events, i);
+                    breaker = true;
+                    isEventStart[counter] = true;
+                }
+                counter++;
             }
         }
-
-
     }
     /**
      * Creates and sets the textViews with appropriate texts
@@ -331,9 +374,48 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      */
     private void createTextView( RelativeLayout layout, int hour) {
         //todo
+        String str;
+        View recent = layout;
+        for ( int i = 0; i < allEventsChron.length; i++) {
+            if ( isEventStart[i]) {
+                str = hour + ":" + allEventsChron[i].getEventStart().get( Calendar.MINUTE);
+                str += " " + allEventsChron[i].getName();
+            }
+            else {
+                str = hour + ":" + allEventsChron[i].getEventEnd().get( Calendar.MINUTE);
+                str += " " + allEventsChron[i].getName();
+            }
 
+            if ( discriminateEvent( allEventsChron[i], isEventStart[i]).get( Calendar.HOUR) == hour) {
+                TextView textView = new TextView(DayActivity.this);
 
+                textView.setId( hour * 60 + discriminateEvent( allEventsChron[i], isEventStart[i]).get( Calendar.MINUTE));
+                RelativeLayout.LayoutParams layoutParams = new
+                        RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.addRule(RelativeLayout.BELOW, recent.getId());
 
+                textView.setText( str);
+                System.out.println( str);
+                layout.addView(textView, layoutParams);
+                recent = textView;
+                /*
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        textView.setText( "Clicked!");
+
+                    }
+                });
+
+                */
+            }
+        }
+    }
+    private Calendar discriminateEvent( CalendarEvent event, boolean b) {
+        if ( b)
+            return event.getEventStart();
+        else
+            return event.getEventEnd();
     }
     /**
      * creates insides of the RelativeLayouts.
@@ -341,6 +423,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      */
     private void initiateRelativeLayouts( ) {
         //todo
+        EventChronologyCreate();
         RelativeLayout[] layouts = new RelativeLayout[24];
         RelativeLayout rl1 = findViewById( R.id.rl1);
         layouts[0] = rl1;
@@ -354,7 +437,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         layouts[4] = rl5;
         //... more will be added.
         for ( int i = 0; i < 24 ; i++) {
-            createTextView( layouts[i], i);
+            //createTextView( layouts[i], i);
         }
     }
     /* TO BE ADDED: ( by Alperen)
