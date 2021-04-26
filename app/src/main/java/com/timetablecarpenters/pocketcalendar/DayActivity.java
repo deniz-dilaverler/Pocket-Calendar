@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,14 +36,20 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private CalendarEvent[] orderedEventEnds; //the events in day
     // first [] for hours of day, next [] for the event starting times and end times in order.
     private String[][] textsOfHours;
+    private CalendarEvent[] allEventsChron; //chronologically all events
+    private boolean[] isEventStart; //if false, event is for the ending, not starting
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_day);
+        setContentView(R.layout.content_day2); //Changed to test it normally activity_day
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: Starts");
+
+
+        //initiate...
+
 
         FloatingActionButton fab = findViewById(R.id.add_event_button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -249,7 +256,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         orderedEventEnds = result;
     }
     /**
-     * helper method for setOrderedEvents()
+     * helper method for setOrderedEventEnds() or setOrderedEventStarts()
      * lengthens the array by one from a specified index
      * @author Alperen Utku Yalçın
      */
@@ -264,7 +271,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         return  result;
     }
     /**
-     * helper method for setOrderedEvents()
+     * helper method for setOrderedEventEnds() or setOrderedEventStarts()
      * discards a value in an array. Array does not get shortened.
      * @author Alperen Utku Yalçın
      */
@@ -301,16 +308,57 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         }
 
     }
+    public void EventChronologyCreate() {
+        setOrderedEventStarts();
+        setOrderedEventEnds();
+
+        // discardEventArrayByOne
+        // moveEventArrayByOne
+
+        allEventsChron = new CalendarEvent[( events.length + orderedEventEnds.length) - 1];
+        isEventStart = new boolean[(events.length + orderedEventEnds.length) - 1];
+        for( int i = 0; i < events.length; i++) {
+            for ( int a = 0; i < orderedEventEnds.length; i++) {
+
+            }
+        }
+
+
+    }
     /**
      * Creates and sets the textViews with appropriate texts
      * @author Alperen Utku Yalçın
      */
-    private void setTextViews( ) {
+    private void createTextView( RelativeLayout layout, int hour) {
         //todo
-        TextView textView1a;
+
+
+
+    }
+    /**
+     * creates insides of the RelativeLayouts.
+     * @author Alperen Utku Yalçın
+     */
+    private void initiateRelativeLayouts( ) {
+        //todo
+        RelativeLayout[] layouts = new RelativeLayout[24];
+        RelativeLayout rl1 = findViewById( R.id.rl1);
+        layouts[0] = rl1;
+        RelativeLayout rl2 = findViewById( R.id.rl2);
+        layouts[1] = rl2;
+        RelativeLayout rl3 = findViewById( R.id.rl3);
+        layouts[2] = rl3;
+        RelativeLayout rl4 = findViewById( R.id.rl4);
+        layouts[3] = rl4;
+        RelativeLayout rl5 = findViewById( R.id.rl5);
+        layouts[4] = rl5;
+        //... more will be added.
+        for ( int i = 0; i < 24 ; i++) {
+            createTextView( layouts[i], i);
+        }
     }
     /* TO BE ADDED: ( by Alperen)
-    - find a way to make a line for each event.
+    - find a way to make a line for each event. //CANCELLED
     - a method that finds which textviews are in an interval
                 of events and gives them gaps at their start
     - get events from database
