@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="@string/default1"
+        android:entries="@array/text_font_sizes"
+        android:entryValues="@array/text_font_sizes"
+        android:key="In-text font size"
+        android:title="In-text font size" />
+    <PreferenceCategory
+        android:contentDescription='"Select the fonts for texts and paragraphs"'
+        android:title="Font Sizes">
+        <ListPreference
+            android:defaultValue="@string/default1"
+            android:entries="@array/text_font_sizes"
+            android:entryValues="@array/text_font_sizes"
+            android:key="In-text font size"
+            android:summary="Choose the font size of texts:Small, Medium, Large"
+            android:title="In-text font size" />
+        <ListPreference
+            android:defaultValue="@string/default2"
+            android:entries="@array/paragraph_font_sizes"
+            android:entryValues="@array/paragraph_font_sizes"
+            android:key="Paragraph font size"
+            android:summary="Choose the font size of paragraphs:Small, Medium, Large"
+            android:title="Paragraph font size" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:icon="@drawable/ic_baseline_audiotrack_24"
+        android:summary='"Select the notification sound"'
+        android:title="Sounds">
+        <ListPreference
+            android:defaultValue="@string/default3"
+            android:entries="@array/notification_sounds"
+            android:entryValues="@array/notification_sounds"
+            android:key="Notification sound"
+            android:summary='"Choose the notification sound: Main, Default, None"'
+            android:title="Notification sound" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

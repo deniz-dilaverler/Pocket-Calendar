@@ -40,7 +40,7 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.settingsToolbar);
         setSupportActionBar(toolbar);
         if (findViewById(R.id.monthly_button) != null) {
             Button monthlyButton = findViewById(R.id.monthly_button);
