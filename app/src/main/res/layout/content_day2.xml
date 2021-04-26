@@ -9,11 +9,12 @@
     <RelativeLayout
         android:id="@+id/rl1"
         android:layout_width="0dp"
-        android:layout_height="11dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="72dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView1"
         app:layout_constraintTop_toBottomOf="@+id/weekly_button">
 
@@ -24,45 +25,50 @@
         android:layout_width="36dp"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:text="00:00"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rl1" />
+        app:layout_constraintBottom_toTopOf="@+id/rl1"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:text="01:00"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rl2" />
+        app:layout_constraintBottom_toTopOf="@+id/rl2"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:text="04:00"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rl5" />
+        app:layout_constraintBottom_toBottomOf="@+id/rl5"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:text="02:00"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rl3" />
+        app:layout_constraintBottom_toTopOf="@+id/rl3"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:text="03:00"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rl4" />
+        app:layout_constraintBottom_toBottomOf="@+id/rl4"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/weekly_button"
@@ -130,11 +136,12 @@
     <RelativeLayout
         android:id="@+id/rl2"
         android:layout_width="0dp"
-        android:layout_height="11dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView10"
         app:layout_constraintTop_toBottomOf="@+id/rl1">
 
@@ -143,12 +150,12 @@
     <RelativeLayout
         android:id="@+id/rl3"
         android:layout_width="0dp"
-        android:layout_height="11dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView12"
         app:layout_constraintTop_toBottomOf="@+id/rl2">
 
@@ -157,11 +164,12 @@
     <RelativeLayout
         android:id="@+id/rl4"
         android:layout_width="0dp"
-        android:layout_height="11dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView14"
         app:layout_constraintTop_toBottomOf="@+id/rl3">
 
@@ -170,7 +178,7 @@
     <RelativeLayout
         android:id="@+id/rl5"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
@@ -179,7 +187,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView15"
-        app:layout_constraintTop_toBottomOf="@+id/rl4">
+        app:layout_constraintTop_toBottomOf="@+id/rl4"
+        app:layout_constraintVertical_bias="0.0">
 
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -51,9 +51,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
 
 
         //initiate...
-        //pullEventsOfDay();
-        //initiateRelativeLayouts();
-        //System.out.println( "Alprın AAAA");
+        pullEventsOfDay();
+        setOrderedEventStarts();
+        initiateRelativeLayouts();
 
         FloatingActionButton fab = findViewById(R.id.add_event_button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -208,6 +208,17 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
 
     }
 
+
+
+
+
+
+
+
+
+
+
+
     /**
      * gets today's events and puts them all in an array as events property
      * @author Alperen Utku Yalçın
@@ -217,41 +228,81 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         //for now..
         Calendar calendar = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
-        events = new CalendarEvent[2];
+        events = new CalendarEvent[5];
+
+        Calendar calendar3 = Calendar.getInstance();
+        Calendar calendar4 = Calendar.getInstance();
+        calendar3.set( Calendar.HOUR , 1);
+        calendar3.set( Calendar.MINUTE , 30);
+        calendar4.set( Calendar.HOUR , 1);
+        calendar4.set( Calendar.MINUTE , 33);
+        events[0] = new CalendarEvent( calendar3, calendar4, "You Have A Meeting" + calendar3.get( Calendar.MINUTE), 2, "Meeting");
+
 
         calendar.set( Calendar.HOUR , 1);
         calendar.set( Calendar.MINUTE , 1);
         calendar2.set( Calendar.HOUR , 1);
         calendar2.set( Calendar.MINUTE , 3);
-        events[0] = new CalendarEvent( calendar, calendar2, "You Have A Meeting", 1, "Meeting");
+        events[1] = new CalendarEvent( calendar, calendar2, "You Have A Meeting"+ calendar.get( Calendar.MINUTE), 1, "Meeting");
 
 
-        calendar.set( Calendar.HOUR , 2);
-        calendar.set( Calendar.MINUTE , 1);
-        calendar2.set( Calendar.HOUR , 2);
-        calendar2.set( Calendar.MINUTE , 3);
-        events[1] = new CalendarEvent( calendar, calendar2, "You Have A Meeting", 2, "Meeting");
+        Calendar calendar5 = Calendar.getInstance();
+        Calendar calendar6 = Calendar.getInstance();
+        calendar5.set( Calendar.HOUR , 2);
+        calendar5.set( Calendar.MINUTE , 1);
+        calendar6.set( Calendar.HOUR , 2);
+        calendar6.set( Calendar.MINUTE , 3);
+        events[2] = new CalendarEvent( calendar5, calendar6, "Bruh", 3, "Meeting");
 
+        Calendar calendar7 = Calendar.getInstance();
+        Calendar calendar8 = Calendar.getInstance();
+        calendar7.set( Calendar.HOUR , 0);
+        calendar7.set( Calendar.MINUTE , 1);
+        calendar8.set( Calendar.HOUR , 0);
+        calendar8.set( Calendar.MINUTE , 3);
+        events[3] = new CalendarEvent( calendar7, calendar8, "You Have A Meeting Too", 4, "Meeting");
+
+        Calendar calendar9 = Calendar.getInstance();
+        Calendar calendar10 = Calendar.getInstance();
+        calendar9.set( Calendar.HOUR , 1);
+        calendar9.set( Calendar.MINUTE , 10);
+        calendar10.set( Calendar.HOUR , 1);
+        calendar10.set( Calendar.MINUTE , 20);
+        events[4] = new CalendarEvent( calendar9, calendar10, "You Have A Meeting Too" + calendar9.get( Calendar.MINUTE), 5, "Meeting");
+
+    }
+    private int clockToInt( Calendar cal) {
+        int result;
+        result = cal.get( Calendar.HOUR) * 60 + cal.get( Calendar.MINUTE);
+        return result;
     }
     /**
      * orders today's events in chronological order and puts the result value to events property
      * @author Alperen Utku Yalçın
      */
     private void setOrderedEventStarts() {
-        boolean exit = false;
-        CalendarEvent[] result = new CalendarEvent[ events.length];
+        Calendar calendar1000 = Calendar.getInstance();
+        calendar1000.set( Calendar.HOUR , 11);
+        calendar1000.set( Calendar.MINUTE , 59);
+        CalendarEvent[] result = new CalendarEvent[events.length];
+        boolean commander[] = new boolean[events.length];
+        int counter;
+        int size = events.length;
         for ( int i = 0; i < events.length; i++) {
-            result[i] = events[i];
+            commander[i] = true;
         }
-        for ( int i = 0; i < result.length; i++) {
-            for ( int a = i + 1; a < result.length; a++) {
-                if ( result[i].getEventStart().get( Calendar.HOUR) * 60 + result[i].getEventStart().get( Calendar.MINUTE)
-                        < result[a].getEventEnd().get( Calendar.HOUR) * 60 + result[a].getEventEnd().get( Calendar.MINUTE)) {
-                    moveEventArrayByOne( result, a);
-                    result[a] = result[ i];
-                    discardEventArrayByOne( result, i);
+
+        for ( int a = 0; a < events.length; a++) {
+            counter = 0;
+            CalendarEvent current = new CalendarEvent( calendar1000, calendar1000, "dsladjas" + calendar1000.get( Calendar.MINUTE), 0, ".");
+            for ( int i = 0; i < events.length; i++) {
+                if ( commander[i] && clockToInt(current.getEventStart()) > clockToInt(events[i].getEventStart())) {
+                    current = events[i];
+                    counter = i;
                 }
             }
+            result[a] = current;
+            commander[counter] = false;
         }
         events = result;
     }
@@ -269,9 +320,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             for ( int a = i - 1; a >= 0; a--) {
                 if ( result[i].getEventStart().get( Calendar.HOUR) * 60 + result[i].getEventStart().get( Calendar.MINUTE)
                         < result[a].getEventEnd().get( Calendar.HOUR) * 60 + result[a].getEventEnd().get( Calendar.MINUTE)) {
-                    moveEventArrayByOne( result, i);
+                    result = moveEventArrayByOne( result, i);
                     result[ i] = result[ a];
-                    discardEventArrayByOne( result, a);
+                    result = discardEventArrayByOne( result, a);
                 }
             }
         }
@@ -287,8 +338,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         for ( int i = 0; i <= index; i ++ ) {
             result[i] = eventArray[i];
         }
-        for (int i = index + 1; i <= eventArray.length; i++) {
-            result[i] = eventArray[ i - 1];
+        for (int i = index; i < eventArray.length; i++) {
+            result[i + 1] = eventArray[i];
         }
         return  result;
     }
@@ -298,14 +349,14 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      * @author Alperen Utku Yalçın
      */
     private CalendarEvent[] discardEventArrayByOne( CalendarEvent[] eventArray, int index) {
-        CalendarEvent[] newEventArray = new CalendarEvent[ eventArray.length - 1];
+        CalendarEvent[] newEventArray = new CalendarEvent[eventArray.length - 1];
 
         if ( eventArray.length > 1) {
             for ( int i = 0; i < index; i++) {
             newEventArray[i] = eventArray[i];
             }
             for ( int i = index + 1; i < eventArray.length; i++) {
-                newEventArray[ i - 1] = eventArray[ i];
+                newEventArray[i - 1] = eventArray[ i];
             }
         }
 
@@ -339,6 +390,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      * @author Alperen Utku Yalçın
      */
     public void EventChronologyCreate() {
+        /*
         int counter = 0;
         setOrderedEventStarts();
         setOrderedEventEnds();
@@ -367,6 +419,14 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                 counter++;
             }
         }
+        */
+        setOrderedEventStarts();
+        allEventsChron = new CalendarEvent[ events.length];
+        isEventStart = new boolean[ events.length];
+        for ( int i = 0 ; i < events.length; i++) {
+            isEventStart[i] = true;
+        }
+        allEventsChron = events;
     }
     /**
      * Creates and sets the textViews with appropriate texts
@@ -395,22 +455,24 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                 layoutParams.addRule(RelativeLayout.BELOW, recent.getId());
 
                 textView.setText( str);
+                textView.setSingleLine();
                 System.out.println( str);
                 layout.addView(textView, layoutParams);
                 recent = textView;
-                /*
+
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        textView.setText( "Clicked!");
+                        textView.setText( "POG");
 
                     }
                 });
 
-                */
+
             }
         }
     }
+
     private Calendar discriminateEvent( CalendarEvent event, boolean b) {
         if ( b)
             return event.getEventStart();
@@ -437,7 +499,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         layouts[4] = rl5;
         //... more will be added.
         for ( int i = 0; i < 24 ; i++) {
-            //createTextView( layouts[i], i);
+            createTextView( layouts[i], i);
         }
     }
     /* TO BE ADDED: ( by Alperen)
