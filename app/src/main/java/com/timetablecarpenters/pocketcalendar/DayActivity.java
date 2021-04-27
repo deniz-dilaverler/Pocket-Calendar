@@ -1,13 +1,9 @@
 package com.timetablecarpenters.pocketcalendar;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,8 +26,8 @@ import java.util.Calendar;
 
 public class DayActivity extends BaseActivity implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "DayActivity";
-    private AlertDialog.Builder dialogBuilder;
-    private AlertDialog dialog;
+    private AlertDialog.Builder addEventBuilder, timeBuilder;
+    private AlertDialog addEventDialog, timeDialog;
     private Spinner event_type_spinner, notification_spinner;
     private Spinner repetition_type;
     private EditText event_name, event_start, event_end, event_due, number_of_repetitions, notes;
@@ -38,6 +35,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private Button next, done, blue;
     private CheckBox repeat, notification;
     private String eventType, eventName;
+    private ScrollView scrollView;
+    private CalendarEvent addedEvent;
 
     private CalendarEvent[] events; //the events in day
     private CalendarEvent[] orderedEventEnds; //the events in day
@@ -82,28 +81,22 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      * @author Elifsena Öz
      */
     public void openDialog() {
-        dialogBuilder = new AlertDialog.Builder(this);
-        addEventPopupView = (LinearLayout) getLayoutInflater().inflate(R.layout.add_event_popup, null);
+        addEventBuilder = new AlertDialog.Builder(this);
+        scrollView = (ScrollView) getLayoutInflater().inflate(R.layout.add_event_popup,null);
+        addEventPopupView = (LinearLayout) scrollView.findViewById(R.id.add_event_linear);
 
-        // Adding event type and name choices to popup
-        final View typeAndNameView = getLayoutInflater().inflate(R.layout.add_event_type_and_name_item, null);
+        addNameAndType();
 
-        event_type_spinner = (Spinner) typeAndNameView.findViewById(R.id.event_type_spinner);
-        ArrayAdapter<String> eventNamesAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.event_types));
-        event_type_spinner.setAdapter(eventNamesAdapter);
-        event_type_spinner.setOnItemSelectedListener(this);
-        event_name = (EditText) typeAndNameView.findViewById(R.id.event_name_edit);
-
-        // If event name and type are given, adds other properties when clicked
-        next = (Button) typeAndNameView.findViewById(R.id.add_event_next);
+        // Next button removes itself from the popup if event type and name are given
+        final View nextButtonView = (View) getLayoutInflater().inflate(R.layout.add_event_next, null);
+        next = (Button) nextButtonView.findViewById(R.id.add_event_next);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 eventName = event_name.getText().toString();
                 if (!eventName.equals("") && eventType != null) {
-                    // todo create event object
                     next.setEnabled(false);
+                    addEventPopupView.removeView(nextButtonView);
                     updatePopupView();
                 }
                 else {
@@ -112,11 +105,11 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                 }
             }
         });
-        addEventPopupView.addView(typeAndNameView);
+        addEventPopupView.addView(nextButtonView);
 
-        dialogBuilder.setView(addEventPopupView);
-        dialog = dialogBuilder.create();
-        dialog.show();
+        addEventBuilder.setView(scrollView);
+        addEventDialog = addEventBuilder.create();
+        addEventDialog.show();
     }
 
     /**
@@ -135,7 +128,23 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             addRepetition();
         }
         addCommonItems();
-        dialogBuilder.setView(addEventPopupView);
+        addEventBuilder.setView(scrollView);
+    }
+
+    /**
+     * Adds name and type choices to add event popup
+     * @author Elifsena Öz
+     */
+    private void addNameAndType() {
+        final View typeAndNameView = getLayoutInflater().inflate(R.layout.add_event_type_and_name_item, null);
+
+        event_type_spinner = (Spinner) typeAndNameView.findViewById(R.id.event_type_spinner);
+        ArrayAdapter<String> eventNamesAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.event_types));
+        event_type_spinner.setAdapter(eventNamesAdapter);
+        event_type_spinner.setOnItemSelectedListener(this);
+        event_name = (EditText) typeAndNameView.findViewById(R.id.event_name_edit);
+        addEventPopupView.addView(typeAndNameView);
     }
 
     /**
@@ -192,6 +201,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                     }
                 }
             });
+
             addEventPopupView.addView(repetitionView);
         }
     }
@@ -221,8 +231,19 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             }
         });
 
+        // todo color and notification
+
         notes = (EditText) commonItemsView.findViewById(R.id.notes);
 
+        // todo location
+
+        done = (Button) commonItemsView.findViewById(R.id.add_event_done);
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         addEventPopupView.addView(commonItemsView);
     }
