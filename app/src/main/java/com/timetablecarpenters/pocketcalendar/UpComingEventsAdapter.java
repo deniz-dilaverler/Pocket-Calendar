@@ -67,9 +67,9 @@ public class UpComingEventsAdapter extends CursorAdapter {
         if (minuteDifference <= 0)
             remainingTimeTextString = "Event Passed!";
         else if (minuteDifference > 60 * 24 )
-            remainingTimeTextString = minuteDifference / (24 * 60) + " Days " + minuteDifference / 60 + " Hours left";
+            remainingTimeTextString = minuteDifference / (24 * 60) + " Days " + minuteDifference % 24 + " Hours left";
         else if (minuteDifference <= 24 * 60)
-            remainingTimeTextString = minuteDifference / 60 + " Hours " + minuteDifference + " Minutes";
+            remainingTimeTextString = minuteDifference / 60 + " Hours " + minuteDifference % 60 + " Minutes";
         else if (minuteDifference < 60 )
             remainingTimeTextString = minuteDifference + " Minutes";
         else
