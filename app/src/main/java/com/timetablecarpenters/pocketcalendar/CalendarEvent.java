@@ -1,6 +1,7 @@
 package com.timetablecarpenters.pocketcalendar;
 
 
+import android.graphics.Color;
 import android.location.Location;
 
 import 	java.util.Calendar;
@@ -20,6 +21,7 @@ public class CalendarEvent {
     protected String notes;
     protected String notifTime;
     protected long id;
+    protected int color;
 
     public CalendarEvent(Calendar eventStart, Calendar eventEnd, String name, long id, String type) {
         this.eventStart = eventStart;
@@ -113,7 +115,7 @@ public class CalendarEvent {
 
     public String getEventStartTime() {
         String result;
-        int hour = eventStart.get(Calendar.HOUR);
+        int hour = eventStart.get(Calendar.HOUR_OF_DAY);
         int minute = eventStart.get(Calendar.MINUTE);
 
         result = hour+"";
@@ -131,7 +133,7 @@ public class CalendarEvent {
 
     public String getEventEndTime() {
         String result;
-        int hour = eventEnd.get(Calendar.HOUR);
+        int hour = eventEnd.get(Calendar.HOUR_OF_DAY);
         int minute = eventEnd.get(Calendar.MINUTE);
 
         result = hour+"";
@@ -147,6 +149,18 @@ public class CalendarEvent {
         return result;
     }
 
-
+    //ADDED BY ALPEREN TEMPORARILY
+    public void setColor(int c) {
+        color = c;
+    }
+    public boolean equals( CalendarEvent anEvent) {
+        if ( anEvent.getName().equals( this.getName()) &&
+                anEvent.getEventStart().equals( this.getEventStart()) && anEvent.getNotes().equals( this.getNotes())) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
 

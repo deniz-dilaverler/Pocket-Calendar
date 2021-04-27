@@ -1,7 +1,10 @@
 package com.timetablecarpenters.pocketcalendar;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -16,6 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -40,8 +45,12 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private String[][] textsOfHours;
     private CalendarEvent[] allEventsChron; //chronologically all events
     private boolean[] isEventStart; //if false, event is for the ending, not starting
+    final private String GAP = "     ";
 
 
+    //BORROWED
+    public Calendar first;
+    private final static String INTENT_KEY = "first_date";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +64,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         setOrderedEventStarts();
         setOrderedEventEnds();
         initiateRelativeLayouts();
+
 
         FloatingActionButton fab = findViewById(R.id.add_event_button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -259,17 +269,17 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         Calendar calendar4 = Calendar.getInstance();
         calendar3.set( Calendar.HOUR_OF_DAY , 1);
         calendar3.set( Calendar.MINUTE , 30);
-        calendar4.set( Calendar.HOUR_OF_DAY , 1);
+        calendar4.set( Calendar.HOUR_OF_DAY , 3);
         calendar4.set( Calendar.MINUTE , 33);
         events[0] = new CalendarEvent( calendar3, calendar4, "You Have A Meeting" + calendar3.get( Calendar.MINUTE), 2, "Meeting");
-
+        events[0].setColor( Color.RED);
 
         calendar.set( Calendar.HOUR_OF_DAY , 1);
         calendar.set( Calendar.MINUTE , 1);
-        calendar2.set( Calendar.HOUR_OF_DAY , 1);
+        calendar2.set( Calendar.HOUR_OF_DAY , 2);
         calendar2.set( Calendar.MINUTE , 3);
         events[1] = new CalendarEvent( calendar, calendar2, "You Have A Meeting"+ calendar.get( Calendar.MINUTE), 1, "Meeting");
-
+        events[1].setColor( Color.BLUE);
 
         Calendar calendar5 = Calendar.getInstance();
         Calendar calendar6 = Calendar.getInstance();
@@ -278,6 +288,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         calendar6.set( Calendar.HOUR_OF_DAY , 2);
         calendar6.set( Calendar.MINUTE , 3);
         events[2] = new CalendarEvent( calendar5, calendar6, "Bruh", 3, "Meeting");
+        events[2].setColor( Color.DKGRAY);
 
         Calendar calendar7 = Calendar.getInstance();
         Calendar calendar8 = Calendar.getInstance();
@@ -286,6 +297,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         calendar8.set( Calendar.HOUR_OF_DAY , 0);
         calendar8.set( Calendar.MINUTE , 3);
         events[3] = new CalendarEvent( calendar7, calendar8, "You Have A Meeting Too", 4, "Meeting");
+        events[3].setColor( Color.GREEN);
 
         Calendar calendar9 = Calendar.getInstance();
         Calendar calendar10 = Calendar.getInstance();
@@ -294,6 +306,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         calendar10.set( Calendar.HOUR_OF_DAY , 1);
         calendar10.set( Calendar.MINUTE , 20);
         events[4] = new CalendarEvent( calendar9, calendar10, "You Have A Meeting Too" + calendar9.get( Calendar.MINUTE), 5, "Meeting");
+        events[3].setColor( Color.CYAN);
+
         orderedEventEnds = events;
     }
 
@@ -473,31 +487,57 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      */
     private void createTextView( RelativeLayout layout, int hour) {
         //todo
+        int gapCounter = 0;
+        int[] gaps;
         String str;
         View recent = layout;
-        for ( int i = 0; i < allEventsChron.length; i++) {
+
+        gaps = new int[ allEventsChron.length];
+        for ( int i = 0; i < gaps.length; i++) {
             if ( isEventStart[i]) {
-                str = hour + ":" + allEventsChron[i].getEventStart().get( Calendar.MINUTE);
-                str += "[Start] " + allEventsChron[i].getName() ;
+                gaps[i] = gapCounter;
+                gapCounter++;
             }
             else {
-                str = hour + ":" + allEventsChron[i].getEventEnd().get( Calendar.MINUTE);
-                str += "[End] " + allEventsChron[i].getName();
+                gapCounter--;
+                for ( int a = 0; a < allEventsChron.length; a++) {
+                    //if ( allEventsChron[a].equals( allEventsChron[i]) && a != i) {
+                    //    gaps[i] = gaps[a];
+                    //}
+                }
+            }
+        }
+        gapCounter = 0;
+        for ( int i = 0; i < allEventsChron.length; i++) {
+            if ( isEventStart[i]) {
+                str = "[Start] " + allEventsChron[i].getEventStartTime();
+                str += " " + allEventsChron[i].getName() ;
+                for ( int a = gaps[i]; a > 0; a--) {
+                    str = GAP + str;
+                }
+                gapCounter++;
+            }
+            else {
+                str = "[End] " +  allEventsChron[i].getEventEndTime();
+                str += " " + allEventsChron[i].getName();
+                gapCounter--;
+                for ( int a = gaps[i]; a > 0; a--) {
+                    str = GAP + str;
+                }
             }
 
-            if ( recent != null && discriminateEvent( allEventsChron[i], isEventStart[i]).get( Calendar.HOUR_OF_DAY) == hour) {
+            if ( discriminateEvent( allEventsChron[i], isEventStart[i]).get( Calendar.HOUR_OF_DAY) == hour) {
                 TextView textView = new TextView(DayActivity.this);
-
-                textView.setId( Calendar.getInstance().get( Calendar.MILLISECOND));
+                textView.setId( (int) ( Math.random() * 10000)); // It is not a very good solution
                 RelativeLayout.LayoutParams layoutParams = new
                         RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.addRule(RelativeLayout.BELOW, recent.getId());
 
                 textView.setText( str);
+                textView.setTextColor( allEventsChron[i].color);
                 textView.setSingleLine();
-                System.out.println( str);
                 layout.addView(textView, layoutParams);
-                recent = textView;
+
 
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -507,7 +547,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                     }
                 });
 
-
+                recent = textView;
             }
         }
     }
@@ -542,10 +582,42 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         }
     }
     /* TO BE ADDED: ( by Alperen)
-    - find a way to make a line for each event. //CANCELLED
-    - a method that finds which textviews are in an interval
-                of events and gives them gaps at their start
     - get events from database
-     and other methods I haven't thought about yet....
+
+    */
+
+    //BORROWED CODE
+    /*
+
+     //when a leftSwipe is notifed by the super class adds a week to the date of weekView and refreshes the activity
+
+    @Override
+    public void leftSwipe() {
+    TODO
+        super.leftSwipe();
+        first.add(Calendar.DATE, 1);
+        finish();
+        Intent intent = new Intent(this, DayActivity.class);
+        intent.putExtra(INTENT_KEY, first);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+
+     //when a rightSwipe is notifed by the super class subtracts a week from the date of weekView and refreshes the activity
+
+    @Override
+    public void rightSwipe() {
+    TODO
+        super.rightSwipe();
+        first.add(Calendar.DATE, -1);
+        finish();
+        Intent intent = new Intent(this, DayActivity.class);
+        intent.putExtra(INTENT_KEY, first);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+
+    }
     */
 }
