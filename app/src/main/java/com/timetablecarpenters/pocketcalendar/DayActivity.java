@@ -53,6 +53,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         //initiate...
         pullEventsOfDay();
         setOrderedEventStarts();
+        setOrderedEventEnds();
         initiateRelativeLayouts();
 
         FloatingActionButton fab = findViewById(R.id.add_event_button);
@@ -256,48 +257,50 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
 
         Calendar calendar3 = Calendar.getInstance();
         Calendar calendar4 = Calendar.getInstance();
-        calendar3.set( Calendar.HOUR , 1);
+        calendar3.set( Calendar.HOUR_OF_DAY , 1);
         calendar3.set( Calendar.MINUTE , 30);
-        calendar4.set( Calendar.HOUR , 1);
+        calendar4.set( Calendar.HOUR_OF_DAY , 1);
         calendar4.set( Calendar.MINUTE , 33);
         events[0] = new CalendarEvent( calendar3, calendar4, "You Have A Meeting" + calendar3.get( Calendar.MINUTE), 2, "Meeting");
 
 
-        calendar.set( Calendar.HOUR , 1);
+        calendar.set( Calendar.HOUR_OF_DAY , 1);
         calendar.set( Calendar.MINUTE , 1);
-        calendar2.set( Calendar.HOUR , 1);
+        calendar2.set( Calendar.HOUR_OF_DAY , 1);
         calendar2.set( Calendar.MINUTE , 3);
         events[1] = new CalendarEvent( calendar, calendar2, "You Have A Meeting"+ calendar.get( Calendar.MINUTE), 1, "Meeting");
 
 
         Calendar calendar5 = Calendar.getInstance();
         Calendar calendar6 = Calendar.getInstance();
-        calendar5.set( Calendar.HOUR , 2);
+        calendar5.set( Calendar.HOUR_OF_DAY , 2);
         calendar5.set( Calendar.MINUTE , 1);
-        calendar6.set( Calendar.HOUR , 2);
+        calendar6.set( Calendar.HOUR_OF_DAY , 2);
         calendar6.set( Calendar.MINUTE , 3);
         events[2] = new CalendarEvent( calendar5, calendar6, "Bruh", 3, "Meeting");
 
         Calendar calendar7 = Calendar.getInstance();
         Calendar calendar8 = Calendar.getInstance();
-        calendar7.set( Calendar.HOUR , 0);
+        calendar7.set( Calendar.HOUR_OF_DAY , 0);
         calendar7.set( Calendar.MINUTE , 1);
-        calendar8.set( Calendar.HOUR , 0);
+        calendar8.set( Calendar.HOUR_OF_DAY , 0);
         calendar8.set( Calendar.MINUTE , 3);
         events[3] = new CalendarEvent( calendar7, calendar8, "You Have A Meeting Too", 4, "Meeting");
 
         Calendar calendar9 = Calendar.getInstance();
         Calendar calendar10 = Calendar.getInstance();
-        calendar9.set( Calendar.HOUR , 1);
+        calendar9.set( Calendar.HOUR_OF_DAY , 1);
         calendar9.set( Calendar.MINUTE , 10);
-        calendar10.set( Calendar.HOUR , 1);
+        calendar10.set( Calendar.HOUR_OF_DAY , 1);
         calendar10.set( Calendar.MINUTE , 20);
         events[4] = new CalendarEvent( calendar9, calendar10, "You Have A Meeting Too" + calendar9.get( Calendar.MINUTE), 5, "Meeting");
-
+        orderedEventEnds = events;
     }
+
+
     private int clockToInt( Calendar cal) {
         int result;
-        result = cal.get( Calendar.HOUR) * 60 + cal.get( Calendar.MINUTE);
+        result = cal.get( Calendar.HOUR_OF_DAY) * 60 + cal.get( Calendar.MINUTE);
         return result;
     }
     /**
@@ -306,12 +309,11 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      */
     private void setOrderedEventStarts() {
         Calendar calendar1000 = Calendar.getInstance();
-        calendar1000.set( Calendar.HOUR , 11);
+        calendar1000.set( Calendar.HOUR_OF_DAY , 11);
         calendar1000.set( Calendar.MINUTE , 59);
         CalendarEvent[] result = new CalendarEvent[events.length];
         boolean commander[] = new boolean[events.length];
         int counter;
-        int size = events.length;
         for ( int i = 0; i < events.length; i++) {
             commander[i] = true;
         }
@@ -335,56 +337,30 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      * @author Alperen Utku Yalçın
      */
     private void setOrderedEventEnds() {
-        int length = events.length;
-        CalendarEvent[] result = new CalendarEvent[ length];
-        for ( int i = 0; i < length; i++) {
-            result[i] = events[i];
+        Calendar calendar2000 = Calendar.getInstance();
+        calendar2000.set( Calendar.HOUR_OF_DAY , 23);
+        calendar2000.set( Calendar.MINUTE , 59);
+        CalendarEvent[] result = new CalendarEvent[orderedEventEnds.length];
+        boolean commander[] = new boolean[orderedEventEnds.length];
+        int counter;
+
+        for ( int i = 0; i < orderedEventEnds.length; i++) {
+            commander[i] = true;
         }
-        for ( int i = result.length - 1; i >= 0; i--) {
-            for ( int a = i - 1; a >= 0; a--) {
-                if ( result[i].getEventStart().get( Calendar.HOUR) * 60 + result[i].getEventStart().get( Calendar.MINUTE)
-                        < result[a].getEventEnd().get( Calendar.HOUR) * 60 + result[a].getEventEnd().get( Calendar.MINUTE)) {
-                    result = moveEventArrayByOne( result, i);
-                    result[ i] = result[ a];
-                    result = discardEventArrayByOne( result, a);
+
+        for ( int a = 0; a < orderedEventEnds.length; a++) {
+            counter = 0;
+            CalendarEvent current = new CalendarEvent( calendar2000, calendar2000, "sth " + calendar2000.get( Calendar.MINUTE), 0, ".");
+            for ( int i = 0; i < orderedEventEnds.length; i++) {
+                if ( commander[i] && clockToInt(current.getEventEnd()) > clockToInt(orderedEventEnds[i].getEventEnd())) {
+                    current = orderedEventEnds[i];
+                    counter = i;
                 }
             }
+            result[a] = current;
+            commander[counter] = false;
         }
         orderedEventEnds = result;
-    }
-    /**
-     * helper method for setOrderedEventEnds() or setOrderedEventStarts()
-     * lengthens the array by one from a specified index
-     * @author Alperen Utku Yalçın
-     */
-    private CalendarEvent[] moveEventArrayByOne( CalendarEvent[] eventArray, int index) {
-        CalendarEvent[] result = new CalendarEvent[ eventArray.length + 1];
-        for ( int i = 0; i <= index; i ++ ) {
-            result[i] = eventArray[i];
-        }
-        for (int i = index; i < eventArray.length; i++) {
-            result[i + 1] = eventArray[i];
-        }
-        return  result;
-    }
-    /**
-     * helper method for setOrderedEventEnds() or setOrderedEventStarts()
-     * discards a value in an array. Array does not get shortened.
-     * @author Alperen Utku Yalçın
-     */
-    private CalendarEvent[] discardEventArrayByOne( CalendarEvent[] eventArray, int index) {
-        CalendarEvent[] newEventArray = new CalendarEvent[eventArray.length - 1];
-
-        if ( eventArray.length > 1) {
-            for ( int i = 0; i < index; i++) {
-            newEventArray[i] = eventArray[i];
-            }
-            for ( int i = index + 1; i < eventArray.length; i++) {
-                newEventArray[i - 1] = eventArray[ i];
-            }
-        }
-
-        return newEventArray;
     }
     /**
      * finds the appropriate texts for each event start time and end time for the textViews.
@@ -394,16 +370,16 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         textsOfHours = new String[24][];
         int[] eventCount = new int[24];
         for ( int i = 0; i < events.length ; i++) {
-            eventCount[ events[i].getEventStart().get(Calendar.HOUR) ] += 1;
-            eventCount[ events[i].getEventEnd().get(Calendar.HOUR) ] += 1;
+            eventCount[ events[i].getEventStart().get(Calendar.HOUR_OF_DAY) ] += 1;
+            eventCount[ events[i].getEventEnd().get(Calendar.HOUR_OF_DAY) ] += 1;
         }
 
         for ( int i = 0; i < events.length ; i++) {
-            textsOfHours[ events[i].getEventStart().get(Calendar.HOUR) ][ eventCount[i]] =
-                            events[i].getEventStart().get(Calendar.HOUR) + ":" +
+            textsOfHours[ events[i].getEventStart().get(Calendar.HOUR_OF_DAY) ][ eventCount[i]] =
+                    events[i].getEventStart().get(Calendar.HOUR_OF_DAY) + ":" +
                             events[i].getEventStart().get(Calendar.MINUTE);
-            textsOfHours[ events[i].getEventEnd().get(Calendar.HOUR) ][ eventCount[i]] =
-                            events[i].getEventStart().get(Calendar.HOUR) + ":" +
+            textsOfHours[ events[i].getEventEnd().get(Calendar.HOUR_OF_DAY) ][ eventCount[i]] =
+                    events[i].getEventStart().get(Calendar.HOUR_OF_DAY) + ":" +
                             events[i].getEventStart().get(Calendar.MINUTE) + " " +
                             events[i].getName();
         }
@@ -414,43 +390,82 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      * @author Alperen Utku Yalçın
      */
     public void EventChronologyCreate() {
-        /*
-        int counter = 0;
         setOrderedEventStarts();
         setOrderedEventEnds();
-        boolean breaker = false;
 
-        allEventsChron = new CalendarEvent[( events.length + orderedEventEnds.length) - 1];
-        isEventStart = new boolean[(events.length + orderedEventEnds.length) - 1];
+        Calendar calendar2000 = Calendar.getInstance();
+        calendar2000.set( Calendar.HOUR_OF_DAY , 23);
+        calendar2000.set( Calendar.MINUTE , 59);
+        Calendar calendar1000 = Calendar.getInstance();
+        calendar1000.set( Calendar.HOUR_OF_DAY , 23);
+        calendar1000.set( Calendar.MINUTE , 59);
+        Calendar calendarDef = Calendar.getInstance();
+        calendarDef.set( Calendar.HOUR_OF_DAY ,3);
+        calendarDef.set( Calendar.MINUTE , 0);
+        CalendarEvent current1, current2, default1;
 
-        for( int i = 0; i < events.length; i++) {
-            breaker = false;
-            for ( int a = 0; i < orderedEventEnds.length; i++) {
-                if ( orderedEventEnds[a].getEventEnd().get( Calendar.HOUR) * 60
-                        + orderedEventEnds[a].getEventEnd().get( Calendar.MINUTE)
-                        < events[i].getEventStart().get( Calendar.HOUR) * 60
-                        + events[i].getEventStart().get( Calendar.MINUTE) && ! breaker) {
-                    allEventsChron[counter] = orderedEventEnds[a];
-                    orderedEventEnds = discardEventArrayByOne( orderedEventEnds, a);
-                    isEventStart[counter] = false;
+        int eventsSmallest = 10000;
+        int orderedSmallest = 10000;
+        int counter1 = 0;
+        int counter2 = 0;
+
+        default1 = new CalendarEvent( calendar2000, calendar2000,
+                "-ERROR-", 0, ".");
+
+        allEventsChron = new CalendarEvent[events.length + orderedEventEnds.length];
+        isEventStart = new boolean[events.length + orderedEventEnds.length];
+        for ( int i = 0; i < events.length + orderedEventEnds.length; i++) {
+            isEventStart[i] = false;
+        }
+
+        for( int i = 0; i < events.length + orderedEventEnds.length; i++) {
+            current1 = new CalendarEvent( calendar2000, calendar2000,
+                    "dsladjas" + calendar2000.get( Calendar.MINUTE), 0, ".");
+            current2 = new CalendarEvent( calendar1000, calendar1000,
+                    "dsladjas" + calendar1000.get( Calendar.MINUTE), 0, ".");
+
+            for ( int a = counter2; a < orderedEventEnds.length; a++) {
+                if ( clockToInt( orderedEventEnds[a].getEventEnd())
+                        <  clockToInt( current1.getEventStart())) {
+                    current1 = orderedEventEnds[a];
+                    orderedSmallest = a;
                 }
-                else {
-                    allEventsChron[counter] = events[i];
-                    events = discardEventArrayByOne( events, i);
-                    breaker = true;
-                    isEventStart[counter] = true;
+            }
+            for ( int a = counter1; a < events.length; a++) {
+                if ( clockToInt( events[a].getEventStart())
+                        <  clockToInt( current2.getEventStart())) {
+                    current2 = events[a];
+                    eventsSmallest = a;
                 }
-                counter++;
+            }
+
+            if ( counter1 < events.length && clockToInt( current1.getEventEnd()) > clockToInt( current2.getEventStart())) {
+                allEventsChron[i] = events[eventsSmallest];
+                CalendarEvent calev = events[counter1];
+                events[counter1] = events[eventsSmallest];
+                events[eventsSmallest] = calev;
+                isEventStart[i] = true;
+                counter1++;
+            }
+            else if ( counter2 < orderedEventEnds.length && clockToInt( current1.getEventEnd()) < clockToInt( current2.getEventStart())) {
+                allEventsChron[i] = orderedEventEnds[orderedSmallest];
+                CalendarEvent calEv = orderedEventEnds[counter2];
+                orderedEventEnds[counter2] = orderedEventEnds[orderedSmallest];
+                orderedEventEnds[orderedSmallest] = calEv;
+                isEventStart[i] = false;
+                counter2++;
             }
         }
-        */
+
+        /* FOR TESTING PURPOSES:
         setOrderedEventStarts();
         allEventsChron = new CalendarEvent[ events.length];
         isEventStart = new boolean[ events.length];
         for ( int i = 0 ; i < events.length; i++) {
-            isEventStart[i] = true;
+            isEventStart[i] = false;
         }
-        allEventsChron = events;
+        allEventsChron = orderedEventEnds;
+        */
     }
     /**
      * Creates and sets the textViews with appropriate texts
@@ -463,17 +478,17 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         for ( int i = 0; i < allEventsChron.length; i++) {
             if ( isEventStart[i]) {
                 str = hour + ":" + allEventsChron[i].getEventStart().get( Calendar.MINUTE);
-                str += " " + allEventsChron[i].getName();
+                str += "[Start] " + allEventsChron[i].getName() ;
             }
             else {
                 str = hour + ":" + allEventsChron[i].getEventEnd().get( Calendar.MINUTE);
-                str += " " + allEventsChron[i].getName();
+                str += "[End] " + allEventsChron[i].getName();
             }
 
-            if ( discriminateEvent( allEventsChron[i], isEventStart[i]).get( Calendar.HOUR) == hour) {
+            if ( recent != null && discriminateEvent( allEventsChron[i], isEventStart[i]).get( Calendar.HOUR_OF_DAY) == hour) {
                 TextView textView = new TextView(DayActivity.this);
 
-                textView.setId( hour * 60 + discriminateEvent( allEventsChron[i], isEventStart[i]).get( Calendar.MINUTE));
+                textView.setId( Calendar.getInstance().get( Calendar.MILLISECOND));
                 RelativeLayout.LayoutParams layoutParams = new
                         RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.addRule(RelativeLayout.BELOW, recent.getId());
