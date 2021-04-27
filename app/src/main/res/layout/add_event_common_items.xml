@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/colour_yellow"
+        android:layout_width="25dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#FFEB3B"
+        app:layout_constraintEnd_toStartOf="@+id/clour_orange"
+        app:layout_constraintTop_toBottomOf="@+id/colour_blue" />
+
+    <Button
+        android:id="@+id/clour_orange"
+        android:layout_width="25dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#FF5722"
+        app:layout_constraintEnd_toStartOf="@+id/colour_red"
+        app:layout_constraintTop_toBottomOf="@+id/colour_purple" />
+
+    <Button
+        android:id="@+id/colour_purple"
+        android:layout_width="25dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#9C27B0"
+        app:layout_constraintBaseline_toBaselineOf="@+id/add_event_colour"
+        app:layout_constraintEnd_toStartOf="@+id/colour_pink" />
+
+    <Button
+        android:id="@+id/colour_blue"
+        android:layout_width="25dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#1974BD"
+        app:layout_constraintBaseline_toBaselineOf="@+id/add_event_colour"
+        app:layout_constraintEnd_toStartOf="@+id/colour_purple" />
+
+    <Button
+        android:id="@+id/colour_red"
+        android:layout_width="25dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#E81000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/colour_pink" />
+
+    <Button
+        android:id="@+id/colour_green"
+        android:layout_width="25dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#2EAC33"
+        app:layout_constraintEnd_toStartOf="@+id/colour_yellow"
+        app:layout_constraintTop_toBottomOf="@+id/colour_teal" />
+
+    <TextView
+        android:id="@+id/add_event_colour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Colour"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/colour_teal"
+        android:layout_width="25dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#00BCD4"
+        app:layout_constraintBaseline_toBaselineOf="@+id/add_event_colour"
+        app:layout_constraintEnd_toStartOf="@+id/colour_blue" />
+
+    <Button
+        android:id="@+id/colour_pink"
+        android:layout_width="25dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#E91E63"
+        app:layout_constraintBaseline_toBaselineOf="@+id/add_event_colour"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/add_event_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Notfication"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/colour_green" />
+
+    <CheckBox
+        android:id="@+id/notification_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toBaselineOf="@+id/add_event_notification"
+        app:layout_constraintStart_toEndOf="@+id/add_event_notification" />
+
+    <Spinner
+        android:id="@+id/notifications_spinner"
+        android:layout_width="154dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/colour_yellow" />
+
+    <TextView
+        android:id="@+id/add_event_notes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Notes"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_event_notification" />
+
+    <EditText
+        android:id="@+id/notes"
+        android:layout_width="226dp"
+        android:layout_height="83dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/add_event_notes"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,12 +26,12 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private static final String TAG = "DayActivity";
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
-    private Spinner event_type_spinner;
+    private Spinner event_type_spinner, notification_spinner;
     private Spinner repetition_type;
-    private EditText event_name, event_start, event_end, event_due, number_of_repetitions;
+    private EditText event_name, event_start, event_end, event_due, number_of_repetitions, notes;
     private LinearLayout addEventPopupView;
-    private Button next, done;
-    private CheckBox repeat;
+    private Button next, done, blue;
+    private CheckBox repeat, notification;
     private String eventType, eventName;
 
     private CalendarEvent[] events; //the events in day
@@ -162,7 +162,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                     getResources().getStringArray(R.array.repetition_types));
             repetition_type.setAdapter(repetitionTypesAdapter);
             repetition_type.setOnItemSelectedListener(DayActivity.this);
+            repetition_type.setEnabled(false);
             number_of_repetitions = (EditText) repetitionView.findViewById(R.id.num_of_reperitions);
+            number_of_repetitions.setEnabled(false);
 
             // displays repetition options if the box is checked (the box is initially checked)
             repeat = (CheckBox) repetitionView.findViewById(R.id.repeatition_checkbox);
@@ -179,7 +181,6 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                     }
                 }
             });
-            repeat.performClick();
             addEventPopupView.addView(repetitionView);
         }
     }
@@ -189,7 +190,30 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      * @author Elifsena Öz
      */
     private void addCommonItems() {
-        // todo
+        final View commonItemsView = getLayoutInflater().inflate(R.layout.add_event_common_items, null);
+
+        notification_spinner = (Spinner) commonItemsView.findViewById(R.id.notifications_spinner);
+        ArrayAdapter<String> notificationTimesAdapter = new ArrayAdapter<>(DayActivity.this,
+                android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.notification_times));
+        notification_spinner.setAdapter(notificationTimesAdapter);
+        notification_spinner.setEnabled(false);
+
+        notification = (CheckBox) commonItemsView.findViewById(R.id.notification_checkbox);
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (notification.isChecked())
+                    notification_spinner.setEnabled(true);
+                else
+                    notification_spinner.setEnabled(false);
+            }
+        });
+
+        notes = (EditText) commonItemsView.findViewById(R.id.notes);
+
+
+        addEventPopupView.addView(commonItemsView);
     }
 
     @Override

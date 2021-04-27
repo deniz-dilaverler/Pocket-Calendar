@@ -16,5 +16,14 @@
         <item>Monthly</item>
     </string-array>
 
+    <string-array name="notification_times">
+        <item>5 minutes prior</item>
+        <item>10 minutes prior</item>
+        <item>30 minutes prior</item>
+        <item>1 hour prior</item>
+        <item>6 hours prior</item>
+        <item>12 hours prior</item>
+    </string-array>
+
 
 </resources>
