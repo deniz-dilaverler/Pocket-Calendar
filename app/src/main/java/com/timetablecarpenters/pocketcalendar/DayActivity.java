@@ -61,7 +61,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private String[][] textsOfHours;
     private CalendarEvent[] allEventsChron; //chronologically all events
     private boolean[] isEventStart; //if false, event is for the ending, not starting
-
+    private DBHelper database;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -69,14 +69,18 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         setContentView(R.layout.content_day3); //Changed to test it normally activity_day
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: Starts");
-
-
         //initiate...
-        pullEventsOfDay();
+        database = new DBHelper(this, DBHelper.DB_NAME, null);
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set( Calendar.HOUR, 0);
+        calendar1.set( Calendar.MINUTE, 0);
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.set( Calendar.HOUR, 23);
+        calendar2.set( Calendar.MINUTE, 59);
+        pullEventsOfDay( database.getEventsInAnIntervalInArray( calendar1, calendar2));
         setOrderedEventStarts();
         setOrderedEventEnds();
         initiateRelativeLayouts();
-
 
         FloatingActionButton fab = findViewById(R.id.add_event_button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -475,10 +479,11 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      * @author Alperen Utku Yalçın
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void pullEventsOfDay() {
+    private void pullEventsOfDay( ArrayList<CalendarEvent> calEvents) {
         //todo - once the other methods work
         //for now
         int counter;
+
         ArrayList<CalendarEvent> arrayListEvents = new ArrayList<>();
         Calendar calendar3 = Calendar.getInstance();
         Calendar calendar4 = Calendar.getInstance();
@@ -549,6 +554,23 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             events[counter] = event;
             counter++;
         }
+/*
+        counter = 0;
+        events = new CalendarEvent[ calEvents.size()];
+        for ( int i = 0; i < calEvents.size(); i++) {
+            if ( calEvents.get( i) != null) {
+                counter++;
+            }
+        }
+        events = new CalendarEvent[ counter];
+        counter = 0;
+        for ( int i = 0; i < calEvents.size(); i++) {
+            if ( calEvents.get( i) != null) {
+                events[counter] = calEvents.get( i);
+                counter++;
+                System.out.println( "ERROR ERROR ERROR ERROR AAAAAAAAAAAAAAAAAAAA");
+            }
+        }*/
         orderedEventEnds = events;
     }
 
