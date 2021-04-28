@@ -1,16 +1,19 @@
 package com.timetablecarpenters.pocketcalendar;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -29,20 +32,25 @@ import java.util.Calendar;
 
 public class DayActivity extends BaseActivity implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "DayActivity";
+    public static final String EVENT_ID_PREF = "eventID";
+    public static final String EVENT_ID_VALUE = "value";
     private AlertDialog.Builder addEventBuilder;
     private AlertDialog addEventDialog;
     private Spinner event_type_spinner, notification_spinner;
     private Spinner repetition_type;
-    private TextView event_due_time, event_due_date, event_start, event_end;
+    private TextView event_due_time, event_date, event_start, event_end;
     private EditText event_name, number_of_repetitions, notes;
     private LinearLayout addEventPopupView;
-    private Button next, done, blue;
+    private Button next, save, blue;
     private CheckBox repeat, notification;
     private String eventType, eventName;
     private ScrollView scrollView;
+    private DatePickerDialog.OnDateSetListener dateSetListener;
     private CalendarEvent addedEvent;
     private int endHour, endMinute, startHour, startMinute;
-    private Calendar eventStart, eventEnd;
+    private Calendar eventStart, eventEnd, date;
+    private long eventID;
+
 
     private CalendarEvent[] events; //the events in day
     private CalendarEvent[] orderedEventEnds; //the events in day
@@ -160,8 +168,36 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      */
     private void addDueDate() {
         final View dueDateView = getLayoutInflater().inflate(R.layout.add_event_due_date_item, null);
-        event_due_time = (TextView) dueDateView.findViewById(R.id.due_time);
 
+        // Displays a dialog to pick a date
+        event_date = (TextView) dueDateView.findViewById(R.id.due_date);
+        event_date.setText(getTodaysDate());
+
+        event_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                date = Calendar.getInstance();
+                final int day = date.get(Calendar.DAY_OF_MONTH);
+                final int month = date.get(Calendar.MONTH);
+                final int year = date.get(Calendar.YEAR);
+
+                DatePickerDialog dialog = new DatePickerDialog(DayActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        dateSetListener, year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
+        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                event_date.setText(formattedMonth(month) + " " + dayOfMonth + " " + year);
+            }
+        };
+
+        // Displays a dialog to pick time
+        event_due_time = (TextView) dueDateView.findViewById(R.id.due_time);
         event_due_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,7 +209,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                                 endHour = hourOfDay;
                                 endMinute = minute;
                                 eventEnd = Calendar.getInstance();
-                                eventEnd.set(0,0,0, endHour, endMinute);
+                                eventEnd.set(date.YEAR, date.MONTH, date.DAY_OF_MONTH, endHour, endMinute);
+                                eventStart = (Calendar) eventEnd.clone();
                                 event_due_time.setText(endHour + ":" + endMinute);
                             }
                         },24,0,true
@@ -186,12 +223,84 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     }
 
     /**
+     * Reports the date of the current day in string form
+     * @return Month Day Year (ex. May 1 2021)
+     */
+    private String getTodaysDate() {
+        Calendar todaysDate = Calendar.getInstance();
+        final int day = todaysDate.get(Calendar.DAY_OF_MONTH);
+        final int month = todaysDate.get(Calendar.MONTH);
+        final int year = todaysDate.get(Calendar.YEAR);
+        return formattedMonth(month) + " " + day + " " + year;
+    }
+
+    /**
+     * Reports the name of the month according to the number
+     * @param month number
+     * @return Sring month name
+     */
+    private String formattedMonth(int month) {
+        if (month == 0)
+            return "Jan";
+        if (month == 1)
+            return "Feb";
+        if (month == 2)
+            return "Mar";
+        if (month == 3)
+            return "Apr";
+        if (month == 4)
+            return "May";
+        if (month == 5)
+            return "Jun";
+        if (month == 6)
+            return "Jul";
+        if (month == 7)
+            return "Aug";
+        if (month == 8)
+            return "Sep";
+        if (month == 9)
+            return "Oct";
+        if (month == 10)
+            return "Nov";
+
+        // For 11th month and if anything goes wrong
+        return "Dec";
+    }
+
+    /**
      * Adds interval view to add event popup
      * @author Elifsena Öz
      */
     private void addInterval() {
         final View intervalView = getLayoutInflater().inflate(R.layout.add_event_interval_item, null);
 
+        // Displays a dialog to pick a date
+        event_date = (TextView) intervalView.findViewById(R.id.event_date);
+        event_date.setText(getTodaysDate());
+        event_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                date = Calendar.getInstance();
+                final int day = date.get(Calendar.DAY_OF_MONTH);
+                final int month = date.get(Calendar.MONTH);
+                final int year = date.get(Calendar.YEAR);
+
+                DatePickerDialog dialog = new DatePickerDialog(DayActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        dateSetListener, year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
+        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                event_date.setText(formattedMonth(month) + " " + dayOfMonth + " " + year);
+            }
+        };
+
+        // Displays a dialog to pick starting time
         event_start = (TextView) intervalView.findViewById(R.id.add_event_start);
         event_start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,7 +313,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                                 startHour = hourOfDay;
                                 startMinute = minute;
                                 eventStart = Calendar.getInstance();
-                                eventStart.set(0,0,0, startHour, startMinute);
+                                eventStart.set(date.YEAR, date.MONTH, date.DAY_OF_MONTH, startHour, startMinute);
                                 event_start.setText("Start: " + startHour + ":" + startMinute);
                             }
                         },24,0,true
@@ -214,8 +323,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             }
         });
 
+        // Displays a dialog to pick ending time
+        // todo check if event_end is after event_start
         event_end = (TextView) intervalView.findViewById(R.id.add_event_end);
-
         event_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,7 +337,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                                 endHour = hourOfDay;
                                 endMinute = minute;
                                 eventEnd = Calendar.getInstance();
-                                eventEnd.set(0,0,0, endHour, endMinute);
+                                eventEnd.set(date.YEAR, date.MONTH, date.DAY_OF_MONTH, endHour, endMinute);
                                 event_end.setText("End: " + endHour + ":" + endMinute);
                             }
                         },24,0,true
@@ -257,7 +367,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             number_of_repetitions = (EditText) repetitionView.findViewById(R.id.num_of_reperitions);
             number_of_repetitions.setEnabled(false);
 
-            // displays repetition options if the box is checked (the box is initially checked)
+            // displays repetition options if the box is checked
             repeat = (CheckBox) repetitionView.findViewById(R.id.repeatition_checkbox);
             repeat.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -308,15 +418,30 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
 
         // todo location
 
-        done = (Button) commonItemsView.findViewById(R.id.add_event_done);
-        done.setOnClickListener(new View.OnClickListener() {
+        save = (Button) commonItemsView.findViewById(R.id.add_event_done);
+        save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                saveData();
+                loadData();
+                addedEvent = new CalendarEvent(eventStart, eventEnd, eventName, eventID, eventType);
+                DBHelper dbHelper = new DBHelper(DayActivity.this, DBHelper.DB_NAME, null);
+                dbHelper.insertEvent(addedEvent);
             }
         });
 
         addEventPopupView.addView(commonItemsView);
+    }
+
+    public void saveData() {
+        SharedPreferences eventIDPref = getSharedPreferences(EVENT_ID_PREF, MODE_PRIVATE);
+        SharedPreferences.Editor editor = eventIDPref.edit();
+        editor.putLong(EVENT_ID_VALUE, eventID + 1);
+    }
+
+    public void loadData() {
+        SharedPreferences eventIDPref = getSharedPreferences(EVENT_ID_PREF, MODE_PRIVATE);
+        eventID = eventIDPref.getLong(EVENT_ID_VALUE, 7); // for testing purposes
     }
 
     @Override
