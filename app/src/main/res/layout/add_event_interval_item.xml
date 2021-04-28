@@ -21,42 +21,19 @@
         android:id="@+id/add_event_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="Start"
+        android:layout_marginEnd="16dp"
+        android:enabled="true"
+        android:text="Start: 00:00"
         app:layout_constraintBaseline_toBaselineOf="@+id/add_event_interval"
-        app:layout_constraintEnd_toStartOf="@+id/add_event_start_time" />
+        app:layout_constraintEnd_toStartOf="@+id/add_event_end" />
 
     <TextView
         android:id="@+id/add_event_end"
-        android:layout_width="24dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="End"
+        android:layout_marginEnd="16dp"
+        android:text="End: 00:00"
         app:layout_constraintBaseline_toBaselineOf="@+id/add_event_interval"
-        app:layout_constraintEnd_toStartOf="@+id/add_event_end_time" />
-
-    <EditText
-        android:id="@+id/add_event_start_time"
-        android:layout_width="45dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="00:00"
-        android:textSize="14sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/add_event_start"
-        app:layout_constraintEnd_toStartOf="@+id/add_event_end" />
-
-    <EditText
-        android:id="@+id/add_event_end_time"
-        android:layout_width="45dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="00:00"
-        android:textSize="14sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/add_event_end"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

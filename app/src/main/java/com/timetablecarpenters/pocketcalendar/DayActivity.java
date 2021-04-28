@@ -1,8 +1,10 @@
 package com.timetablecarpenters.pocketcalendar;
 
 import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 
@@ -26,17 +29,20 @@ import java.util.Calendar;
 
 public class DayActivity extends BaseActivity implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "DayActivity";
-    private AlertDialog.Builder addEventBuilder, timeBuilder;
-    private AlertDialog addEventDialog, timeDialog;
+    private AlertDialog.Builder addEventBuilder;
+    private AlertDialog addEventDialog;
     private Spinner event_type_spinner, notification_spinner;
     private Spinner repetition_type;
-    private EditText event_name, event_start, event_end, event_due, number_of_repetitions, notes;
+    private TextView event_due_time, event_due_date, event_start, event_end;
+    private EditText event_name, number_of_repetitions, notes;
     private LinearLayout addEventPopupView;
     private Button next, done, blue;
     private CheckBox repeat, notification;
     private String eventType, eventName;
     private ScrollView scrollView;
     private CalendarEvent addedEvent;
+    private int endHour, endMinute, startHour, startMinute;
+    private Calendar eventStart, eventEnd;
 
     private CalendarEvent[] events; //the events in day
     private CalendarEvent[] orderedEventEnds; //the events in day
@@ -96,6 +102,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                 eventName = event_name.getText().toString();
                 if (!eventName.equals("") && eventType != null) {
                     next.setEnabled(false);
+                    event_type_spinner.setEnabled(false);
                     addEventPopupView.removeView(nextButtonView);
                     updatePopupView();
                 }
@@ -153,7 +160,28 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      */
     private void addDueDate() {
         final View dueDateView = getLayoutInflater().inflate(R.layout.add_event_due_date_item, null);
-        event_due = (EditText) dueDateView.findViewById(R.id.due_time);
+        event_due_time = (TextView) dueDateView.findViewById(R.id.due_time);
+
+        event_due_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        DayActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                endHour = hourOfDay;
+                                endMinute = minute;
+                                eventEnd = Calendar.getInstance();
+                                eventEnd.set(0,0,0, endHour, endMinute);
+                                event_due_time.setText(endHour + ":" + endMinute);
+                            }
+                        },24,0,true
+                );
+                timePickerDialog.updateTime(endHour, endMinute);
+                timePickerDialog.show();
+            }
+        });
         addEventPopupView.addView(dueDateView);
     }
 
@@ -163,8 +191,51 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      */
     private void addInterval() {
         final View intervalView = getLayoutInflater().inflate(R.layout.add_event_interval_item, null);
-        event_start = (EditText) intervalView.findViewById(R.id.add_event_start_time);
-        event_end = (EditText) intervalView.findViewById(R.id.add_event_end_time);
+
+        event_start = (TextView) intervalView.findViewById(R.id.add_event_start);
+        event_start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        DayActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                startHour = hourOfDay;
+                                startMinute = minute;
+                                eventStart = Calendar.getInstance();
+                                eventStart.set(0,0,0, startHour, startMinute);
+                                event_start.setText("Start: " + startHour + ":" + startMinute);
+                            }
+                        },24,0,true
+                );
+                timePickerDialog.updateTime(startHour, startMinute);
+                timePickerDialog.show();
+            }
+        });
+
+        event_end = (TextView) intervalView.findViewById(R.id.add_event_end);
+
+        event_end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        DayActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                endHour = hourOfDay;
+                                endMinute = minute;
+                                eventEnd = Calendar.getInstance();
+                                eventEnd.set(0,0,0, endHour, endMinute);
+                                event_end.setText("End: " + endHour + ":" + endMinute);
+                            }
+                        },24,0,true
+                );
+                timePickerDialog.updateTime(endHour, endMinute);
+                timePickerDialog.show();
+            }
+        });
         addEventPopupView.addView(intervalView);
     }
 
