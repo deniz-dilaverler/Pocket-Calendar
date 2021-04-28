@@ -15,13 +15,14 @@ import androidx.core.app.NotificationCompat;
 public class NotificationActivity extends AppCompatActivity {
 
     CheckBox bNotification;
+    Button cdNotification;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_event_common_items);
-        bNotification = (CheckBox) findViewById(R.id.notification_checkbox);
 
-        bNotification.setOnClickListener(new View.OnClickListener(){
+        cdNotification = findViewById(R.id.add_event_button);
+        cdNotification.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v)
             {
