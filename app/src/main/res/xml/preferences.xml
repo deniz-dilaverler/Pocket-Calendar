@@ -15,15 +15,15 @@
             android:defaultValue="@string/default1"
             android:entries="@array/text_font_sizes"
             android:entryValues="@array/text_font_sizes"
-            android:key="In-text font size"
-            android:summary="Choose the font size of texts"
+            android:key="In_text_font_size"
+            android:summary="Medium"
             android:title="In-text font size" />
         <ListPreference
             android:defaultValue="@string/default2"
             android:entries="@array/paragraph_font_sizes"
             android:entryValues="@array/paragraph_font_sizes"
-            android:key="Paragraph font size"
-            android:summary="Choose the font size of paragraphs"
+            android:key="Paragraph_font_size"
+            android:summary="Large"
             android:title="Paragraph font size" />
     </PreferenceCategory>
     <PreferenceCategory
@@ -33,15 +33,15 @@
             android:defaultValue="@string/default3"
             android:entries="@array/notification_sounds"
             android:entryValues="@array/notification_sounds"
-            android:key="Notification sound"
-            android:summary="Choose the notification sound"
+            android:key="Notification_sound"
+            android:summary="Main"
             android:title="Notification sound" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Calendar">
         <Preference
-            android:title="Date"
+            android:title="Reset Calendar"
             android:key="myButton"
-            android:summary="Set today's date" />
+            android:summary="Set to default" />
     </PreferenceCategory>
 
 
