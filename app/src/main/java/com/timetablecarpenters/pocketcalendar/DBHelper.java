@@ -11,6 +11,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -177,7 +178,77 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d(TAG, "getEventsInAnInterval: SQL statement: " + query);
 
         return db.rawQuery(query, new String[] {});
+    }
 
+    /**
+     * Calls the eventsInAnInterval method to retrieve event information in a day Interval.
+     * Instead of returning a Cursor, the data is wrapped into the CalendarEvent class and each CalendarEvent is
+     * added to the ArrayList to be returned.
+     * @param today
+     * @param until
+     * @return ArrayList of events that are in the specified day interval.
+     */
+    public ArrayList<CalendarEvent> getEventsInAnIntervalInArray(Calendar today , Calendar until) {
+
+        Cursor cursor = getEventsInAnInterval(today, until);
+        ArrayList<CalendarEvent> events = new ArrayList<CalendarEvent>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                double longitude;
+                double latitude;
+                String notes;
+                String color;
+                String notifTime;
+                CalendarEvent eventToAdd;
+                //TODO: add code for setting the color, notifTime and Location
+
+                Calendar eventStart = Calendar.getInstance();
+                eventStart.set(Calendar.YEAR, cursor.getInt(cursor.getColumnIndex(DBHelper.YEAR)));
+                eventStart.set(Calendar.MONTH, cursor.getInt(cursor.getColumnIndex(DBHelper.MONTH)));
+                eventStart.set(Calendar.DATE, cursor.getInt(cursor.getColumnIndex(DBHelper.DAY)));
+                // times are stored as strings in the db in HH:MM format, this code beneath parses the hour and minutes into an
+                // int value and later sets the Calendar class
+                try {
+                    eventStart.set(Calendar.HOUR,
+                            Integer.parseInt((cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_START))).substring(0, 2)));
+                } catch (Exception e) {
+                    Log.e(TAG, "onCreate: eventStart setting the hour: " + e);
+                }
+                try {
+                    eventStart.set(Calendar.MINUTE,
+                            Integer.parseInt((cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_START))).substring(3)));
+                } catch (Exception e) {
+                    Log.e(TAG, "onCreate: eventStart setting the minute: " + e);
+                }
+
+                Calendar eventEnd = (Calendar) eventStart.clone();
+
+                try {
+                    eventStart.set(Calendar.HOUR,
+                            Integer.parseInt((cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_END))).substring(0, 2)));
+                } catch (Exception e) {
+                    Log.e(TAG, "onCreate: eventEnd setting the hour: " + e);
+                }
+                try {
+                    eventEnd.set(Calendar.MINUTE,
+                            Integer.parseInt((cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_END))).substring(3)));
+                } catch (Exception e) {
+                    Log.e(TAG, "onCreate: eventEnd setting the minute: " + e);
+                }
+                String eventName = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_NAME));
+                String eventType = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_TYPE));
+                int id = cursor.getInt(cursor.getColumnIndex(DBHelper.ID));
+                // rest of the properties are not needed for the widget to be shown
+                eventToAdd = new CalendarEvent(eventStart, eventEnd, eventName, id, eventType);
+
+               notes = cursor.getString(cursor.getColumnIndex(NOTES));
+               eventToAdd.setNotes(notes);
+               events.add(eventToAdd);
+
+            } while (cursor.moveToNext());
+        }
+        return events;
     }
 
 
