@@ -20,7 +20,7 @@ public class MapActivity extends AppCompatActivity {
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    GoogleMap mMap;
+    GoogleMap map;
 
     private boolean locationPermissionGranted = false;
     @Override
@@ -49,7 +49,7 @@ public class MapActivity extends AppCompatActivity {
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull GoogleMap googleMap) {
-
+                map = googleMap;
             }
         });
     }
