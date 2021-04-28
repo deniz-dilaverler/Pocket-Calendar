@@ -1,5 +1,6 @@
 package com.timetablecarpenters.pocketcalendar;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -63,12 +64,19 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private boolean[] isEventStart; //if false, event is for the ending, not starting
     private DBHelper database;
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.content_day3); //Changed to test it normally activity_day
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: Starts");
+        Log.d(TAG, "onCreate: DayActivity Starts");
+        // Name the dayview's heading
+        Calendar today = Calendar.getInstance();
+        TextView date = findViewById( R.id.dateText);
+        date.setText( today.get( Calendar.YEAR) + " " + formattedMonth( today.get(
+                Calendar.MONTH)) + " " + today.get( Calendar.DAY_OF_MONTH));
+
         //initiate...
         database = new DBHelper(this, DBHelper.DB_NAME, null);
         Calendar calendar1 = Calendar.getInstance();
