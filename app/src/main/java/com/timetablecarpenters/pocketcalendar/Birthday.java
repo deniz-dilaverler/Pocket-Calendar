@@ -18,7 +18,7 @@ public class Birthday extends CalendarEvent{
      * @param id
      * @param type
      */
-    public Birthday (Calendar eventStart, Calendar eventEnd, String name, long id, String type)
+    public Birthday (Calendar eventStart, Calendar eventEnd, String name, long id, String type,boolean giftBought)
     {
 
         super (eventStart,eventEnd, name, id, type);
