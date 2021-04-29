@@ -62,7 +62,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(createTableStatement);
 
     }
-
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
         SQLiteDatabase db = getWritableDatabase();
@@ -100,7 +99,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.putNull(NOTES);
             }
             try {
-                cv.put(COLOR, event.getColor());
+                cv.put(COLOR, event.color);
             } catch(Exception e) {
                 Log.d(TAG, "insertEvent: no Color value " + e);
                 cv.putNull(COLOR);
@@ -240,7 +239,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 // times are stored as strings in the db in HH:MM format, this code beneath parses the hour and minutes into an
                 // int value and later sets the Calendar class
                 try {
-                    eventStart.set(Calendar.HOUR,
+                    eventStart.set(Calendar.HOUR_OF_DAY,
                             Integer.parseInt((cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_START))).substring(0, 2)));
                 } catch (Exception e) {
                     Log.e(TAG, "onCreate: eventStart setting the hour: " + e);
@@ -255,7 +254,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 Calendar eventEnd = (Calendar) eventStart.clone();
 
                 try {
-                    eventStart.set(Calendar.HOUR,
+                    eventEnd.set(Calendar.HOUR_OF_DAY,
                             Integer.parseInt((cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_END))).substring(0, 2)));
                 } catch (Exception e) {
                     Log.e(TAG, "onCreate: eventEnd setting the hour: " + e);
