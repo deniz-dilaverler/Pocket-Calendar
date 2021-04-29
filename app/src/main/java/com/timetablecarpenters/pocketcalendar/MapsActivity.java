@@ -58,5 +58,6 @@ private static final int ERROR_DIALOG_REQUEST = 9001;
         } else {
             Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
         }
+        return false;
     }
 }

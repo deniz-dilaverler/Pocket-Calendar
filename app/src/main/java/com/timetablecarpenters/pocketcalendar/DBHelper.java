@@ -99,6 +99,9 @@ public class DBHelper extends SQLiteOpenHelper {
             }
             try {
                 cv.put(COLOR, event.color);
+=======
+                // TODO cv.put(COLOR, event.getColor());
+>>>>>>> Stashed changes
             } catch(Exception e) {
                 Log.d(TAG, "insertEvent: no Color value " + e);
                 cv.putNull(COLOR);
