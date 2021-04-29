@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -63,6 +64,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private CalendarEvent[] allEventsChron; //chronologically all events
     private boolean[] isEventStart; //if false, event is for the ending, not starting
     private DBHelper database;
+    private Calendar thisDay;
+    private final static String INTENT_KEY = "today_date";
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -71,13 +74,22 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         setContentView(R.layout.content_day3); //Changed to test it normally activity_day
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: DayActivity Starts");
-        // Name the dayview's heading
-        Calendar today = Calendar.getInstance();
-        TextView date = findViewById( R.id.dateText);
-        date.setText( today.get( Calendar.YEAR) + " " + formattedMonth( today.get(
-                Calendar.MONTH)) + " " + today.get( Calendar.DAY_OF_MONTH));
+
+        Bundle extras;
 
         //initiate...
+        extras = getIntent().getExtras();
+        if ( extras != null) {
+            thisDay = (Calendar) extras.get(INTENT_KEY);
+        }
+        if (thisDay == null) {
+            Log.d(TAG, "onCreate: SA" );
+            thisDay = Calendar.getInstance();
+        }
+        TextView date = findViewById( R.id.dateText);
+        date.setText( thisDay.get( Calendar.YEAR) + " " + formattedMonth( thisDay.get(
+                Calendar.MONTH)) + " " + thisDay.get( Calendar.DAY_OF_MONTH));
+
         database = new DBHelper(this, DBHelper.DB_NAME, null);
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set( Calendar.HOUR, 0);
@@ -849,7 +861,35 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             createTextView( layouts[i], i);
         }
     }
+    /**
+     *
+     */
+    @Override
+    public void leftSwipe() {
+        Log.d(TAG, "leftSwipe: DayActivity");
+        super.leftSwipe();
+        finish();
+        Intent intent = new Intent(this, DayActivity.class);
+        thisDay.add( Calendar.DATE, 1);
+        intent.putExtra( INTENT_KEY, thisDay);
+        startActivity(intent);
+        overridePendingTransition( R.anim.slide_in_right, R.anim.slide_out_left);
+    }
 
+    /**
+     *
+     */
+    @Override
+    public void rightSwipe() {
+        Log.d(TAG, "rightSwipe: DayActivity");
+        super.rightSwipe();
+        finish();
+        Intent intent = new Intent(this, DayActivity.class);
+        thisDay.add( Calendar.DATE, -1);
+        intent.putExtra( INTENT_KEY, thisDay);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
     /*
      //when a leftSwipe is notifed by the super class adds a week to the date of weekView and refreshes the activity
 
