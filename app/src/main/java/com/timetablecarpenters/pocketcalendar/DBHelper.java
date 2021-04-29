@@ -6,11 +6,11 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -31,13 +31,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String LATITUDE = "latitude";
     public static final String LONGITUDE = "longitude";
     public static final String NOTIF_TIME = "notification_time";
+    public static final String COLOR = "color";
 
 
 
 
     // constructor
     public DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory) {
-        super(context, name, factory, 5);
+        super(context, name, factory, 6);
     }
 
     // methods
@@ -56,6 +57,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 LONGITUDE + " REAL," +
                 LATITUDE + " REAL," +
                 NOTES + " TEXT, " +
+                COLOR + " INTEGER, " +
                 NOTIF_TIME + " TEXT);";
         db.execSQL(createTableStatement);
 
@@ -63,7 +65,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        SQLiteDatabase db = getWritableDatabase();
+        // Drop older table if existed
+        db.execSQL("DROP TABLE IF EXISTS " + EVENTS_TABLE);
 
+        // Create tables again
+        onCreate(db);
     }
 
     /**
@@ -77,20 +84,43 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
 
-        if (checkIsDataAlreadyInDB(event)) {
+        if (!checkIsDataAlreadyInDB(event)) {
             cv.put(ID, event.getId());
             cv.put(YEAR, event.getYear());
             cv.put(MONTH, event.getMonth());
             cv.put(DAY, event.getDay());
             cv.put(EVENT_TYPE, event.getType());
             cv.put(EVENT_NAME, event.getName());
-            cv.put(NOTES, event.getNotes());
-            cv.put(LONGITUDE, event.getLocation().getLatitude());
-            cv.put(LATITUDE, event.getLocation().getLongitude());
-            cv.put(NOTIF_TIME, event.getNotifTime());
             cv.put(EVENT_START, event.getEventStartTime().toString());
             cv.put(EVENT_END, event.getEventEndTime().toString());
+            try {
+                cv.put(NOTES, event.getNotes());
+            } catch (Exception e) {
+                Log.e(TAG, "insertEvent: " + e);
+                cv.putNull(NOTES);
+            }
+            try {
+                cv.put(COLOR, event.getColor());
+            } catch(Exception e) {
+                Log.d(TAG, "insertEvent: no Color value " + e);
+                cv.putNull(COLOR);
+            }
 
+
+            try {
+                Location location = event.getLocation();
+                cv.put(LATITUDE, location.getLatitude());
+                cv.put(LONGITUDE, location.getLongitude());
+            } catch (Exception e) {
+                Log.e(TAG, "insertEvent: Location " + e);
+                cv.putNull(LONGITUDE);
+                cv.putNull(LATITUDE);
+            }
+            try {
+                cv.put(NOTIF_TIME, event.getNotifTime());
+            } catch (Exception e) {
+                Log.e(TAG, "insertEvent: NotifTime " + e);
+            }
             long insert = db.insert(EVENTS_TABLE, null, cv);
             return insert;
         }
@@ -101,15 +131,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public boolean checkIsDataAlreadyInDB(CalendarEvent event) {
         SQLiteDatabase db = getReadableDatabase();
-
-        String query = "Select * from " + EVENTS_TABLE + " where " + YEAR + " = " + event.getYear() + " AND "
-                                                                   + MONTH + " = " + event.getMonth() + " AND "
-                                                                   + DAY + " = " + event.getDay() + " AND "
-                                                                   + EVENT_NAME + " = " + event.getName() + " AND "
-                                                                   + EVENT_START + " = " + event.getEventStartTime() + " AND "
-                                                                   + EVENT_END + " = " + event.getEventEndTime() + " ;"
+        Log.d(TAG, "checkIsDataAlreadyInDB: " + event.getYear() + " " + event.getMonth() + " " + event.getDay());
+        String query = "Select * from " + EVENTS_TABLE + " where " + YEAR + " = ?" + " AND "
+                                                                   + MONTH + " = ?" + " AND "
+                                                                   + DAY + " = ?" + " AND "
+                                                                   + EVENT_NAME + " = ?" + " AND "
+                                                                   + EVENT_START + " = ?" + " AND "
+                                                                   + EVENT_END + " = ?" + " ;"
                 ;
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[] {event.getYear()+"", event.getMonth()+"", event.getDay()+"", event.getName(), event.getEventStartTime(), event.getEventEndTime() });
         if(cursor.getCount() <= 0){
             cursor.close();
             return false;
@@ -198,10 +228,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 double longitude;
                 double latitude;
                 String notes;
-                String color;
+                int color;
                 String notifTime;
                 CalendarEvent eventToAdd;
-                //TODO: add code for setting the color, notifTime and Location
+                //TODO: add code for setting the notifTime and Location
 
                 Calendar eventStart = Calendar.getInstance();
                 eventStart.set(Calendar.YEAR, cursor.getInt(cursor.getColumnIndex(DBHelper.YEAR)));
@@ -244,10 +274,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
                notes = cursor.getString(cursor.getColumnIndex(NOTES));
                eventToAdd.setNotes(notes);
+               if (!cursor.isNull(cursor.getColumnIndex(COLOR)))
+                   eventToAdd.setColor(cursor.getInt(cursor.getColumnIndex(COLOR)));
+
                events.add(eventToAdd);
 
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return events;
     }
 

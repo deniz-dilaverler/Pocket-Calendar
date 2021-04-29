@@ -1,16 +1,22 @@
 package com.timetablecarpenters.pocketcalendar;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,28 +27,35 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 
+import androidx.annotation.RequiresApi;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
 public class DayActivity extends BaseActivity implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "DayActivity";
+    public static final String EVENT_ID_PREF = "eventID";
+    public static final String EVENT_ID_VALUE = "value";
     private AlertDialog.Builder addEventBuilder;
     private AlertDialog addEventDialog;
     private Spinner event_type_spinner, notification_spinner;
     private Spinner repetition_type;
-    private TextView event_due_time, event_due_date, event_start, event_end;
+    private TextView event_due_time, event_date, event_start, event_end;
     private EditText event_name, number_of_repetitions, notes;
     private LinearLayout addEventPopupView;
-    private Button next, done, blue;
+    private Button next, save, blue;
     private CheckBox repeat, notification;
     private String eventType, eventName;
     private ScrollView scrollView;
+    private DatePickerDialog.OnDateSetListener dateSetListener;
     private CalendarEvent addedEvent;
     private int endHour, endMinute, startHour, startMinute;
-    private Calendar eventStart, eventEnd;
+    private Calendar eventStart, eventEnd, date;
+    private long eventID;
+
 
     private CalendarEvent[] events; //the events in day
     private CalendarEvent[] orderedEventEnds; //the events in day
@@ -50,26 +63,44 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private String[][] textsOfHours;
     private CalendarEvent[] allEventsChron; //chronologically all events
     private boolean[] isEventStart; //if false, event is for the ending, not starting
-    final private String GAP = "     ";
+    private DBHelper database;
+    private Calendar thisDay;
+    private final static String INTENT_KEY = "today_date";
 
-
-    //BORROWED
-    public Calendar first;
-    private final static String INTENT_KEY = "first_date";
-
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.content_day2); //Changed to test it normally activity_day
+        setContentView(R.layout.content_day3); //Changed to test it normally activity_day
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: Starts");
+        Log.d(TAG, "onCreate: DayActivity Starts");
 
+        Bundle extras;
 
         //initiate...
-        pullEventsOfDay();
+        extras = getIntent().getExtras();
+        if ( extras != null) {
+            thisDay = (Calendar) extras.get(INTENT_KEY);
+        }
+        if (thisDay == null) {
+            Log.d(TAG, "onCreate: SA" );
+            thisDay = Calendar.getInstance();
+        }
+        TextView date = findViewById( R.id.dateText);
+        date.setText( thisDay.get( Calendar.YEAR) + " " + formattedMonth( thisDay.get(
+                Calendar.MONTH)) + " " + thisDay.get( Calendar.DAY_OF_MONTH));
+
+        database = new DBHelper(this, DBHelper.DB_NAME, null);
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set( Calendar.HOUR, 0);
+        calendar1.set( Calendar.MINUTE, 0);
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.set( Calendar.HOUR, 23);
+        calendar2.set( Calendar.MINUTE, 59);
+        pullEventsOfDay( database.getEventsInAnIntervalInArray( calendar1, calendar2));
         setOrderedEventStarts();
         setOrderedEventEnds();
         initiateRelativeLayouts();
-
 
         FloatingActionButton fab = findViewById(R.id.add_event_button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -160,8 +191,36 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      */
     private void addDueDate() {
         final View dueDateView = getLayoutInflater().inflate(R.layout.add_event_due_date_item, null);
-        event_due_time = (TextView) dueDateView.findViewById(R.id.due_time);
 
+        // Displays a dialog to pick a date
+        event_date = (TextView) dueDateView.findViewById(R.id.due_date);
+        event_date.setText(getTodaysDate());
+
+        event_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                date = Calendar.getInstance();
+                final int day = date.get(Calendar.DAY_OF_MONTH);
+                final int month = date.get(Calendar.MONTH);
+                final int year = date.get(Calendar.YEAR);
+
+                DatePickerDialog dialog = new DatePickerDialog(DayActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        dateSetListener, year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
+        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                event_date.setText(formattedMonth(month) + " " + dayOfMonth + " " + year);
+            }
+        };
+
+        // Displays a dialog to pick time
+        event_due_time = (TextView) dueDateView.findViewById(R.id.due_time);
         event_due_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,7 +232,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                                 endHour = hourOfDay;
                                 endMinute = minute;
                                 eventEnd = Calendar.getInstance();
-                                eventEnd.set(0,0,0, endHour, endMinute);
+                                eventEnd.set(date.YEAR, date.MONTH, date.DAY_OF_MONTH, endHour, endMinute);
+                                eventStart = (Calendar) eventEnd.clone();
                                 event_due_time.setText(endHour + ":" + endMinute);
                             }
                         },24,0,true
@@ -186,12 +246,84 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     }
 
     /**
+     * Reports the date of the current day in string form
+     * @return Month Day Year (ex. May 1 2021)
+     */
+    private String getTodaysDate() {
+        Calendar todaysDate = Calendar.getInstance();
+        final int day = todaysDate.get(Calendar.DAY_OF_MONTH);
+        final int month = todaysDate.get(Calendar.MONTH);
+        final int year = todaysDate.get(Calendar.YEAR);
+        return formattedMonth(month) + " " + day + " " + year;
+    }
+
+    /**
+     * Reports the name of the month according to the number
+     * @param month number
+     * @return Sring month name
+     */
+    private String formattedMonth(int month) {
+        if (month == 0)
+            return "Jan";
+        if (month == 1)
+            return "Feb";
+        if (month == 2)
+            return "Mar";
+        if (month == 3)
+            return "Apr";
+        if (month == 4)
+            return "May";
+        if (month == 5)
+            return "Jun";
+        if (month == 6)
+            return "Jul";
+        if (month == 7)
+            return "Aug";
+        if (month == 8)
+            return "Sep";
+        if (month == 9)
+            return "Oct";
+        if (month == 10)
+            return "Nov";
+
+        // For 11th month and if anything goes wrong
+        return "Dec";
+    }
+
+    /**
      * Adds interval view to add event popup
      * @author Elifsena Öz
      */
     private void addInterval() {
         final View intervalView = getLayoutInflater().inflate(R.layout.add_event_interval_item, null);
 
+        // Displays a dialog to pick a date
+        event_date = (TextView) intervalView.findViewById(R.id.event_date);
+        event_date.setText(getTodaysDate());
+        event_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                date = Calendar.getInstance();
+                final int day = date.get(Calendar.DAY_OF_MONTH);
+                final int month = date.get(Calendar.MONTH);
+                final int year = date.get(Calendar.YEAR);
+
+                DatePickerDialog dialog = new DatePickerDialog(DayActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        dateSetListener, year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
+        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                event_date.setText(formattedMonth(month) + " " + dayOfMonth + " " + year);
+            }
+        };
+
+        // Displays a dialog to pick starting time
         event_start = (TextView) intervalView.findViewById(R.id.add_event_start);
         event_start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,7 +336,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                                 startHour = hourOfDay;
                                 startMinute = minute;
                                 eventStart = Calendar.getInstance();
-                                eventStart.set(0,0,0, startHour, startMinute);
+                                eventStart.set(date.YEAR, date.MONTH, date.DAY_OF_MONTH, startHour, startMinute);
                                 event_start.setText("Start: " + startHour + ":" + startMinute);
                             }
                         },24,0,true
@@ -214,8 +346,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             }
         });
 
+        // Displays a dialog to pick ending time
+        // todo check if event_end is after event_start
         event_end = (TextView) intervalView.findViewById(R.id.add_event_end);
-
         event_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,7 +360,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                                 endHour = hourOfDay;
                                 endMinute = minute;
                                 eventEnd = Calendar.getInstance();
-                                eventEnd.set(0,0,0, endHour, endMinute);
+                                eventEnd.set(date.YEAR, date.MONTH, date.DAY_OF_MONTH, endHour, endMinute);
                                 event_end.setText("End: " + endHour + ":" + endMinute);
                             }
                         },24,0,true
@@ -257,7 +390,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             number_of_repetitions = (EditText) repetitionView.findViewById(R.id.num_of_reperitions);
             number_of_repetitions.setEnabled(false);
 
-            // displays repetition options if the box is checked (the box is initially checked)
+            // displays repetition options if the box is checked
             repeat = (CheckBox) repetitionView.findViewById(R.id.repeatition_checkbox);
             repeat.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -308,15 +441,30 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
 
         // todo location
 
-        done = (Button) commonItemsView.findViewById(R.id.add_event_done);
-        done.setOnClickListener(new View.OnClickListener() {
+        save = (Button) commonItemsView.findViewById(R.id.add_event_done);
+        save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                saveData();
+                loadData();
+                addedEvent = new CalendarEvent(eventStart, eventEnd, eventName, eventID, eventType);
+                DBHelper dbHelper = new DBHelper(DayActivity.this, DBHelper.DB_NAME, null);
+                dbHelper.insertEvent(addedEvent);
             }
         });
 
         addEventPopupView.addView(commonItemsView);
+    }
+
+    public void saveData() {
+        SharedPreferences eventIDPref = getSharedPreferences(EVENT_ID_PREF, MODE_PRIVATE);
+        SharedPreferences.Editor editor = eventIDPref.edit();
+        editor.putLong(EVENT_ID_VALUE, eventID + 1);
+    }
+
+    public void loadData() {
+        SharedPreferences eventIDPref = getSharedPreferences(EVENT_ID_PREF, MODE_PRIVATE);
+        eventID = eventIDPref.getLong(EVENT_ID_VALUE, 7); // for testing purposes
     }
 
     @Override
@@ -350,28 +498,30 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      * gets today's events and puts them all in an array as events property
      * @author Alperen Utku Yalçın
      */
-    private void pullEventsOfDay() {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void pullEventsOfDay( ArrayList<CalendarEvent> calEvents) {
         //todo - once the other methods work
-        //for now..
-        Calendar calendar = Calendar.getInstance();
-        Calendar calendar2 = Calendar.getInstance();
-        events = new CalendarEvent[5];
+        //for now
+        int counter;
 
+        ArrayList<CalendarEvent> arrayListEvents = new ArrayList<>();
         Calendar calendar3 = Calendar.getInstance();
         Calendar calendar4 = Calendar.getInstance();
-        calendar3.set( Calendar.HOUR_OF_DAY , 1);
+        calendar3.set( Calendar.HOUR_OF_DAY , 10);
         calendar3.set( Calendar.MINUTE , 30);
-        calendar4.set( Calendar.HOUR_OF_DAY , 3);
+        calendar4.set( Calendar.HOUR_OF_DAY , 13);
         calendar4.set( Calendar.MINUTE , 33);
-        events[0] = new CalendarEvent( calendar3, calendar4, "You Have A Meeting" + calendar3.get( Calendar.MINUTE), 2, "Meeting");
-        events[0].setColor( Color.RED);
+        arrayListEvents.add( new CalendarEvent( calendar3, calendar4, "You Have A Meeting" + calendar3.get( Calendar.MINUTE), 2, "Meeting"));
+        arrayListEvents.get(0).setColor( Color.RED);
 
-        calendar.set( Calendar.HOUR_OF_DAY , 1);
+        Calendar calendar = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+        calendar.set( Calendar.HOUR_OF_DAY , 0);
         calendar.set( Calendar.MINUTE , 1);
         calendar2.set( Calendar.HOUR_OF_DAY , 2);
         calendar2.set( Calendar.MINUTE , 3);
-        events[1] = new CalendarEvent( calendar, calendar2, "You Have A Meeting"+ calendar.get( Calendar.MINUTE), 1, "Meeting");
-        events[1].setColor( Color.BLUE);
+        arrayListEvents.add( new CalendarEvent( calendar, calendar2, "You Have A Meeting"+ calendar.get( Calendar.MINUTE), 1, "Meeting"));
+        arrayListEvents.get(1).setColor( Color.BLUE);
 
         Calendar calendar5 = Calendar.getInstance();
         Calendar calendar6 = Calendar.getInstance();
@@ -379,8 +529,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         calendar5.set( Calendar.MINUTE , 1);
         calendar6.set( Calendar.HOUR_OF_DAY , 2);
         calendar6.set( Calendar.MINUTE , 3);
-        events[2] = new CalendarEvent( calendar5, calendar6, "Bruh", 3, "Meeting");
-        events[2].setColor( Color.DKGRAY);
+        arrayListEvents.add( new CalendarEvent( calendar5, calendar6, "Bruh", 3, "Meeting"));
+        arrayListEvents.get(2).setColor( Color.DKGRAY);
 
         Calendar calendar7 = Calendar.getInstance();
         Calendar calendar8 = Calendar.getInstance();
@@ -388,18 +538,59 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         calendar7.set( Calendar.MINUTE , 1);
         calendar8.set( Calendar.HOUR_OF_DAY , 0);
         calendar8.set( Calendar.MINUTE , 3);
-        events[3] = new CalendarEvent( calendar7, calendar8, "You Have A Meeting Too", 4, "Meeting");
-        events[3].setColor( Color.GREEN);
+        arrayListEvents.add( new CalendarEvent( calendar7, calendar8, "You Have A Meeting Too", 4, "Meeting"));
+        arrayListEvents.get(3).setColor( Color.GREEN);
 
         Calendar calendar9 = Calendar.getInstance();
         Calendar calendar10 = Calendar.getInstance();
-        calendar9.set( Calendar.HOUR_OF_DAY , 1);
+        calendar9.set( Calendar.HOUR_OF_DAY , 11);
         calendar9.set( Calendar.MINUTE , 10);
-        calendar10.set( Calendar.HOUR_OF_DAY , 1);
+        calendar10.set( Calendar.HOUR_OF_DAY , 11);
         calendar10.set( Calendar.MINUTE , 20);
-        events[4] = new CalendarEvent( calendar9, calendar10, "You Have A Meeting Too" + calendar9.get( Calendar.MINUTE), 5, "Meeting");
-        events[3].setColor( Color.CYAN);
+        arrayListEvents.add( new CalendarEvent( calendar9, calendar10, "You Have A Meeting Too" + calendar9.get( Calendar.MINUTE), 5, "Meeting"));
+        arrayListEvents.get(4).setColor( Color.BLUE);
 
+        Calendar calendar11 = Calendar.getInstance();
+        Calendar calendar12 = Calendar.getInstance();
+        calendar11.set( Calendar.HOUR_OF_DAY , 20);
+        calendar11.set( Calendar.MINUTE , 1);
+        calendar12.set( Calendar.HOUR_OF_DAY , 21);
+        calendar12.set( Calendar.MINUTE , 50);
+        arrayListEvents.add( new CalendarEvent( calendar11, calendar12, "Meet with friends", 4, "Meeting"));
+        arrayListEvents.get(5).setColor( Color.MAGENTA);
+
+        Calendar calendar13 = Calendar.getInstance();
+        Calendar calendar14 = Calendar.getInstance();
+        calendar13.set( Calendar.HOUR_OF_DAY , 18);
+        calendar13.set( Calendar.MINUTE , 10);
+        calendar14.set( Calendar.HOUR_OF_DAY , 18);
+        calendar14.set( Calendar.MINUTE , 20);
+        arrayListEvents.add( new CalendarEvent( calendar13, calendar14, "Have a cup of cofee" + calendar9.get( Calendar.MINUTE), 5, "Meeting"));
+        arrayListEvents.get(6).setColor( Color.CYAN);
+
+        counter = 0;
+        events = new CalendarEvent[ arrayListEvents.size()];
+        for ( CalendarEvent event : arrayListEvents) {
+            events[counter] = event;
+            counter++;
+        }
+/*
+        counter = 0;
+        events = new CalendarEvent[ calEvents.size()];
+        for ( int i = 0; i < calEvents.size(); i++) {
+            if ( calEvents.get( i) != null) {
+                counter++;
+            }
+        }
+        events = new CalendarEvent[ counter];
+        counter = 0;
+        for ( int i = 0; i < calEvents.size(); i++) {
+            if ( calEvents.get( i) != null) {
+                events[counter] = calEvents.get( i);
+                counter++;
+                System.out.println( "ERROR ERROR ERROR ERROR AAAAAAAAAAAAAAAAAAAA");
+            }
+        }*/
         orderedEventEnds = events;
     }
 
@@ -415,7 +606,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      */
     private void setOrderedEventStarts() {
         Calendar calendar1000 = Calendar.getInstance();
-        calendar1000.set( Calendar.HOUR_OF_DAY , 11);
+        calendar1000.set( Calendar.HOUR_OF_DAY , 23);
         calendar1000.set( Calendar.MINUTE , 59);
         CalendarEvent[] result = new CalendarEvent[events.length];
         boolean commander[] = new boolean[events.length];
@@ -427,7 +618,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         for ( int a = 0; a < events.length; a++) {
             counter = 0;
             CalendarEvent current = new CalendarEvent( calendar1000, calendar1000, "dsladjas" + calendar1000.get( Calendar.MINUTE), 0, ".");
-            for ( int i = 0; i < events.length; i++) {
+            for ( int i = 0; i < events.length && events[i] != null; i++) {
                 if ( commander[i] && clockToInt(current.getEventStart()) > clockToInt(events[i].getEventStart())) {
                     current = events[i];
                     counter = i;
@@ -457,7 +648,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         for ( int a = 0; a < orderedEventEnds.length; a++) {
             counter = 0;
             CalendarEvent current = new CalendarEvent( calendar2000, calendar2000, "sth " + calendar2000.get( Calendar.MINUTE), 0, ".");
-            for ( int i = 0; i < orderedEventEnds.length; i++) {
+            for ( int i = 0; i < orderedEventEnds.length && orderedEventEnds[i] != null; i++) {
                 if ( commander[i] && clockToInt(current.getEventEnd()) > clockToInt(orderedEventEnds[i].getEventEnd())) {
                     current = orderedEventEnds[i];
                     counter = i;
@@ -562,71 +753,32 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                 counter2++;
             }
         }
-
-        /* FOR TESTING PURPOSES:
-        setOrderedEventStarts();
-        allEventsChron = new CalendarEvent[ events.length];
-        isEventStart = new boolean[ events.length];
-        for ( int i = 0 ; i < events.length; i++) {
-            isEventStart[i] = false;
-        }
-        allEventsChron = orderedEventEnds;
-        */
     }
     /**
      * Creates and sets the textViews with appropriate texts
      * @author Alperen Utku Yalçın
      */
     private void createTextView( RelativeLayout layout, int hour) {
-        //todo
-        int gapCounter = 0;
-        int[] gaps;
         String str;
         View recent = layout;
-
-        gaps = new int[ allEventsChron.length];
-        for ( int i = 0; i < gaps.length; i++) {
-            if ( isEventStart[i]) {
-                gaps[i] = gapCounter;
-                gapCounter++;
-            }
-            else {
-                gapCounter--;
-                for ( int a = 0; a < allEventsChron.length; a++) {
-                    //if ( allEventsChron[a].equals( allEventsChron[i]) && a != i) {
-                    //    gaps[i] = gaps[a];
-                    //}
-                }
-            }
-        }
-        gapCounter = 0;
         for ( int i = 0; i < allEventsChron.length; i++) {
-            if ( isEventStart[i]) {
+            if (isEventStart[i]) {
                 str = "[Start] " + allEventsChron[i].getEventStartTime();
-                str += " " + allEventsChron[i].getName() ;
-                for ( int a = gaps[i]; a > 0; a--) {
-                    str = GAP + str;
-                }
-                gapCounter++;
+            } else {
+                str = "[End] " + allEventsChron[i].getEventEndTime();
             }
-            else {
-                str = "[End] " +  allEventsChron[i].getEventEndTime();
-                str += " " + allEventsChron[i].getName();
-                gapCounter--;
-                for ( int a = gaps[i]; a > 0; a--) {
-                    str = GAP + str;
-                }
-            }
+            str += " " + allEventsChron[i].getName();
 
-            if ( discriminateEvent( allEventsChron[i], isEventStart[i]).get( Calendar.HOUR_OF_DAY) == hour) {
+            if (discriminateEvent(allEventsChron[i], isEventStart[i]).get(Calendar.HOUR_OF_DAY) == hour) {
                 TextView textView = new TextView(DayActivity.this);
-                textView.setId( (int) ( Math.random() * 10000)); // It is not a very good solution
+                textView.setId((int) (Math.random() * 10000)); // It is not a very good solution
                 RelativeLayout.LayoutParams layoutParams = new
                         RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.addRule(RelativeLayout.BELOW, recent.getId());
 
-                textView.setText( str);
-                textView.setTextColor( allEventsChron[i].color);
+                recent = textView;
+                textView.setText(str);
+                textView.setTextColor(allEventsChron[i].color);
                 textView.setSingleLine();
                 layout.addView(textView, layoutParams);
 
@@ -634,12 +786,11 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        textView.setText( "POG");
+                        textView.setText("POG");
 
                     }
                 });
 
-                recent = textView;
             }
         }
     }
@@ -668,19 +819,78 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         layouts[3] = rl4;
         RelativeLayout rl5 = findViewById( R.id.rl5);
         layouts[4] = rl5;
-        //... more will be added.
+        RelativeLayout rl6 = findViewById( R.id.rl6);
+        layouts[5] = rl6;
+        RelativeLayout rl7 = findViewById( R.id.rl7);
+        layouts[6] = rl7;
+        RelativeLayout rl8 = findViewById( R.id.rl8);
+        layouts[7] = rl8;
+        RelativeLayout rl9 = findViewById( R.id.rl9);
+        layouts[8] = rl9;
+        RelativeLayout rl10 = findViewById( R.id.rl10);
+        layouts[9] = rl10;
+        RelativeLayout rl11 = findViewById( R.id.rl11);
+        layouts[10] = rl11;
+        RelativeLayout rl12 = findViewById( R.id.rl12);
+        layouts[11] = rl12;
+        RelativeLayout rl13 = findViewById( R.id.rl13);
+        layouts[12] = rl13;
+        RelativeLayout rl14 = findViewById( R.id.rl14);
+        layouts[13] = rl14;
+        RelativeLayout rl15 = findViewById( R.id.rl15);
+        layouts[14] = rl15;
+        RelativeLayout rl16 = findViewById( R.id.rl16);
+        layouts[15] = rl16;
+        RelativeLayout rl17 = findViewById( R.id.rl17);
+        layouts[16] = rl17;
+        RelativeLayout rl18 = findViewById( R.id.rl18);
+        layouts[17] = rl18;
+        RelativeLayout rl19 = findViewById( R.id.rl19);
+        layouts[18] = rl19;
+        RelativeLayout rl20 = findViewById( R.id.rl20);
+        layouts[19] = rl20;
+        RelativeLayout rl21 = findViewById( R.id.rl21);
+        layouts[20] = rl21;
+        RelativeLayout rl22 = findViewById( R.id.rl22);
+        layouts[21] = rl22;
+        RelativeLayout rl23 = findViewById( R.id.rl23);
+        layouts[22] = rl23;
+        RelativeLayout rl24 = findViewById( R.id.rl24);
+        layouts[23] = rl24;
         for ( int i = 0; i < 24 ; i++) {
             createTextView( layouts[i], i);
         }
     }
-    /* TO BE ADDED: ( by Alperen)
-    - get events from database
+    /**
+     *
+     */
+    @Override
+    public void leftSwipe() {
+        Log.d(TAG, "leftSwipe: DayActivity");
+        super.leftSwipe();
+        finish();
+        Intent intent = new Intent(this, DayActivity.class);
+        thisDay.add( Calendar.DATE, 1);
+        intent.putExtra( INTENT_KEY, thisDay);
+        startActivity(intent);
+        overridePendingTransition( R.anim.slide_in_right, R.anim.slide_out_left);
+    }
 
-    */
-
-    //BORROWED CODE
+    /**
+     *
+     */
+    @Override
+    public void rightSwipe() {
+        Log.d(TAG, "rightSwipe: DayActivity");
+        super.rightSwipe();
+        finish();
+        Intent intent = new Intent(this, DayActivity.class);
+        thisDay.add( Calendar.DATE, -1);
+        intent.putExtra( INTENT_KEY, thisDay);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
     /*
-
      //when a leftSwipe is notifed by the super class adds a week to the date of weekView and refreshes the activity
 
     @Override
