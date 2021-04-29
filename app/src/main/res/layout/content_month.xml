@@ -165,6 +165,7 @@
             android:layout_height="wrap_content" />
 
         <include
+            android:id="@+id/week6_row"
             layout="@layout/month_view_list_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

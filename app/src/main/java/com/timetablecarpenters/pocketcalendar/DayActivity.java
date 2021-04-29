@@ -91,13 +91,17 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                 Calendar.MONTH)) + " " + thisDay.get( Calendar.DAY_OF_MONTH));
 
         database = new DBHelper(this, DBHelper.DB_NAME, null);
+
         Calendar calendar1 = Calendar.getInstance();
-        calendar1.set( Calendar.HOUR, 0);
+        calendar1.add( Calendar.DATE, -1);
+        calendar1.set( Calendar.HOUR_OF_DAY, 0);
         calendar1.set( Calendar.MINUTE, 0);
         Calendar calendar2 = Calendar.getInstance();
-        calendar2.set( Calendar.HOUR, 23);
+        calendar2.add( Calendar.DATE, 1);
+        calendar2.set( Calendar.HOUR_OF_DAY, 23);
         calendar2.set( Calendar.MINUTE, 59);
         pullEventsOfDay( database.getEventsInAnIntervalInArray( calendar1, calendar2));
+
         setOrderedEventStarts();
         setOrderedEventEnds();
         initiateRelativeLayouts();
@@ -503,7 +507,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         //todo - once the other methods work
         //for now
         int counter;
-
+/*
         ArrayList<CalendarEvent> arrayListEvents = new ArrayList<>();
         Calendar calendar3 = Calendar.getInstance();
         Calendar calendar4 = Calendar.getInstance();
@@ -573,8 +577,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         for ( CalendarEvent event : arrayListEvents) {
             events[counter] = event;
             counter++;
-        }
-/*
+        }*/
+
         counter = 0;
         events = new CalendarEvent[ calEvents.size()];
         for ( int i = 0; i < calEvents.size(); i++) {
@@ -585,12 +589,12 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         events = new CalendarEvent[ counter];
         counter = 0;
         for ( int i = 0; i < calEvents.size(); i++) {
-            if ( calEvents.get( i) != null) {
+            if ( calEvents.get( i) != null && calEvents.get(i).getEventStart().get( Calendar.DATE) == thisDay.get( Calendar.DATE) ) {
                 events[counter] = calEvents.get( i);
                 counter++;
-                System.out.println( "ERROR ERROR ERROR ERROR AAAAAAAAAAAAAAAAAAAA");
+                System.out.println( "  ---   WORKING  ---   AAAAAAAAAAAAAAAAAAAA");
             }
-        }*/
+        }
         orderedEventEnds = events;
     }
 
@@ -761,36 +765,37 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private void createTextView( RelativeLayout layout, int hour) {
         String str;
         View recent = layout;
-        for ( int i = 0; i < allEventsChron.length; i++) {
-            if (isEventStart[i]) {
-                str = "[Start] " + allEventsChron[i].getEventStartTime();
-            } else {
-                str = "[End] " + allEventsChron[i].getEventEndTime();
-            }
-            str += " " + allEventsChron[i].getName();
+        for ( int i = 0; i < allEventsChron.length ; i++) {
+            if ( allEventsChron[i] != null) {
+                if (isEventStart[i]) {
+                    str = "[Start] " + allEventsChron[i].getEventStartTime();
+                } else {
+                    str = "[End] " + allEventsChron[i].getEventEndTime();
+                }
+                str += " " + allEventsChron[i].getName();
 
-            if (discriminateEvent(allEventsChron[i], isEventStart[i]).get(Calendar.HOUR_OF_DAY) == hour) {
-                TextView textView = new TextView(DayActivity.this);
-                textView.setId((int) (Math.random() * 10000)); // It is not a very good solution
-                RelativeLayout.LayoutParams layoutParams = new
-                        RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.addRule(RelativeLayout.BELOW, recent.getId());
+                if (discriminateEvent(allEventsChron[i], isEventStart[i]).get(Calendar.HOUR_OF_DAY) == hour) {
+                    TextView textView = new TextView(DayActivity.this);
+                    textView.setId((int) (Math.random() * 10000)); // It is not a very good solution
+                    RelativeLayout.LayoutParams layoutParams = new
+                            RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    layoutParams.addRule(RelativeLayout.BELOW, recent.getId());
 
-                recent = textView;
-                textView.setText(str);
-                textView.setTextColor(allEventsChron[i].color);
-                textView.setSingleLine();
-                layout.addView(textView, layoutParams);
+                    recent = textView;
+                    textView.setText(str);
+                    //textView.setTextColor(allEventsChron[i].color);
+                    textView.setSingleLine();
+                    layout.addView(textView, layoutParams);
 
 
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        textView.setText("POG");
+                    textView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            textView.setText("POG");
 
-                    }
-                });
-
+                        }
+                    });
+                }
             }
         }
     }
@@ -890,36 +895,4 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
-    /*
-     //when a leftSwipe is notifed by the super class adds a week to the date of weekView and refreshes the activity
-
-    @Override
-    public void leftSwipe() {
-    TODO
-        super.leftSwipe();
-        first.add(Calendar.DATE, 1);
-        finish();
-        Intent intent = new Intent(this, DayActivity.class);
-        intent.putExtra(INTENT_KEY, first);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-    }
-
-
-     //when a rightSwipe is notifed by the super class subtracts a week from the date of weekView and refreshes the activity
-
-    @Override
-    public void rightSwipe() {
-    TODO
-        super.rightSwipe();
-        first.add(Calendar.DATE, -1);
-        finish();
-        Intent intent = new Intent(this, DayActivity.class);
-        intent.putExtra(INTENT_KEY, first);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-
-
-    }
-    */
 }
