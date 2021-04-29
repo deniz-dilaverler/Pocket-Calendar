@@ -101,7 +101,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public boolean checkIsDataAlreadyInDB(CalendarEvent event) {
         SQLiteDatabase db = getReadableDatabase();
-
+        Log.d(TAG, "checkIsDataAlreadyInDB: " + event.getYear() + " " + event.getMonth() + " " + event.getDay());
         String query = "Select * from " + EVENTS_TABLE + " where " + YEAR + " = " + event.getYear() + " AND "
                                                                    + MONTH + " = " + event.getMonth() + " AND "
                                                                    + DAY + " = " + event.getDay() + " AND "
@@ -109,7 +109,7 @@ public class DBHelper extends SQLiteOpenHelper {
                                                                    + EVENT_START + " = " + event.getEventStartTime() + " AND "
                                                                    + EVENT_END + " = " + event.getEventEndTime() + " ;"
                 ;
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[2]);
         if(cursor.getCount() <= 0){
             cursor.close();
             return false;
@@ -248,6 +248,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return events;
     }
 
