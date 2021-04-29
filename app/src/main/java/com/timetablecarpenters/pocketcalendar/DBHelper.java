@@ -230,7 +230,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 String notifTime;
                 CalendarEvent eventToAdd;
                 //TODO: add code for setting the notifTime and Location
-
                 Calendar eventStart = Calendar.getInstance();
                 eventStart.set(Calendar.YEAR, cursor.getInt(cursor.getColumnIndex(DBHelper.YEAR)));
                 eventStart.set(Calendar.MONTH, cursor.getInt(cursor.getColumnIndex(DBHelper.MONTH)));

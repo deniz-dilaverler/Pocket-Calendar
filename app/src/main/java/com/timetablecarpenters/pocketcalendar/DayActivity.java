@@ -592,7 +592,6 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             if ( calEvents.get( i) != null && calEvents.get(i).getEventStart().get( Calendar.DATE) == thisDay.get( Calendar.DATE) ) {
                 events[counter] = calEvents.get( i);
                 counter++;
-                System.out.println( "  ---   WORKING  ---   AAAAAAAAAAAAAAAAAAAA");
             }
         }
         orderedEventEnds = events;
@@ -662,29 +661,6 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             commander[counter] = false;
         }
         orderedEventEnds = result;
-    }
-    /**
-     * finds the appropriate texts for each event start time and end time for the textViews.
-     * @author Alperen Utku Yalçın
-     */
-    private void getTextsOfEvents( ) {
-        textsOfHours = new String[24][];
-        int[] eventCount = new int[24];
-        for ( int i = 0; i < events.length ; i++) {
-            eventCount[ events[i].getEventStart().get(Calendar.HOUR_OF_DAY) ] += 1;
-            eventCount[ events[i].getEventEnd().get(Calendar.HOUR_OF_DAY) ] += 1;
-        }
-
-        for ( int i = 0; i < events.length ; i++) {
-            textsOfHours[ events[i].getEventStart().get(Calendar.HOUR_OF_DAY) ][ eventCount[i]] =
-                    events[i].getEventStart().get(Calendar.HOUR_OF_DAY) + ":" +
-                            events[i].getEventStart().get(Calendar.MINUTE);
-            textsOfHours[ events[i].getEventEnd().get(Calendar.HOUR_OF_DAY) ][ eventCount[i]] =
-                    events[i].getEventStart().get(Calendar.HOUR_OF_DAY) + ":" +
-                            events[i].getEventStart().get(Calendar.MINUTE) + " " +
-                            events[i].getName();
-        }
-
     }
     /**
      * Creates an event arraqy with chronologically ordered event start-end times.
