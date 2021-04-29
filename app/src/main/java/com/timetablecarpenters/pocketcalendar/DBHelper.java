@@ -77,20 +77,39 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
 
-        if (checkIsDataAlreadyInDB(event)) {
+        if (!checkIsDataAlreadyInDB(event)) {
             cv.put(ID, event.getId());
             cv.put(YEAR, event.getYear());
             cv.put(MONTH, event.getMonth());
             cv.put(DAY, event.getDay());
             cv.put(EVENT_TYPE, event.getType());
             cv.put(EVENT_NAME, event.getName());
-            cv.put(NOTES, event.getNotes());
-            cv.put(LONGITUDE, event.getLocation().getLatitude());
-            cv.put(LATITUDE, event.getLocation().getLongitude());
-            cv.put(NOTIF_TIME, event.getNotifTime());
             cv.put(EVENT_START, event.getEventStartTime().toString());
             cv.put(EVENT_END, event.getEventEndTime().toString());
+            try {
+                cv.put(NOTES, event.getNotes());
+            } catch (Exception e) {
+                Log.e(TAG, "insertEvent: " + e);
+                cv.putNull(NOTES);
+            }
 
+            try {
+                cv.put(LONGITUDE, event.getLocation().getLongitude());
+            } catch (Exception e) {
+                Log.e(TAG, "insertEvent: Longitude " + e);
+                cv.putNull(NOTES);
+            }
+            try {
+                cv.put(LATITUDE, event.getLocation().getLatitude());
+            } catch (Exception e) {
+                Log.e(TAG, "insertEvent: Latitude " + e);
+                cv.putNull(NOTES);
+            }
+            try {
+                cv.put(NOTIF_TIME, event.getNotifTime());
+            } catch (Exception e) {
+                Log.e(TAG, "insertEvent: NotifTime " + e);
+            }
             long insert = db.insert(EVENTS_TABLE, null, cv);
             return insert;
         }
@@ -102,14 +121,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean checkIsDataAlreadyInDB(CalendarEvent event) {
         SQLiteDatabase db = getReadableDatabase();
         Log.d(TAG, "checkIsDataAlreadyInDB: " + event.getYear() + " " + event.getMonth() + " " + event.getDay());
-        String query = "Select * from " + EVENTS_TABLE + " where " + YEAR + " = " + event.getYear() + " AND "
-                                                                   + MONTH + " = " + event.getMonth() + " AND "
-                                                                   + DAY + " = " + event.getDay() + " AND "
-                                                                   + EVENT_NAME + " = " + event.getName() + " AND "
-                                                                   + EVENT_START + " = " + event.getEventStartTime() + " AND "
-                                                                   + EVENT_END + " = " + event.getEventEndTime() + " ;"
+        String query = "Select * from " + EVENTS_TABLE + " where " + YEAR + " = ?" + " AND "
+                                                                   + MONTH + " = ?" + " AND "
+                                                                   + DAY + " = ?" + " AND "
+                                                                   + EVENT_NAME + " = ?" + " AND "
+                                                                   + EVENT_START + " = ?" + " AND "
+                                                                   + EVENT_END + " = ?" + " ;"
                 ;
-        Cursor cursor = db.rawQuery(query, new String[2]);
+        Cursor cursor = db.rawQuery(query, new String[] {event.getYear()+"", event.getMonth()+"", event.getDay()+"", event.getName(), event.getEventStartTime(), event.getEventEndTime() });
         if(cursor.getCount() <= 0){
             cursor.close();
             return false;
