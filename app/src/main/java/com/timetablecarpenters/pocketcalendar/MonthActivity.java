@@ -2,6 +2,8 @@ package com.timetablecarpenters.pocketcalendar;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,9 +11,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
+
+import com.timetablecarpenters.pocketcalendar.R.color;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static com.timetablecarpenters.pocketcalendar.R.color.*;
 
 
 public class MonthActivity extends BaseActivity {
@@ -21,7 +28,9 @@ public class MonthActivity extends BaseActivity {
     private Calendar today;
     private DBHelper database;
     private final static String INTENT_KEY = "today_date";
-
+    private CalendarEvent defaultEvent;
+    private int[] eventCountDays;
+    private boolean[] isSpareDay;
     private static final String TAG = "MonthActivity";
 
     @SuppressLint("SetTextI18n")
@@ -33,7 +42,6 @@ public class MonthActivity extends BaseActivity {
         Bundle extras;
 
         database = new DBHelper(this, DBHelper.DB_NAME, null);
-
 
         extras = getIntent().getExtras();
         if ( extras != null) {
@@ -47,6 +55,7 @@ public class MonthActivity extends BaseActivity {
         date.setText( today.get( Calendar.YEAR) + " " + formattedMonth( today.get(
                 Calendar.MONTH)));
 
+        createDefault();
         eventsInDays = new CalendarEvent[42][];
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set( Calendar.MONTH, today.get( Calendar.MONTH));
@@ -55,7 +64,9 @@ public class MonthActivity extends BaseActivity {
         calendar1.set(Calendar.DATE, 0);
         calendar1.set(Calendar.HOUR_OF_DAY, 0);
         calendar1.set(Calendar.MINUTE, 0);
-        Calendar calendar2 = calendar1;
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.set( Calendar.MONTH, today.get( Calendar.MONTH));
+        calendar2.set( Calendar.YEAR, today.get( Calendar.YEAR));
         calendar2.set(Calendar.DATE, calendar1.getActualMaximum(Calendar.DATE));
         calendar2.set(Calendar.HOUR_OF_DAY, 23);
         calendar2.set(Calendar.MINUTE, 59);
@@ -64,15 +75,6 @@ public class MonthActivity extends BaseActivity {
         initiateWeeks();
 
 
-        View week1 = findViewById(R.id.week1_row);
-        View day1 = week1.findViewById(R.id.monday_box);
-        day1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextView text = day1.findViewById(R.id.text_date_name);
-                text.setText("Boom");
-            }
-        });
 
 
     }
@@ -112,62 +114,91 @@ public class MonthActivity extends BaseActivity {
     private void initiateWeeks() {
         weeks = new View[6];
         int count;
+        int dayCount = 0;
         Calendar cal = Calendar.getInstance();
         cal.set( Calendar.MONTH, today.get( Calendar.MONTH));
         cal.set( Calendar.YEAR, today.get( Calendar.YEAR));
         cal.set( Calendar.DATE, 0);
         count = dayCorrector( cal.get( Calendar.DAY_OF_WEEK));
-        System.out.println( "AAAAAAAAAAAAAAAAAAAAA" + count);
         weeks[0] = findViewById(R.id.week1_row);
-        cal.add( Calendar.DATE, - count);
-        initiateDayInWeek( weeks[0], cal);
+        cal.add( Calendar.DATE, - ( count % 7));
+        initiateDayInWeek( weeks[0], cal, dayCount);
         weeks[1] = findViewById(R.id.week2_row);
-        //cal.add( Calendar.DATE,  7);
-        initiateDayInWeek( weeks[1], cal);
+        dayCount += 7;
+        initiateDayInWeek( weeks[1], cal, dayCount);
         weeks[2] = findViewById(R.id.week3_row);
-        //cal.add( Calendar.DATE,  7);
-        initiateDayInWeek( weeks[2], cal);
+        dayCount += 7;
+        initiateDayInWeek( weeks[2], cal, dayCount);
         weeks[3] = findViewById(R.id.week4_row);
-        //cal.add( Calendar.DATE,  7);
-        initiateDayInWeek( weeks[3], cal);
+        dayCount += 7;
+        initiateDayInWeek( weeks[3], cal, dayCount);
         weeks[4] = findViewById(R.id.week5_row);
-        //cal.add( Calendar.DATE,  7);
-        initiateDayInWeek( weeks[4], cal);
+        dayCount += 7;
+        initiateDayInWeek( weeks[4], cal, dayCount);
         weeks[5] = findViewById(R.id.week6_row);
-        //cal.add( Calendar.DATE,  7);
-        initiateDayInWeek( weeks[5], cal);
+        dayCount += 7;
+        initiateDayInWeek( weeks[5], cal, dayCount);
     }
 
-    private void initiateDayInWeek(View aWeek, Calendar cal) { // week 1 to 6
+    private void initiateDayInWeek(View aWeek, Calendar cal , int dayCount) { // week 1 to 6
         dayInWeek = new View[7];
         dayInWeek[0] = aWeek.findViewById(R.id.monday_box);
         cal.add( Calendar.DATE,1);
-        dayCreate( dayInWeek[0], cal);
+        dayCreate( dayInWeek[0], cal, dayCount);
+        dayCount ++;
         dayInWeek[1] = aWeek.findViewById(R.id.tuesday_box);
         cal.add( Calendar.DATE,1);
-        dayCreate( dayInWeek[1], cal);
+        dayCreate( dayInWeek[1], cal, dayCount);
+        dayCount ++;
         dayInWeek[2] = aWeek.findViewById(R.id.wednesday_box);
         cal.add( Calendar.DATE,1);
-        dayCreate( dayInWeek[2], cal);
+        dayCreate( dayInWeek[2], cal, dayCount);
+        dayCount ++;
         dayInWeek[3] = aWeek.findViewById(R.id.thursday_box);
         cal.add( Calendar.DATE,1);
-        dayCreate( dayInWeek[3], cal);
+        dayCreate( dayInWeek[3], cal, dayCount);
+        dayCount ++;
         dayInWeek[4] = aWeek.findViewById(R.id.friday_box);
         cal.add( Calendar.DATE,1);
-        dayCreate( dayInWeek[4], cal);
+        dayCreate( dayInWeek[4], cal, dayCount);
+        dayCount ++;
         dayInWeek[5] = aWeek.findViewById(R.id.saturday_box);
         cal.add( Calendar.DATE,1);
-        dayCreate( dayInWeek[5], cal);
+        dayCreate( dayInWeek[5], cal, dayCount);
+        dayCount ++;
         dayInWeek[6] = aWeek.findViewById(R.id.sunday_box);
         cal.add( Calendar.DATE,1);
-        dayCreate( dayInWeek[6], cal);
+        dayCreate( dayInWeek[6], cal, dayCount);
     }
 
-    @SuppressLint("SetTextI18n")
-    private void dayCreate(View day, Calendar cal) { //dayNo 1 to 7
-        TextView date = day.findViewById( R.id.text_date_name);
 
-        date.setText( cal.get(Calendar.DATE) +"");
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
+    private void dayCreate(View day, Calendar cal, int dayCount) { //dayNo 1 to 7
+        TextView date = day.findViewById( R.id.text_date_name);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set( Calendar.MONTH, cal.get( Calendar.MONTH));
+        calendar.set( Calendar.YEAR, cal.get( Calendar.YEAR));
+        calendar.set( Calendar.DATE, cal.get( Calendar.DATE));
+        calendar.set( Calendar.HOUR_OF_DAY, cal.get( Calendar.HOUR_OF_DAY));
+        calendar.set( Calendar.MINUTE, cal.get( Calendar.MINUTE));
+
+        int i = eventCountDays[ dayCount];
+        String str = "" + calendar.get( Calendar.DATE) + "." + i;
+
+        if ( isSpareDay[dayCount]) {
+            str = "";
+            date.setBackgroundColor( Color.parseColor("#5481A4"));
+        }
+        date.setText( str );
+
+        day.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView text = day.findViewById(R.id.text_date_name);
+                text.setText("Boom");
+            }
+        });
+
     }
 
     private void pullEvents( ArrayList<CalendarEvent> dBEvents) {
@@ -175,6 +206,13 @@ public class MonthActivity extends BaseActivity {
         int firstDayOfMonth;
         Calendar cal;
         counter = 0;
+        eventCountDays = new int[42];
+        isSpareDay = new boolean[42];
+        for ( int i = 0; i < 42; i++) {
+            eventCountDays[i] = 0;
+            isSpareDay[i] = true;
+        }
+
         for (int i = 0; i < dBEvents.size(); i++) {
             if (dBEvents.get(i) != null) {
                 counter++;
@@ -186,21 +224,18 @@ public class MonthActivity extends BaseActivity {
             if ( dBEvents.get(i) != null && dBEvents.get(i).getEventStart().get(Calendar.MONTH) == today.get(Calendar.MONTH)) {
                 events[counter] = dBEvents.get(i);
                 counter++;
-                System.out.println("  ---   WORKING  ---   BBBBBBBBBBBBBBBBBBBBBBB " + counter + " " );
             }
         }
         cal = Calendar.getInstance();
         cal.set( Calendar.MONTH, today.get( Calendar.MONTH));
         cal.set( Calendar.YEAR, today.get( Calendar.YEAR));
-        cal.set( Calendar.DATE, today.get( Calendar.DATE));
-        cal.set(Calendar.DATE, 1);
-        firstDayOfMonth = dayCorrector( cal.get( Calendar.DAY_OF_WEEK));
+        cal.set(Calendar.DATE, 0);
+        firstDayOfMonth = ( dayCorrector( cal.get( Calendar.DAY_OF_WEEK)) % 7);
         for (int i = 0; i < today.getActualMaximum( Calendar.DAY_OF_MONTH); i++) {
-            eventsInDays[ i + firstDayOfMonth] = new CalendarEvent[( pullEventsOfDay( dBEvents, i + 1).length)];
-            System.out.println( ( "  ---   WORKING  ---   BBBBBBBBBBBBBBBBBBBBBBB " + 1 + i + "" +
-                    " AAAAAAAAA " + pullEventsOfDay( dBEvents, i + 1).length));
-            eventsInDays[i + firstDayOfMonth] = pullEventsOfDay( dBEvents, i + 1);
+            eventCountDays[i + firstDayOfMonth] = ( pullEventsOfDay( dBEvents, i).length);
+            isSpareDay[i + firstDayOfMonth] = false;
         }
+
     }
     public int dayCorrector(int a) {
         if (a == 1) {
@@ -232,6 +267,25 @@ public class MonthActivity extends BaseActivity {
         }
         return dayEvents;
     }
+    private  void createDefault() {
+        CalendarEvent defaultEvent;
+        Calendar calendar11 = Calendar.getInstance();
+        Calendar calendar12 = Calendar.getInstance();
+        calendar11.set( Calendar.MONTH, today.get( Calendar.MONTH));
+        calendar11.set( Calendar.YEAR, today.get( Calendar.YEAR));
+        calendar11.set( Calendar.DATE, today.get( Calendar.DATE));
+        calendar11.set( Calendar.HOUR_OF_DAY , 0);
+        calendar11.set( Calendar.MINUTE , 1);
+
+        calendar12.set( Calendar.MONTH, today.get( Calendar.MONTH));
+        calendar12.set( Calendar.YEAR, today.get( Calendar.YEAR));
+        calendar12.set( Calendar.DATE, today.get( Calendar.DATE));
+        calendar12.set( Calendar.HOUR_OF_DAY , 0);
+        calendar12.set( Calendar.MINUTE , 10);
+        defaultEvent = new CalendarEvent( calendar11, calendar12, "Default", 123456789, "None");
+        defaultEvent.setNotes( "None");
+        defaultEvent.setColor( Color.MAGENTA);
+    }
     /**
      *
      */
@@ -239,12 +293,12 @@ public class MonthActivity extends BaseActivity {
     public void leftSwipe() {
         Log.d(TAG, "leftSwipe: MonthActivity");
         super.leftSwipe();
-        finish();
         Intent intent = new Intent(this, MonthActivity.class);
         today.add( Calendar.MONTH, 1);
         intent.putExtra( INTENT_KEY, today);
         startActivity(intent);
         overridePendingTransition( R.anim.slide_in_right, R.anim.slide_out_left);
+        finish();
     }
 
     /**
@@ -254,12 +308,12 @@ public class MonthActivity extends BaseActivity {
     public void rightSwipe() {
         Log.d(TAG, "rightSwipe: MonthActivity");
         super.rightSwipe();
-        finish();
         Intent intent = new Intent(this, MonthActivity.class);
         today.add( Calendar.MONTH, -1);
         intent.putExtra( INTENT_KEY, today);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        finish();
     }
 
 

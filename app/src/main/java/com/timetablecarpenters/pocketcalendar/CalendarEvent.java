@@ -153,9 +153,8 @@ public class CalendarEvent {
     public void setColor(int c) {
         color = c;
     }
-    public boolean equals( CalendarEvent anEvent) {
-        if ( anEvent.getName().equals( this.getName()) &&
-                anEvent.getEventStart().equals( this.getEventStart()) && anEvent.getNotes().equals( this.getNotes())) {
+    public boolean equals2( CalendarEvent anEvent) {
+        if ( anEvent.getName().equals( this.getName())) {
             return true;
         }
         else {
