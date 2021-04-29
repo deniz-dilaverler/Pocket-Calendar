@@ -167,7 +167,7 @@ public class MonthActivity extends BaseActivity {
     private void dayCreate(View day, Calendar cal) { //dayNo 1 to 7
         TextView date = day.findViewById( R.id.text_date_name);
 
-        date.setText( cal.get(Calendar.DATE));
+        date.setText( cal.get(Calendar.DATE) +"");
     }
 
     private void pullEvents( ArrayList<CalendarEvent> dBEvents) {
