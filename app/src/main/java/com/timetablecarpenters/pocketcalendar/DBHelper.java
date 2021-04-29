@@ -11,7 +11,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -32,13 +31,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String LATITUDE = "latitude";
     public static final String LONGITUDE = "longitude";
     public static final String NOTIF_TIME = "notification_time";
+    public static final String COLOR = "color";
 
 
 
 
     // constructor
     public DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory) {
-        super(context, name, factory, 5);
+        super(context, name, factory, 6);
     }
 
     // methods
@@ -57,6 +57,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 LONGITUDE + " REAL," +
                 LATITUDE + " REAL," +
                 NOTES + " TEXT, " +
+                COLOR + " INTEGER, " +
                 NOTIF_TIME + " TEXT);";
         db.execSQL(createTableStatement);
 
@@ -64,7 +65,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        SQLiteDatabase db = getWritableDatabase();
+        // Drop older table if existed
+        db.execSQL("DROP TABLE IF EXISTS " + EVENTS_TABLE);
 
+        // Create tables again
+        onCreate(db);
     }
 
     /**
@@ -93,6 +99,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 Log.e(TAG, "insertEvent: " + e);
                 cv.putNull(NOTES);
             }
+            try {
+                cv.put(COLOR, event.getColor());
+            } catch(Exception e) {
+                Log.d(TAG, "insertEvent: no Color value " + e);
+                cv.putNull(COLOR);
+            }
+
 
             try {
                 Location location = event.getLocation();
@@ -215,10 +228,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 double longitude;
                 double latitude;
                 String notes;
-                String color;
+                int color;
                 String notifTime;
                 CalendarEvent eventToAdd;
-                //TODO: add code for setting the color, notifTime and Location
+                //TODO: add code for setting the notifTime and Location
 
                 Calendar eventStart = Calendar.getInstance();
                 eventStart.set(Calendar.YEAR, cursor.getInt(cursor.getColumnIndex(DBHelper.YEAR)));
@@ -261,6 +274,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
                notes = cursor.getString(cursor.getColumnIndex(NOTES));
                eventToAdd.setNotes(notes);
+               if (!cursor.isNull(cursor.getColumnIndex(COLOR)))
+                   eventToAdd.setColor(cursor.getInt(cursor.getColumnIndex(COLOR)));
+
                events.add(eventToAdd);
 
             } while (cursor.moveToNext());
