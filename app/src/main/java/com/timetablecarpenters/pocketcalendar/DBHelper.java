@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -94,16 +95,13 @@ public class DBHelper extends SQLiteOpenHelper {
             }
 
             try {
-                cv.put(LONGITUDE, event.getLocation().getLongitude());
+                Location location = event.getLocation();
+                cv.put(LATITUDE, location.getLatitude());
+                cv.put(LONGITUDE, location.getLongitude());
             } catch (Exception e) {
-                Log.e(TAG, "insertEvent: Longitude " + e);
-                cv.putNull(NOTES);
-            }
-            try {
-                cv.put(LATITUDE, event.getLocation().getLatitude());
-            } catch (Exception e) {
-                Log.e(TAG, "insertEvent: Latitude " + e);
-                cv.putNull(NOTES);
+                Log.e(TAG, "insertEvent: Location " + e);
+                cv.putNull(LONGITUDE);
+                cv.putNull(LATITUDE);
             }
             try {
                 cv.put(NOTIF_TIME, event.getNotifTime());
