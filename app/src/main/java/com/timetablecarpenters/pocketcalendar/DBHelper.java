@@ -65,12 +65,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        SQLiteDatabase db = getWritableDatabase();
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + EVENTS_TABLE);
+        database.execSQL("DROP TABLE IF EXISTS " + EVENTS_TABLE);
 
         // Create tables again
-        onCreate(db);
+        onCreate(database);
     }
 
     /**
@@ -100,7 +99,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.putNull(NOTES);
             }
             try {
-                cv.put(COLOR, event.getColor());
+                cv.put(COLOR, event.color);
             } catch(Exception e) {
                 Log.d(TAG, "insertEvent: no Color value " + e);
                 cv.putNull(COLOR);
