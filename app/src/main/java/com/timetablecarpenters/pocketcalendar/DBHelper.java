@@ -98,6 +98,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.putNull(NOTES);
             }
             try {
+<<<<<<< Updated upstream
                 cv.put(COLOR, event.color);
 =======
                 // TODO cv.put(COLOR, event.getColor());
