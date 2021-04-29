@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -110,6 +111,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
 
                 return false;
+            }
+        });
+
+        mGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: clicked gps icon");
+                getDeviceLocation();
             }
         });
         hideSoftKeyboard();
