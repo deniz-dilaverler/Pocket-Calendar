@@ -104,27 +104,25 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.putNull(COLOR);
             }
 
-
-            try {
                 Location location = event.getLocation();
+            if (location != null) {
                 cv.put(LATITUDE, location.getLatitude());
                 cv.put(LONGITUDE, location.getLongitude());
-            } catch (Exception e) {
-                Log.e(TAG, "insertEvent: Location " + e);
+            } else {
                 cv.putNull(LONGITUDE);
                 cv.putNull(LATITUDE);
             }
+
             try {
                 cv.put(NOTIF_TIME, event.getNotifTime());
             } catch (Exception e) {
                 Log.e(TAG, "insertEvent: NotifTime " + e);
             }
+
             long insert = db.insert(EVENTS_TABLE, null, cv);
             return insert;
-        }
-        else
+        } else
             return -2;
-
     }
 
     public boolean checkIsDataAlreadyInDB(CalendarEvent event) {
