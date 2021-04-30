@@ -16,6 +16,7 @@ public class MapsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         MapFragment mapFragment = (MapFragment) (getSupportFragmentManager().findFragmentById(R.id.map_fragment));
+
         if (LocationAvailability.isServicesOK(this)) {
             Button btnMap = (Button) findViewById(R.id.btnMap);
 
