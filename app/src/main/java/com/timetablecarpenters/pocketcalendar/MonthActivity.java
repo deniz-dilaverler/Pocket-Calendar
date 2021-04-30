@@ -19,7 +19,11 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-
+/**
+ * MonthActivity does everything in the month view part of the project.
+ * @author Alperen Utku Yalçın
+ * @version 1.0
+ */
 public class MonthActivity extends BaseActivity {
     private View[] weeks, dayInWeek;
     private CalendarEvent[][] eventsInDays;
@@ -33,6 +37,10 @@ public class MonthActivity extends BaseActivity {
     Intent intent;
     private Context context;
 
+    /**
+     * this method works once a MonthActivity is created.
+     * @param savedInstanceState
+     */
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +62,7 @@ public class MonthActivity extends BaseActivity {
         TextView date = findViewById( R.id.month_content).findViewById( R.id.dateText);
         date.setText( today.get( Calendar.YEAR) + " " + formattedMonth( today.get(
                 Calendar.MONTH)));
-
+        //Create two calendar instances to get the events in a such interval from the database.
         eventsInDays = new CalendarEvent[42][];
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set( Calendar.MONTH, today.get( Calendar.MONTH));
@@ -72,13 +80,10 @@ public class MonthActivity extends BaseActivity {
         insertEvents();
         pullEvents( database.getEventsInAnIntervalInArray( calendar1, calendar2));
         initiateWeeks();
-
-
-
-
     }
     /**
      * Reports the name of the month according to the number
+     * @author Elifsena
      * @param month number
      * @return Sring month name
      */
@@ -105,11 +110,13 @@ public class MonthActivity extends BaseActivity {
             return "Oct";
         if (month == 10)
             return "Nov";
-
         // For 11th month and if anything goes wrong
         return "Dec";
     }
-
+    /**
+     * Creates the 6 weeks that are going to be seen in Month View
+     * @author Alperen
+     */
     private void initiateWeeks() {
         weeks = new View[6];
         int count;
@@ -138,7 +145,14 @@ public class MonthActivity extends BaseActivity {
         dayCount += 7;
         initiateDayInWeek( weeks[5], cal, dayCount);
     }
-
+    /**
+     * This method is called once for every row (there are 6 for every week)
+     * in the Month View. this method creates each day in a row.
+     * @author Alperen
+     * @param aWeek
+     * @param cal
+     * @param dayCount
+     */
     private void initiateDayInWeek(View aWeek, Calendar cal , int dayCount) { // week 1 to 6
         dayInWeek = new View[7];
         dayInWeek[0] = aWeek.findViewById(R.id.monday_box);
@@ -169,53 +183,80 @@ public class MonthActivity extends BaseActivity {
         cal.add( Calendar.DATE,1);
         dayCreate( dayInWeek[6], cal, dayCount);
     }
+    /**
+     * Sets the text colors to a specific value (For testing purposes only)
+     * @author Alperen
+     * @return int color value
+     */
     private int getBackGColor() {
         return ResourcesCompat.getColor(getResources(), R.color.month_activity_beckground_unusable, null);
     }
-
+    /**
+     * Activates each day in MonthView.
+     * @author Alperen
+     * @param day the "day"s view in one of the week rows
+     * @param cal the exact day that the "day" view represents
+     * @param dayCount the exact place that the day is located from the start to the day.(42 places)
+     */
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
-    private void dayCreate(View day, Calendar cal, int dayCount) { //dayNo 1 to 7
-        TextView date = day.findViewById( R.id.text_date_name);
-        View backG = ( View) day.findViewById( R.id.downwards_layout);
+    private void dayCreate(View day, Calendar cal, int dayCount) {
+        TextView date = day.findViewById(R.id.text_date_name);
+        View backG = (View) day.findViewById(R.id.downwards_layout);
         Calendar calendar = Calendar.getInstance();
-        calendar.set( Calendar.MONTH, cal.get( Calendar.MONTH));
-        calendar.set( Calendar.YEAR, cal.get( Calendar.YEAR));
-        calendar.set( Calendar.DATE, cal.get( Calendar.DATE));
-        calendar.set( Calendar.HOUR_OF_DAY, cal.get( Calendar.HOUR_OF_DAY));
-        calendar.set( Calendar.MINUTE, cal.get( Calendar.MINUTE));
-        String str = "" + calendar.get( Calendar.DATE);
+        calendar.set(Calendar.MONTH, cal.get(Calendar.MONTH));
+        calendar.set(Calendar.YEAR, cal.get(Calendar.YEAR));
+        calendar.set(Calendar.DATE, cal.get(Calendar.DATE));
+        calendar.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY));
+        calendar.set(Calendar.MINUTE, cal.get(Calendar.MINUTE));
+        String str = "" + calendar.get(Calendar.DATE);
 
-        if ( isSpareDay[dayCount]) {
+        if (isSpareDay[dayCount]) {
             str = "";
-            backG.setBackgroundColor( getBackGColor());
-            date.setText( str );
-            LinearLayout rl = (LinearLayout) day.findViewById( R.id.linear_layout1);
+            backG.setBackgroundColor(getBackGColor());
+            date.setText(str);
+            LinearLayout rl = (LinearLayout) day.findViewById(R.id.linear_layout1);
             rl.removeAllViews();
-        }
-        else {
-            if ( eventCountDays[ dayCount] != null) {
-                addCircles( eventCountDays[dayCount], day);
+        } else {
+            if (eventCountDays[dayCount] != null) {
+                addCircles(eventCountDays[dayCount], day);
             }
 
-            date.setText( str);
-            date.setTextColor( getBackGColor());
+            date.setText(str);
+            date.setTextColor(getBackGColor());
             day.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    intent = new Intent( context, DayActivity.class);
-                    intent.putExtra( INTENT_KEY, calendar);
+                    intent = new Intent(context, DayActivity.class);
+                    intent.putExtra(INTENT_KEY, calendar);
                     startActivity(intent);
                     //finish();
                 }
             });
         }
     }
+    /**
+     * A helper method that helps addCircles method and sets the right text color to the text.
+     * @author Alperen
+     * @param c the view that the textView belongs to
+     * @param i the index of the event in eventlist
+     * @param eventList array of CalendarEvent values
+     * @return view that has been updated
+     */
     private View setView( View c, int i, CalendarEvent[] eventList) {
         TextView txt = c.findViewById( R.id.mark);
         txt.setTextColor( eventList[i].color);
         return c;
     }
+    /**
+     * for each active day of the month, according to the amount of events in the day, octagens are
+     * created. Each octogen has the color of the event that it represents.
+     * If the amount of events is bigger than 6, than the 6th octogen becomes a plus instead and
+     * its color is set as the textcolor.
+     * @author Alperen
+     * @param events the events in month
+     * @param day the day in week row of month View.
+     */
     private void addCircles( CalendarEvent[] events, View day) {
         LinearLayout rl = (LinearLayout) day.findViewById( R.id.linear_layout1);
         LinearLayout rl2 = (LinearLayout) day.findViewById( R.id.linear_layout2);
@@ -274,7 +315,12 @@ public class MonthActivity extends BaseActivity {
             rl2.addView( viewPlus, 2);
         }
     }
-
+    /**
+     *pulls event array list from database and turns it into an array of events and initiates
+     * eventCountDays and isSpareDay.
+     * @author Alperen
+     * @param dBEvents ArrayList of CalendarEvent's from the database
+     */
     private void pullEvents( ArrayList<CalendarEvent> dBEvents) {
         int counter;
         int firstDayOfMonth;
@@ -310,6 +356,13 @@ public class MonthActivity extends BaseActivity {
         }
 
     }
+    /**
+     * Helper method.
+     * Turns the 0 to 6 values starting from sunday to 1 to 7 values starting from Monday.
+     * @author Alperen Utku Yalçın
+     * @param a a day value (Starts from sunday)
+     * @return a day value (Starts from monday)
+     */
     public int dayCorrector(int a) {
         if (a == 1) {
             return 7;
@@ -318,8 +371,12 @@ public class MonthActivity extends BaseActivity {
         }
     }
     /**
-     * gets today's events and puts them all in an array as events property
+     * Helper method for pullEvents.
+     * gets today's events and puts them all in an array as events property.
      * @author Alperen Utku Yalçın
+     * @param calEvents today's events as an ArrayList
+     * @param day the day in the 6 weeks corresponding to 6 rows(1 to 42)
+     * @return today's events as an array.
      */
     private CalendarEvent[] pullEventsOfDay( ArrayList<CalendarEvent> calEvents, int day) {
         int counter;
@@ -340,6 +397,9 @@ public class MonthActivity extends BaseActivity {
         }
         return dayEvents;
     }
+    /**
+     * When right swiped, it opens the next month's view
+     */
     @Override
     public void leftSwipe() {
         Log.d(TAG, "leftSwipe: MonthActivity");
@@ -351,9 +411,8 @@ public class MonthActivity extends BaseActivity {
         overridePendingTransition( R.anim.slide_in_right, R.anim.slide_out_left);
         finish();
     }
-
     /**
-     *
+     *When left swiped, it opens the previous month's view
      */
     @Override
     public void rightSwipe() {
@@ -366,8 +425,10 @@ public class MonthActivity extends BaseActivity {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         finish();
     }
-
-    //TO CREATE EVENTS ----  TEST ONLY
+    /**
+     * TO CREATE EVENTS ----  TEST ONLY Method.
+     * insets some sample events to database.
+     */
     private void insertEvents() {
         Calendar calendar3 = Calendar.getInstance();
         Calendar calendar4 = Calendar.getInstance();
@@ -463,14 +524,4 @@ public class MonthActivity extends BaseActivity {
         cal7.setColor( Color.CYAN);
         database.insertEvent( cal7);
     }
-
-
-
-
-
-
-
-
-
-
 }
