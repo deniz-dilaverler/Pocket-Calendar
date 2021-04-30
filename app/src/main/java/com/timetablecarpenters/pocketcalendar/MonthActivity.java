@@ -269,7 +269,7 @@ public class MonthActivity extends BaseActivity {
             rl.addView( setView( c3, 2, events), 2);
             rl2.addView( setView( c4, 3, events), 0);
             rl2.addView( setView( c5, 4, events), 1);
-            TextView txt = viewPlus.findViewById( R.id.three_dots);
+            TextView txt = viewPlus.findViewById( R.id.plus_sign);
             txt.setTextColor( getBackGColor());
             rl2.addView( viewPlus, 2);
         }
