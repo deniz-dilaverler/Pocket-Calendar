@@ -11,18 +11,13 @@ import android.os.Bundle;
 
 
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,26 +42,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
-import com.google.android.libraries.places.api.net.FetchPhotoResponse;
-import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import static com.google.android.libraries.places.api.model.Place.Field.LAT_LNG;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-
-import javax.security.auth.login.LoginException;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -265,7 +252,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void initMap(){
         Log.d(TAG, "initMap: initializing map");
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment_encapsulater);
 
         mapFragment.getMapAsync(MapActivity.this);
     }

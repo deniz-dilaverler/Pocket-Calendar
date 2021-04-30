@@ -7,7 +7,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/map"
+        android:id="@+id/map_fragment_encapsulater"
         tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
@@ -38,14 +38,14 @@
     </RelativeLayout>
 
     <ImageView
+        android:id="@+id/ic_gps"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_below="@+id/relLayout1"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
         android:scaleType="centerCrop"
-        android:id="@+id/ic_gps"
-        android:src="@drawable/ic_gps"/>
+        android:src="@drawable/ic_gps" />
 
 </RelativeLayout>
