@@ -671,23 +671,24 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         setOrderedEventEnds();
 
         Calendar calendar2000 = Calendar.getInstance();
+        calendar2000.set( Calendar.MONTH, thisDay.get( Calendar.MONTH));
+        calendar2000.set( Calendar.YEAR, thisDay.get( Calendar.YEAR));
+        calendar2000.set( Calendar.DATE, thisDay.get( Calendar.DATE));
         calendar2000.set( Calendar.HOUR_OF_DAY , 23);
         calendar2000.set( Calendar.MINUTE , 59);
         Calendar calendar1000 = Calendar.getInstance();
+        calendar1000.set( Calendar.MONTH, thisDay.get( Calendar.MONTH));
+        calendar1000.set( Calendar.YEAR, thisDay.get( Calendar.YEAR));
+        calendar1000.set( Calendar.DATE, thisDay.get( Calendar.DATE));
         calendar1000.set( Calendar.HOUR_OF_DAY , 23);
         calendar1000.set( Calendar.MINUTE , 59);
-        Calendar calendarDef = Calendar.getInstance();
-        calendarDef.set( Calendar.HOUR_OF_DAY ,3);
-        calendarDef.set( Calendar.MINUTE , 0);
-        CalendarEvent current1, current2, default1;
+        CalendarEvent current1, current2;
 
         int eventsSmallest = 10000;
         int orderedSmallest = 10000;
         int counter1 = 0;
         int counter2 = 0;
 
-        default1 = new CalendarEvent( calendar2000, calendar2000,
-                "-ERROR-", 0, ".");
 
         allEventsChron = new CalendarEvent[events.length + orderedEventEnds.length];
         isEventStart = new boolean[events.length + orderedEventEnds.length];
@@ -699,7 +700,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             current1 = new CalendarEvent( calendar2000, calendar2000,
                     "dsladjas" + calendar2000.get( Calendar.MINUTE), 0, ".");
             current2 = new CalendarEvent( calendar1000, calendar1000,
-                    "dsladjas" + calendar1000.get( Calendar.MINUTE), 0, ".");
+                    "dsladjas" + calendar1000.get( Calendar.MINUTE), 1, ".");
 
             for ( int a = counter2; a < orderedEventEnds.length; a++) {
                 if ( clockToInt( orderedEventEnds[a].getEventEnd())

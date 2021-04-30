@@ -1,6 +1,7 @@
 package com.timetablecarpenters.pocketcalendar;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,6 +14,10 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 
+import com.timetablecarpenters.pocketcalendar.BaseActivity;
+import com.timetablecarpenters.pocketcalendar.CalendarEvent;
+import com.timetablecarpenters.pocketcalendar.DBHelper;
+import com.timetablecarpenters.pocketcalendar.R;
 import com.timetablecarpenters.pocketcalendar.R.color;
 
 import java.util.ArrayList;
@@ -32,6 +37,8 @@ public class MonthActivity extends BaseActivity {
     private int[] eventCountDays;
     private boolean[] isSpareDay;
     private static final String TAG = "MonthActivity";
+    Intent intent;
+    private Context context;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -40,7 +47,7 @@ public class MonthActivity extends BaseActivity {
         Log.d(TAG, "onCreate: starts");
         super.onCreate(savedInstanceState);
         Bundle extras;
-
+        context = this;
         database = new DBHelper(this, DBHelper.DB_NAME, null);
 
         extras = getIntent().getExtras();
@@ -192,10 +199,13 @@ public class MonthActivity extends BaseActivity {
         date.setText( str );
 
         day.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                TextView text = day.findViewById(R.id.text_date_name);
-                text.setText("Boom");
+                intent = new Intent( context, DayActivity.class);
+                intent.putExtra( INTENT_KEY, calendar);
+                startActivity(intent);
+                finish();
             }
         });
 
