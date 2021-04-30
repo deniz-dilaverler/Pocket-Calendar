@@ -170,7 +170,8 @@
         android:layout_marginEnd="16dp"
         android:text="Dıscard"
         app:layout_constraintEnd_toStartOf="@+id/add_event_done"
-        app:layout_constraintTop_toBottomOf="@+id/mapView" />
+        app:layout_constraintTop_toBottomOf="@+id/mapView"
+/>
 
     <Button
         android:id="@+id/add_event_done"
