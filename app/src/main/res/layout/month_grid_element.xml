@@ -8,92 +8,57 @@
     android:background="#FFFFFF"
     app:layoutDescription="@xml/week_grid_element_scene">
 
-    <TextView
-        android:id="@+id/text_date_name"
+    <LinearLayout
+        android:id="@+id/downwards_layout"
         android:layout_width="50dp"
-        android:layout_height="70dp"
+        android:layout_height="80dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="day" />
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/event_circle1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="20dp"
-        app:srcCompat="@drawable/event_circle" />
+        <TextView
+            android:id="@+id/text_date_name"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="day" />
 
-    <ImageView
-        android:id="@+id/event_circle2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="20dp"
-        app:srcCompat="@drawable/event_circle" />
+        <LinearLayout
+            android:id="@+id/linear_layout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/event_circle3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="20dp"
-        app:srcCompat="@drawable/event_circle" />
+            <include
+                android:id="@+id/circle1"
+                layout="@layout/circle" />
+            <include
+                android:id="@+id/circle2"
+                layout="@layout/circle" />
+            <include
+                android:id="@+id/circle3"
+                layout="@layout/circle" />
+            <include
+                android:id="@+id/circle4"
+                layout="@layout/circle" />
+            <include
+                android:id="@+id/circle5"
+                layout="@layout/circle" />
+            <include
+                android:id="@+id/circle6"
+                layout="@layout/circle" />
+            <include
+                android:id="@+id/three_dot"
+                layout="@layout/three_dots" />
+        </LinearLayout>
 
-    <ImageView
-        android:id="@+id/event_circle4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="20dp"
-        app:srcCompat="@drawable/event_circle" />
+        <LinearLayout
+            android:id="@+id/linear_layout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/event_circle5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="32dp"
-        app:srcCompat="@drawable/event_circle" />
-
-    <ImageView
-        android:id="@+id/event_circle6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="32dp"
-        app:srcCompat="@drawable/event_circle" />
-
-    <ImageView
-        android:id="@+id/event_circle7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="32dp"
-        app:srcCompat="@drawable/event_circle" />
-
-    <ImageView
-        android:id="@+id/event_circle8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="32dp"
-        app:srcCompat="@drawable/event_circle" />
-
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

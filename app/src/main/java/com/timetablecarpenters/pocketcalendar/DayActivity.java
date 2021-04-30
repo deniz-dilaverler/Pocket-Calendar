@@ -28,8 +28,11 @@ import android.widget.Toast;
 
 
 import androidx.annotation.RequiresApi;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,11 +70,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private Calendar thisDay;
     private final static String INTENT_KEY = "today_date";
 
-    @SuppressLint("SetTextI18n")
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.content_day); //Changed to test it normally activity_day
+        setContentView(R.layout.activity_day); //Changed to test it normally activity_day
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: DayActivity Starts");
 
@@ -86,9 +87,10 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             Log.d(TAG, "onCreate: thisDay is Set" );
             thisDay = Calendar.getInstance();
         }
+        String heading = thisDay.get( Calendar.YEAR) + " " + formattedMonth( thisDay.get(
+                Calendar.MONTH)) + " " + thisDay.get( Calendar.DAY_OF_MONTH);
         TextView date = findViewById( R.id.dateText);
-        date.setText( thisDay.get( Calendar.YEAR) + " " + formattedMonth( thisDay.get(
-                Calendar.MONTH)) + " " + thisDay.get( Calendar.DAY_OF_MONTH));
+        date.setText( heading);
 
         database = new DBHelper(this, DBHelper.DB_NAME, null);
 
@@ -533,22 +535,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      * gets today's events and puts them all in an array as events property
      * @author Alperen Utku Yalçın
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void pullEventsOfDay( ArrayList<CalendarEvent> calEvents) {
-        //todo - once the other methods work
-        //for now
         int counter;
-        /*
-        ArrayList<CalendarEvent> arrayListEvents = new ArrayList<>();
-
-
-        counter = 0;
-        events = new CalendarEvent[ arrayListEvents.size()];
-        for ( CalendarEvent event : arrayListEvents) {
-            events[counter] = event;
-            counter++;
-        }*/
-
         counter = 0;
         events = new CalendarEvent[ calEvents.size()];
         for ( int i = 0; i < calEvents.size(); i++) {
@@ -566,7 +554,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         }
         orderedEventEnds = events;
     }
-
+    private int getBackGColor() {
+        return ResourcesCompat.getColor(getResources(), R.color.month_activity_beckground_unusable, null);
+    }
 
     private int clockToInt( Calendar cal) {
         int result;
@@ -724,6 +714,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         TextView text = view.findViewById( R.id.textView1);
         RelativeLayout layout = view.findViewById( R.id.rl1);
         text.setText( hourConvert( hour));
+        text.setTextColor( getBackGColor());
+
         View recent = layout;
         for ( int i = 0; i < allEventsChron.length ; i++) {
             if ( allEventsChron[i] != null) {
@@ -803,6 +795,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         for ( int i = 0; i < 24 ; i++) {
             createTextView( views[i], i);
         }
+        TextView txt = findViewById( R.id.textView8);
+        txt.setTextColor( getBackGColor());
     }
     /**
      *
