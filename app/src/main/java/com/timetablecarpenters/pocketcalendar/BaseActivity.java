@@ -1,6 +1,8 @@
 package com.timetablecarpenters.pocketcalendar;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -9,8 +11,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -23,6 +28,9 @@ import androidx.appcompat.widget.Toolbar;
  */
 public class BaseActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
     private static final String TAG = "BaseActivity";
+    public static final String SMALL = "Small";
+    public static final String MEDIUM = "Medium";
+    public static final String LARGE = "Large";
     protected static final String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     protected static final String[] dateNames = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     protected static float x1, x2, y1, y2;
@@ -52,7 +60,7 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         }
 
         this.gestureDetector = new GestureDetector(BaseActivity.this, this);
-
+        editInTextFont();
     }
 
 
@@ -78,6 +86,11 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
                 break;
             case R.id.action_settings:
                 intent = new Intent(this, SettingsActivity.class);
+                break;
+            case R.id.About_Devs:
+                //todo: this is for testing purposes, remove in final version
+                intent = new Intent(this, MapsActivity.class);
+                break;
         }
 
         if (intent != null) {
@@ -122,8 +135,10 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
                 default:
                     intent = null;
             }
-            if (intent != null)
+            if (intent != null) {
                 BaseActivity.this.startActivity(intent);
+                finish();
+            }
 
         }
     }
@@ -165,6 +180,53 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         }
         return super.onTouchEvent(event);
     }
+
+    /**
+     * Edits the font sizes of textViews according to settings
+     */
+    public void editInTextFont(){
+        TextView textView = findViewById(R.id.dateText);
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("inTextPref", MODE_PRIVATE);
+        String inTextFontSize = sp.getString("inTextFontSize","");
+        if (inTextFontSize.equals(SMALL))
+        {
+            textView.setTextSize(16);
+        }
+        if (inTextFontSize.equals(MEDIUM))
+        {
+            textView.setTextSize(20);
+        }
+        if (inTextFontSize.equals(LARGE))
+        {
+            textView.setTextSize(40);
+        }
+        //Toast.makeText(BaseActivity.this,"is selected",Toast.LENGTH_LONG).show();
+    }
+    /**
+     * After the user pressed the back
+     * Shows the dialog that asks the user
+     * is sure or not
+     */
+    public void onBackPressed() {
+        // Here you want to show the user a dialog box
+        new AlertDialog.Builder(BaseActivity.this)
+                .setTitle("Exiting the App")
+                .setMessage("Are you sure?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // The user wants to leave - so dismiss the dialog and exit
+                        finish();
+                        dialog.dismiss();
+                    }
+                }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // The user is not sure, so you can exit or just stay
+                dialog.dismiss();
+            }
+        }).show();
+
+    }
+
 
     /**
      * Override to add functionality

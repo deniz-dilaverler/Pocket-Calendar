@@ -4,34 +4,24 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.timetablecarpenters.pocketcalendar.BaseActivity;
-import com.timetablecarpenters.pocketcalendar.CalendarEvent;
-import com.timetablecarpenters.pocketcalendar.DBHelper;
-import com.timetablecarpenters.pocketcalendar.R;
-import com.timetablecarpenters.pocketcalendar.R.color;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static com.timetablecarpenters.pocketcalendar.R.color.*;
-
 
 public class MonthActivity extends BaseActivity {
     private View[] weeks, dayInWeek;
-    private CalendarEvent[] events;
     private CalendarEvent[][] eventsInDays;
     private Calendar today;
     private DBHelper database;
@@ -179,42 +169,36 @@ public class MonthActivity extends BaseActivity {
         cal.add( Calendar.DATE,1);
         dayCreate( dayInWeek[6], cal, dayCount);
     }
-
+    private int getBackGColor() {
+        return ResourcesCompat.getColor(getResources(), R.color.month_activity_beckground_unusable, null);
+    }
 
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
     private void dayCreate(View day, Calendar cal, int dayCount) { //dayNo 1 to 7
         TextView date = day.findViewById( R.id.text_date_name);
+        View backG = ( View) day.findViewById( R.id.downwards_layout);
         Calendar calendar = Calendar.getInstance();
         calendar.set( Calendar.MONTH, cal.get( Calendar.MONTH));
         calendar.set( Calendar.YEAR, cal.get( Calendar.YEAR));
         calendar.set( Calendar.DATE, cal.get( Calendar.DATE));
         calendar.set( Calendar.HOUR_OF_DAY, cal.get( Calendar.HOUR_OF_DAY));
         calendar.set( Calendar.MINUTE, cal.get( Calendar.MINUTE));
-        int i;
-        if ( eventCountDays[ dayCount] != null) {
-            i = eventCountDays[ dayCount].length;
-        }
-        else {
-            i = 0;
-        }
-        String str = "" + calendar.get( Calendar.DATE) + "." + i;
+        String str = "" + calendar.get( Calendar.DATE);
 
         if ( isSpareDay[dayCount]) {
             str = "";
-            date.setBackgroundColor( ResourcesCompat.getColor(getResources(), R.color.month_activity_beckground_unusable, null)); //with theme));//"#5481A4"));
+            backG.setBackgroundColor( getBackGColor());
             date.setText( str );
+            LinearLayout rl = (LinearLayout) day.findViewById( R.id.linear_layout1);
+            rl.removeAllViews();
         }
         else {
-            // Put the circles.
-
             if ( eventCountDays[ dayCount] != null) {
-                //addCircles( eventCountDays[dayCount], day);
+                addCircles( eventCountDays[dayCount], day);
             }
 
-
-
-            date.setText( str );
-
+            date.setText( str);
+            date.setTextColor( getBackGColor());
             day.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -222,21 +206,72 @@ public class MonthActivity extends BaseActivity {
                     intent = new Intent( context, DayActivity.class);
                     intent.putExtra( INTENT_KEY, calendar);
                     startActivity(intent);
-                    finish();
+                    //finish();
                 }
             });
         }
-
-
+    }
+    private View setView( View c, int i, CalendarEvent[] eventList) {
+        TextView txt = c.findViewById( R.id.mark);
+        txt.setTextColor( eventList[i].color);
+        return c;
     }
     private void addCircles( CalendarEvent[] events, View day) {
-        RelativeLayout rl = day.findViewById( R.id.rlC);
+        LinearLayout rl = (LinearLayout) day.findViewById( R.id.linear_layout1);
+        LinearLayout rl2 = (LinearLayout) day.findViewById( R.id.linear_layout2);
+        View c1 = rl.findViewById( R.id.circle1);
+        View c2 = rl.findViewById( R.id.circle2);
+        View c3 = rl.findViewById( R.id.circle3);
+        View c4 = rl.findViewById( R.id.circle4);
+        View c5 = rl.findViewById( R.id.circle5);
+        View c6 = rl.findViewById( R.id.circle6);
+        View viewPlus = rl.findViewById( R.id.three_dot);
+        rl.removeAllViews( );
         if ( events == null) {
             return;
         }
         else if ( events.length == 1) {
-            ImageView pic = rl.findViewById( R.id.event_circle1);
-            //rl.( pic);
+            rl.addView( setView( c1, 0, events), 0);
+        }
+        else if ( events.length == 2) {
+            rl.addView( setView( c1, 0, events), 0);
+            rl.addView( setView( c2, 1, events), 1);
+        }
+        else if ( events.length == 3) {
+            rl.addView( setView( c1, 0, events), 0);
+            rl.addView( setView( c2, 1, events), 1);
+            rl.addView( setView( c3, 2, events), 2);
+        }
+        else if ( events.length == 4) {
+            rl.addView( setView( c1, 0, events), 0);
+            rl.addView( setView( c2, 1, events), 1);
+            rl.addView( setView( c3, 2, events), 2);
+            rl2.addView( setView( c4, 3, events), 0);
+        }
+        else if ( events.length == 5) {
+            rl.addView( setView( c1, 0, events), 0);
+            rl.addView( setView( c2, 1, events), 1);
+            rl.addView( setView( c3, 2, events), 2);
+            rl2.addView( setView( c4, 3, events), 0);
+            rl2.addView( setView( c5, 4, events), 1);
+        }
+        else if ( events.length == 6) {
+            rl.addView( setView( c1, 0, events), 0);
+            rl.addView( setView( c2, 1, events), 1);
+            rl.addView( setView( c3, 2, events), 2);
+            rl2.addView( setView( c4, 3, events), 0);
+            rl2.addView( setView( c5, 4, events), 1);
+            rl2.addView( setView( c6, 5, events), 2);
+        }
+        else if ( events.length >= 7) {
+            rl.addView( setView( c1, 0, events), 0);
+            rl.addView( setView( c2, 1, events), 1);
+            rl.addView( setView( c3, 2, events), 2);
+            rl2.addView( setView( c4, 3, events), 0);
+            rl2.addView( setView( c5, 4, events), 1);
+            TextView txt = viewPlus.findViewById( R.id.three_dots);
+            txt.setTextColor( getBackGColor());
+            rl2.addView( viewPlus, 2);
         }
     }
 
@@ -257,11 +292,9 @@ public class MonthActivity extends BaseActivity {
                 counter++;
             }
         }
-        events = new CalendarEvent[counter];
         counter = 0;
         for (int i = 0; i < dBEvents.size(); i++) {
             if ( dBEvents.get(i) != null && dBEvents.get(i).getEventStart().get(Calendar.MONTH) == today.get(Calendar.MONTH)) {
-                events[counter] = dBEvents.get(i);
                 counter++;
             }
         }
@@ -307,27 +340,6 @@ public class MonthActivity extends BaseActivity {
         }
         return dayEvents;
     }
-    /*
-    private  void createDefault() {
-        CalendarEvent defaultEvent;
-        Calendar calendar11 = Calendar.getInstance();
-        Calendar calendar12 = Calendar.getInstance();
-        calendar11.set( Calendar.MONTH, today.get( Calendar.MONTH));
-        calendar11.set( Calendar.YEAR, today.get( Calendar.YEAR));
-        calendar11.set( Calendar.DATE, today.get( Calendar.DATE));
-        calendar11.set( Calendar.HOUR_OF_DAY , 0);
-        calendar11.set( Calendar.MINUTE , 1);
-
-        calendar12.set( Calendar.MONTH, today.get( Calendar.MONTH));
-        calendar12.set( Calendar.YEAR, today.get( Calendar.YEAR));
-        calendar12.set( Calendar.DATE, today.get( Calendar.DATE));
-        calendar12.set( Calendar.HOUR_OF_DAY , 0);
-        calendar12.set( Calendar.MINUTE , 10);
-        defaultEvent = new CalendarEvent( calendar11, calendar12, "Default", 123456789, "None");
-        defaultEvent.setNotes( "None");
-        defaultEvent.setColor( Color.MAGENTA);
-    }
-     */
     @Override
     public void leftSwipe() {
         Log.d(TAG, "leftSwipe: MonthActivity");
@@ -355,6 +367,7 @@ public class MonthActivity extends BaseActivity {
         finish();
     }
 
+    //TO CREATE EVENTS ----  TEST ONLY
     private void insertEvents() {
         Calendar calendar3 = Calendar.getInstance();
         Calendar calendar4 = Calendar.getInstance();
@@ -374,6 +387,12 @@ public class MonthActivity extends BaseActivity {
 
         Calendar calendar = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
+        calendar.set( Calendar.MONTH, 3);
+        calendar.set( Calendar.YEAR, 2021);
+        calendar.set( Calendar.DATE, 20);
+        calendar2.set( Calendar.MONTH, calendar.get( Calendar.MONTH));
+        calendar2.set( Calendar.YEAR, calendar.get( Calendar.YEAR));
+        calendar2.set( Calendar.DATE, calendar.get( Calendar.DATE));
         calendar.set( Calendar.HOUR_OF_DAY , 0);
         calendar.set( Calendar.MINUTE , 1);
         calendar2.set( Calendar.HOUR_OF_DAY , 2);
@@ -383,7 +402,13 @@ public class MonthActivity extends BaseActivity {
         database.insertEvent( cal2);
 
         Calendar calendar5 = Calendar.getInstance();
-        Calendar calendar6 = Calendar.getInstance();
+        Calendar calendar6 = Calendar.getInstance();;
+        calendar5.set( Calendar.MONTH, 3);
+        calendar5.set( Calendar.YEAR, 2021);
+        calendar5.set( Calendar.DATE, 22);
+        calendar6.set( Calendar.MONTH, calendar5.get( Calendar.MONTH));
+        calendar6.set( Calendar.YEAR, calendar5.get( Calendar.YEAR));
+        calendar6.set( Calendar.DATE, calendar5.get( Calendar.DATE));
         calendar5.set( Calendar.HOUR_OF_DAY , 2);
         calendar5.set( Calendar.MINUTE , 1);
         calendar6.set( Calendar.HOUR_OF_DAY , 2);
@@ -394,6 +419,12 @@ public class MonthActivity extends BaseActivity {
 
         Calendar calendar7 = Calendar.getInstance();
         Calendar calendar8 = Calendar.getInstance();
+        calendar7.set( Calendar.MONTH, 3);
+        calendar7.set( Calendar.YEAR, 2021);
+        calendar7.set( Calendar.DATE, 23);
+        calendar8.set( Calendar.MONTH, calendar7.get( Calendar.MONTH));
+        calendar8.set( Calendar.YEAR, calendar7.get( Calendar.YEAR));
+        calendar8.set( Calendar.DATE, calendar7.get( Calendar.DATE));
         calendar7.set( Calendar.HOUR_OF_DAY , 0);
         calendar7.set( Calendar.MINUTE , 1);
         calendar8.set( Calendar.HOUR_OF_DAY , 0);
@@ -432,11 +463,6 @@ public class MonthActivity extends BaseActivity {
         cal7.setColor( Color.CYAN);
         database.insertEvent( cal7);
     }
-
-
-
-
-
 
 
 

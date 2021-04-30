@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import androidx.core.content.res.ResourcesCompat;
 
 import java.util.Calendar;
 
@@ -70,7 +71,9 @@ public class WeekActivity extends BaseActivity {
         DBHelper dbHelper = new DBHelper(this, DBHelper.DB_NAME, null);
         for(int i = 0 ; i < 7 ; i++) {
             View row = content.findViewById(rowIds[i]);
-            ((TextView) row.findViewById(R.id.text_date_name)).setText(dateNames[i]);
+            TextView weekDayName = (row.findViewById(R.id.text_date_name));
+            weekDayName.setText(dateNames[i]);
+            weekDayName.setTextColor( getBackGColor());
             Log.d(TAG, "onCreate: day = " + day.get(Calendar.YEAR)+ " " + day.get(Calendar.MONTH)+ " " + day.get(Calendar.DAY_OF_MONTH));
             cursor = dbHelper.getEventsInAnInterval(day, day);
             // check if there are any events on that day
@@ -88,7 +91,9 @@ public class WeekActivity extends BaseActivity {
             day.add(Calendar.DATE, 1);
         }
     }
-
+    private int getBackGColor() {
+        return ResourcesCompat.getColor(getResources(), R.color.month_activity_beckground_unusable, null);
+    }
     /**
      * when a leftSwipe is notifed by the super class adds a week to the date of weekView and refreshes the activity
      */
