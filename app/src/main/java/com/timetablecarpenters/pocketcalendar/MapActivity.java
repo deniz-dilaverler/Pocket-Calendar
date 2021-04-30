@@ -29,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
@@ -183,35 +184,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
 
         List<PhotoMetadata> photos = placeToSearch.getPhotoMetadatas();
-        if(photos.size() > 0) {
-            Log.d(TAG, "initSheetView: attributions " + photos.get(0));
+        if( photos == null || photos.size() == 0) {
+            Log.d(TAG, "initSheetView: attributions " );
+            imageView.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_broken_image, null));
+            imageView.setScaleType(ImageView.ScaleType.CENTER);
+        } else {
+
+            // The code beneath has been taken from the Google PlacesAPI documentation page https://developers.google.com/maps/documentation/places/android-sdk/photos
+            // Photo metadata (HTML String) is converted to a bitmap to be portrayed in the UI
+            final PhotoMetadata photoMetadata = photos.get(0);
+
+            // Get the attribution text.
+            final String attributions = photoMetadata.getAttributions();
+
+            PlacesClient placesClient = Places.createClient(this);
+
+            // Create a FetchPhotoRequest.
+            final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                    .setMaxWidth(500) // Optional.
+                    .setMaxHeight(300) // Optional.
+                    .build();
+            placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+                Bitmap bitmap = fetchPhotoResponse.getBitmap();
+                imageView.setImageBitmap(bitmap);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }).addOnFailureListener((exception) -> {
+                if (exception instanceof ApiException) {
+                    final ApiException apiException = (ApiException) exception;
+                    Log.e(TAG, "Place not found: " + exception.getMessage());
+                    final int statusCode = apiException.getStatusCode();
+                }
+            });
         }
-
-        // The code beneath has been taken from the Google PlacesAPI documentation page https://developers.google.com/maps/documentation/places/android-sdk/photos
-        // Photo metadata (HTML String) is converted to a bitmap to be portrayed in the UI
-        final PhotoMetadata photoMetadata = photos.get(0);
-
-        // Get the attribution text.
-        final String attributions = photoMetadata.getAttributions();
-
-        PlacesClient placesClient = Places.createClient(this);
-
-        // Create a FetchPhotoRequest.
-        final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                .setMaxWidth(500) // Optional.
-                .setMaxHeight(300) // Optional.
-                .build();
-        placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
-            Bitmap bitmap = fetchPhotoResponse.getBitmap();
-            imageView.setImageBitmap(bitmap);
-        }).addOnFailureListener((exception) -> {
-            if (exception instanceof ApiException) {
-                final ApiException apiException = (ApiException) exception;
-                Log.e(TAG, "Place not found: " + exception.getMessage());
-                final int statusCode = apiException.getStatusCode();
-            }
-        });
-
 
         bottomSheetDialog.show();
     }
@@ -336,6 +340,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() );
                 placeToSearch = place;
+                mMap.clear();
                 geoLocate();
             }
 

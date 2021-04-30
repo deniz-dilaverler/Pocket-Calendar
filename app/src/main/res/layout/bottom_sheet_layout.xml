@@ -28,7 +28,7 @@
             android:id="@+id/place_name_tv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:textSize="24sp"
             android:textStyle="bold"
             tools:text="Place Name" />
@@ -38,7 +38,7 @@
             android:id="@+id/address_tv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4"
+            android:layout_weight="5"
             android:textSize="12sp"
             tools:text="address stuff, I am so addressing right now yaaassss" />
     </LinearLayout>
