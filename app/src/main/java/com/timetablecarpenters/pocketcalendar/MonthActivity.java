@@ -206,7 +206,11 @@ public class MonthActivity extends BaseActivity {
         }
         else {
             // Put the circles.
-            //addCircles( eventCountDays[dayCount], day);
+
+            if ( eventCountDays[ dayCount] != null) {
+                //addCircles( eventCountDays[dayCount], day);
+            }
+
 
 
             date.setText( str );

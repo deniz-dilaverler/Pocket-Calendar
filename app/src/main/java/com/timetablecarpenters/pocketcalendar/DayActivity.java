@@ -71,7 +71,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.content_day3); //Changed to test it normally activity_day
+        setContentView(R.layout.content_day); //Changed to test it normally activity_day
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: DayActivity Starts");
 
@@ -680,12 +680,25 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             }
         }
     }
+
+    public String hourConvert( int i) {
+        String result;
+        result = i + "";
+        if( i < 10) {
+            result = 0 + "" + result;
+        }
+        result = result + ":00";
+        return result;
+    }
     /**
      * Creates and sets the textViews with appropriate texts
      * @author Alperen Utku Yalçın
      */
-    private void createTextView( RelativeLayout layout, int hour) {
+    private void createTextView( View view, int hour) {
         String str;
+        TextView text = view.findViewById( R.id.textView1);
+        RelativeLayout layout = view.findViewById( R.id.rl1);
+        text.setText( hourConvert( hour));
         View recent = layout;
         for ( int i = 0; i < allEventsChron.length ; i++) {
             if ( allEventsChron[i] != null) {
@@ -737,57 +750,33 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private void initiateRelativeLayouts( ) {
         //todo
         EventChronologyCreate();
-        RelativeLayout[] layouts = new RelativeLayout[24];
-        RelativeLayout rl1 = findViewById( R.id.rl1);
-        layouts[0] = rl1;
-        RelativeLayout rl2 = findViewById( R.id.rl2);
-        layouts[1] = rl2;
-        RelativeLayout rl3 = findViewById( R.id.rl3);
-        layouts[2] = rl3;
-        RelativeLayout rl4 = findViewById( R.id.rl4);
-        layouts[3] = rl4;
-        RelativeLayout rl5 = findViewById( R.id.rl5);
-        layouts[4] = rl5;
-        RelativeLayout rl6 = findViewById( R.id.rl6);
-        layouts[5] = rl6;
-        RelativeLayout rl7 = findViewById( R.id.rl7);
-        layouts[6] = rl7;
-        RelativeLayout rl8 = findViewById( R.id.rl8);
-        layouts[7] = rl8;
-        RelativeLayout rl9 = findViewById( R.id.rl9);
-        layouts[8] = rl9;
-        RelativeLayout rl10 = findViewById( R.id.rl10);
-        layouts[9] = rl10;
-        RelativeLayout rl11 = findViewById( R.id.rl11);
-        layouts[10] = rl11;
-        RelativeLayout rl12 = findViewById( R.id.rl12);
-        layouts[11] = rl12;
-        RelativeLayout rl13 = findViewById( R.id.rl13);
-        layouts[12] = rl13;
-        RelativeLayout rl14 = findViewById( R.id.rl14);
-        layouts[13] = rl14;
-        RelativeLayout rl15 = findViewById( R.id.rl15);
-        layouts[14] = rl15;
-        RelativeLayout rl16 = findViewById( R.id.rl16);
-        layouts[15] = rl16;
-        RelativeLayout rl17 = findViewById( R.id.rl17);
-        layouts[16] = rl17;
-        RelativeLayout rl18 = findViewById( R.id.rl18);
-        layouts[17] = rl18;
-        RelativeLayout rl19 = findViewById( R.id.rl19);
-        layouts[18] = rl19;
-        RelativeLayout rl20 = findViewById( R.id.rl20);
-        layouts[19] = rl20;
-        RelativeLayout rl21 = findViewById( R.id.rl21);
-        layouts[20] = rl21;
-        RelativeLayout rl22 = findViewById( R.id.rl22);
-        layouts[21] = rl22;
-        RelativeLayout rl23 = findViewById( R.id.rl23);
-        layouts[22] = rl23;
-        RelativeLayout rl24 = findViewById( R.id.rl24);
-        layouts[23] = rl24;
+        View[] views = new View[24];
+        views[0] = findViewById( R.id.day_content).findViewById( R.id.hr0);
+        views[1] = findViewById( R.id.day_content).findViewById( R.id.hr1);
+        views[2] = findViewById( R.id.day_content).findViewById( R.id.hr2);
+        views[3] = findViewById( R.id.day_content).findViewById( R.id.hr3);
+        views[4] = findViewById( R.id.day_content).findViewById( R.id.hr4);
+        views[5] = findViewById( R.id.day_content).findViewById( R.id.hr5);
+        views[6] = findViewById( R.id.day_content).findViewById( R.id.hr6);
+        views[7] = findViewById( R.id.day_content).findViewById( R.id.hr7);
+        views[8] = findViewById( R.id.day_content).findViewById( R.id.hr8);
+        views[9] = findViewById( R.id.day_content).findViewById( R.id.hr9);
+        views[10] = findViewById( R.id.day_content).findViewById( R.id.hr10);
+        views[11] = findViewById( R.id.day_content).findViewById( R.id.hr11);
+        views[12] = findViewById( R.id.day_content).findViewById( R.id.hr12);
+        views[13] = findViewById( R.id.day_content).findViewById( R.id.hr13);
+        views[14] = findViewById( R.id.day_content).findViewById( R.id.hr14);
+        views[15] = findViewById( R.id.day_content).findViewById( R.id.hr15);
+        views[16] = findViewById( R.id.day_content).findViewById( R.id.hr16);
+        views[17] = findViewById( R.id.day_content).findViewById( R.id.hr17);
+        views[18] = findViewById( R.id.day_content).findViewById( R.id.hr18);
+        views[19] = findViewById( R.id.day_content).findViewById( R.id.hr19);
+        views[20] = findViewById( R.id.day_content).findViewById( R.id.hr20);
+        views[21] = findViewById( R.id.day_content).findViewById( R.id.hr21);
+        views[22] = findViewById( R.id.day_content).findViewById( R.id.hr22);
+        views[23] = findViewById( R.id.day_content).findViewById( R.id.hr23);
         for ( int i = 0; i < 24 ; i++) {
-            createTextView( layouts[i], i);
+            createTextView( views[i], i);
         }
     }
     /**
