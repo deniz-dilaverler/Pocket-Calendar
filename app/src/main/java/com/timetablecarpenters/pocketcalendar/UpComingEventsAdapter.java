@@ -43,7 +43,7 @@ public class UpComingEventsAdapter extends CursorAdapter {
         String startTime = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_START));
         String endTime = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_END));
         int year = cursor.getInt(cursor.getColumnIndex(DBHelper.YEAR));
-        int month = cursor.getInt(cursor.getColumnIndex(DBHelper.MONTH));
+        int month = cursor.getInt(cursor.getColumnIndex(DBHelper.MONTH)) + 1; // because db stores month values starting from 0
         int day = cursor.getInt(cursor.getColumnIndex(DBHelper.DAY));
         String title = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_NAME));
         String eventType = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_TYPE));

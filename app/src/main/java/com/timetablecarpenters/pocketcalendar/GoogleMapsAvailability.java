@@ -9,11 +9,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-public class LocationAvailability {
+/**
+ * Has the methods and variables to check if the user's device can use Google maps or not
+ * @version 30.04.2021
+ */
+public class GoogleMapsAvailability {
     private static final String TAG = "LocationAvailability";
 
     private static final int ERROR_DIALOG_REQUEST = 9001;
 
+    /**
+     * Checks form the google API wether the user is applicable to use the maps function
+     * @param activity
+     * @return
+     */
     public static boolean isServicesOK(AppCompatActivity activity) {
         Log.d(TAG, "isServicesOK: checking google services version");
 

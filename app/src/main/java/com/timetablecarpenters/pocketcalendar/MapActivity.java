@@ -55,6 +55,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * MapActivity is an activity where the user can look up locations and get name and address information from.
+ * This class uses the google maps Api to create a MapFragment and manipulate it to move around it. This class also uses
+ * Google Places API to AutoComplete user inputs and find information about the location searched. The user can select a location to be
+ * added to their CalendarEvent via this class
+ * @author: Deniz Mert Dilaverler
+ * @version 30.04.2021
+ */
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = "MapActivity";
@@ -76,7 +84,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Place placeToSearch;
 
-
+    /**
+     * initialisation of the autocompleteFragment and the GPS button, it calls getLocationPermission to check wether
+     * the user consents to their Location data to be used
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,9 +100,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+    /**
+     * this is the callback method which is called when the map is set up
+     * initializes mMap. If the location permissions are granted, then gets the location of the user and initializes GooglePlaces
+     * Autocomplete api and the GPS button's on click listener.
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: map is ready");
         mMap = googleMap;
 
@@ -111,6 +128,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    /**
+     * set an onClickListener that takes the camera of the map to the user location
+     */
     private void init(){
         Log.d(TAG, "init: initializing");
 
@@ -125,7 +145,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private void geoLocate(){
+    /**
+     * Finds the location with the Latlng value that the Place instance provide. Takes the camera to the location of the place
+     * calls the initSheetView().initSheetView() initializes the SheetView that shows the user, the location they searched for.
+     */
+    private void geoLocate() {
         Log.d(TAG, "geoLocate: geolocating");
 
        //String searchString = autocompleteFragment.getText().toString();

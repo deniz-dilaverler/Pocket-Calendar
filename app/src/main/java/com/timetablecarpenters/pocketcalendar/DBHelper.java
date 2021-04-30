@@ -14,6 +14,12 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * SQLiteOpenHelper class that creates, manages and resets database.
+ * CalendarEvents can be inserted, deleted or extracted
+ * @version 30.04.2021
+ * @author  Deniz Mert Dilaverler
+ */
 public class DBHelper extends SQLiteOpenHelper {
     public static String DB_NAME = "events.db";
     private static final String TAG = "DBHelper";
@@ -32,9 +38,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String LONGITUDE = "longitude";
     public static final String NOTIF_TIME = "notification_time";
     public static final String COLOR = "color";
-
-
-
 
     // constructor
 

@@ -34,6 +34,10 @@ public class WidgetService extends RemoteViewsService {
                     AppWidgetManager.INVALID_APPWIDGET_ID );
             this.cursor = cursor;
         }
+
+        /**
+         * recieves events from the db and puts them inside an ArrayList to be extracted agains to inflate the ListView items
+         */
         @Override
         public void onCreate() {
             DBHelper dbHelper = new DBHelper(context , DBHelper.DB_NAME, null);
@@ -54,11 +58,19 @@ public class WidgetService extends RemoteViewsService {
             // events.clear();
         }
 
+        /**
+         * @return how many items for the widget there are
+         */
         @Override
         public int getCount() {
             return events.size();
         }
 
+        /**
+         * creates a remote view and fills it with the data from the cursor
+         * @param position
+         * @return RemoteView (1 item of the UpcomingEvents widget's listView)
+         */
         @Override
         public RemoteViews getViewAt(int position) {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list_item);
@@ -66,7 +78,7 @@ public class WidgetService extends RemoteViewsService {
             Log.d(TAG, "getViewAt: current event: " + event.getName());
             views.setTextViewText(R.id.widget_event_title, event.getName());
 
-            String dateString = String.format("%d.%d.%d", event.getDay(), event.getMonth(), event.getYear());
+            String dateString = String.format("%d.%d.%d", event.getDay(), event.getMonth() , event.getYear());
             views.setTextViewText(R.id.widget_date_text, dateString );
 
             String timeText = event.getEventStartTime();
