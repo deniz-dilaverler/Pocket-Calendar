@@ -4,13 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_sheet"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_sheet_background">
 
     <ImageView
         android:id="@+id/dialog_place_pic"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:padding="16dp" />
+        android:layout_height="250dp"
+        android:layout_marginTop="16dp"
+        android:padding="16dp"
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:id="@+id/sheet_dialog_tvs"
@@ -25,30 +28,35 @@
             android:id="@+id/place_name_tv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
+            android:textSize="24sp"
+            android:textStyle="bold"
             tools:text="Place Name" />
 
         <TextView
+            android:layout_marginTop="10dp"
             android:id="@+id/address_tv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="4"
+            android:textSize="12sp"
             tools:text="address stuff, I am so addressing right now yaaassss" />
     </LinearLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/save_place_button"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="63dp"
+        android:layout_height="64dp"
         android:layout_below="@id/dialog_place_pic"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="14dp"
         android:layout_toEndOf="@id/sheet_dialog_tvs"
-        android:backgroundTint="#388E3C"
+        android:background="@drawable/set_location_button_background"
         android:clickable="true"
-        android:tint="#D60D0D"
+        android:tint="#000000"
         app:fabSize="normal"
         app:rippleColor="#388E3C"
-        app:srcCompat="@drawable/ic_place" />
+        app:srcCompat="@drawable/ic_location_on_24"
+        tools:srcCompat="@drawable/ic_location_on_24" />
 
 </RelativeLayout>

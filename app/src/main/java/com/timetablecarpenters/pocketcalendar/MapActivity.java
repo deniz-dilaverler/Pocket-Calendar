@@ -3,6 +3,7 @@ package com.timetablecarpenters.pocketcalendar;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -25,9 +26,11 @@ import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -41,8 +44,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.net.FetchPhotoRequest;
+import com.google.android.libraries.places.api.net.FetchPhotoResponse;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
@@ -55,6 +62,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.security.auth.login.LoginException;
@@ -163,6 +171,48 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 (ViewGroup) findViewById(R.id.bottom_sheet));
 
         bottomSheetDialog.setContentView(sheetView);
+        ((TextView) sheetView.findViewById(R.id.place_name_tv)).setText(placeToSearch.getName());
+        ((TextView) sheetView.findViewById(R.id.address_tv)).setText(placeToSearch.getAddress());
+        ImageView imageView = ((ImageView) sheetView.findViewById((R.id.dialog_place_pic)));
+        AppCompatImageView  button = (AppCompatImageView) sheetView.findViewById(R.id.save_place_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Todo: return the selected Place or Location object to the event Creation activity
+            }
+        });
+
+        List<PhotoMetadata> photos = placeToSearch.getPhotoMetadatas();
+        if(photos.size() > 0) {
+            Log.d(TAG, "initSheetView: attributions " + photos.get(0));
+        }
+
+        // The code beneath has been taken from the Google PlacesAPI documentation page https://developers.google.com/maps/documentation/places/android-sdk/photos
+        // Photo metadata (HTML String) is converted to a bitmap to be portrayed in the UI
+        final PhotoMetadata photoMetadata = photos.get(0);
+
+        // Get the attribution text.
+        final String attributions = photoMetadata.getAttributions();
+
+        PlacesClient placesClient = Places.createClient(this);
+
+        // Create a FetchPhotoRequest.
+        final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                .setMaxWidth(500) // Optional.
+                .setMaxHeight(300) // Optional.
+                .build();
+        placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+            Bitmap bitmap = fetchPhotoResponse.getBitmap();
+            imageView.setImageBitmap(bitmap);
+        }).addOnFailureListener((exception) -> {
+            if (exception instanceof ApiException) {
+                final ApiException apiException = (ApiException) exception;
+                Log.e(TAG, "Place not found: " + exception.getMessage());
+                final int statusCode = apiException.getStatusCode();
+            }
+        });
+
+
         bottomSheetDialog.show();
     }
 
@@ -277,7 +327,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
         // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.PHOTO_METADATAS, Place.Field.ADDRESS));
         Log.d(TAG, "initPlacesAutoComplete: " +  this.getResources().getConfiguration().locale.getCountry()) ;
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -288,7 +338,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 placeToSearch = place;
                 geoLocate();
             }
-
 
             @Override
             public void onError(@NotNull Status status) {
