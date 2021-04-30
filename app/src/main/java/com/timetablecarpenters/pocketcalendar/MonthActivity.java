@@ -9,10 +9,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.timetablecarpenters.pocketcalendar.BaseActivity;
 import com.timetablecarpenters.pocketcalendar.CalendarEvent;
@@ -34,7 +37,7 @@ public class MonthActivity extends BaseActivity {
     private DBHelper database;
     private final static String INTENT_KEY = "today_date";
     private CalendarEvent defaultEvent;
-    private int[] eventCountDays;
+    private CalendarEvent[][] eventCountDays;
     private boolean[] isSpareDay;
     private static final String TAG = "MonthActivity";
     Intent intent;
@@ -62,23 +65,22 @@ public class MonthActivity extends BaseActivity {
         date.setText( today.get( Calendar.YEAR) + " " + formattedMonth( today.get(
                 Calendar.MONTH)));
 
-        createDefault();
         eventsInDays = new CalendarEvent[42][];
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set( Calendar.MONTH, today.get( Calendar.MONTH));
         calendar1.set( Calendar.YEAR, today.get( Calendar.YEAR));
-        calendar1.set( Calendar.DATE, today.get( Calendar.DATE));
-        calendar1.set(Calendar.DATE, 0);
-        calendar1.set(Calendar.HOUR_OF_DAY, 0);
-        calendar1.set(Calendar.MINUTE, 0);
+        calendar1.set(Calendar.DATE, today.getActualMinimum( Calendar.DATE));
+        calendar1.set(Calendar.HOUR_OF_DAY, calendar1.getActualMinimum( Calendar.HOUR_OF_DAY));
+        calendar1.set(Calendar.MINUTE, calendar1.getActualMinimum( Calendar.MINUTE));
         Calendar calendar2 = Calendar.getInstance();
         calendar2.set( Calendar.MONTH, today.get( Calendar.MONTH));
         calendar2.set( Calendar.YEAR, today.get( Calendar.YEAR));
-        calendar2.set(Calendar.DATE, calendar1.getActualMaximum(Calendar.DATE));
-        calendar2.set(Calendar.HOUR_OF_DAY, 23);
-        calendar2.set(Calendar.MINUTE, 59);
-        pullEvents( database.getEventsInAnIntervalInArray( calendar1, calendar2));
+        calendar2.set(Calendar.DATE, today.getActualMaximum(Calendar.DATE));
+        calendar2.set(Calendar.HOUR_OF_DAY, calendar2.getActualMaximum( Calendar.HOUR_OF_DAY));
+        calendar2.set(Calendar.MINUTE, calendar2.getActualMaximum( Calendar.MINUTE));
 
+        insertEvents();
+        pullEvents( database.getEventsInAnIntervalInArray( calendar1, calendar2));
         initiateWeeks();
 
 
@@ -188,27 +190,50 @@ public class MonthActivity extends BaseActivity {
         calendar.set( Calendar.DATE, cal.get( Calendar.DATE));
         calendar.set( Calendar.HOUR_OF_DAY, cal.get( Calendar.HOUR_OF_DAY));
         calendar.set( Calendar.MINUTE, cal.get( Calendar.MINUTE));
-
-        int i = eventCountDays[ dayCount];
+        int i;
+        if ( eventCountDays[ dayCount] != null) {
+            i = eventCountDays[ dayCount].length;
+        }
+        else {
+            i = 0;
+        }
         String str = "" + calendar.get( Calendar.DATE) + "." + i;
 
         if ( isSpareDay[dayCount]) {
             str = "";
-            date.setBackgroundColor( Color.parseColor("#5481A4"));
+            date.setBackgroundColor( ResourcesCompat.getColor(getResources(), R.color.month_activity_beckground_unusable, null)); //with theme));//"#5481A4"));
+            date.setText( str );
         }
-        date.setText( str );
+        else {
+            // Put the circles.
+            //addCircles( eventCountDays[dayCount], day);
 
-        day.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                intent = new Intent( context, DayActivity.class);
-                intent.putExtra( INTENT_KEY, calendar);
-                startActivity(intent);
-                finish();
-            }
-        });
+            date.setText( str );
 
+            day.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    intent = new Intent( context, DayActivity.class);
+                    intent.putExtra( INTENT_KEY, calendar);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
+
+
+    }
+    private void addCircles( CalendarEvent[] events, View day) {
+        RelativeLayout rl = day.findViewById( R.id.rlC);
+        if ( events == null) {
+            return;
+        }
+        else if ( events.length == 1) {
+            ImageView pic = rl.findViewById( R.id.event_circle1);
+            //rl.( pic);
+        }
     }
 
     private void pullEvents( ArrayList<CalendarEvent> dBEvents) {
@@ -216,10 +241,10 @@ public class MonthActivity extends BaseActivity {
         int firstDayOfMonth;
         Calendar cal;
         counter = 0;
-        eventCountDays = new int[42];
+        eventCountDays = new CalendarEvent[42][];
         isSpareDay = new boolean[42];
         for ( int i = 0; i < 42; i++) {
-            eventCountDays[i] = 0;
+            //eventCountDays[i] = 0;
             isSpareDay[i] = true;
         }
 
@@ -242,7 +267,8 @@ public class MonthActivity extends BaseActivity {
         cal.set(Calendar.DATE, 0);
         firstDayOfMonth = ( dayCorrector( cal.get( Calendar.DAY_OF_WEEK)) % 7);
         for (int i = 0; i < today.getActualMaximum( Calendar.DAY_OF_MONTH); i++) {
-            eventCountDays[i + firstDayOfMonth] = ( pullEventsOfDay( dBEvents, i).length);
+            eventCountDays[i+ firstDayOfMonth] = new CalendarEvent[ pullEventsOfDay( dBEvents, i + 1).length];
+            eventCountDays[i + firstDayOfMonth] = pullEventsOfDay( dBEvents, i + 1);
             isSpareDay[i + firstDayOfMonth] = false;
         }
 
@@ -277,6 +303,7 @@ public class MonthActivity extends BaseActivity {
         }
         return dayEvents;
     }
+    /*
     private  void createDefault() {
         CalendarEvent defaultEvent;
         Calendar calendar11 = Calendar.getInstance();
@@ -296,8 +323,6 @@ public class MonthActivity extends BaseActivity {
         defaultEvent.setNotes( "None");
         defaultEvent.setColor( Color.MAGENTA);
     }
-    /**
-     *
      */
     @Override
     public void leftSwipe() {
@@ -326,7 +351,83 @@ public class MonthActivity extends BaseActivity {
         finish();
     }
 
+    private void insertEvents() {
+        Calendar calendar3 = Calendar.getInstance();
+        Calendar calendar4 = Calendar.getInstance();
+        calendar3.set( Calendar.MONTH, 3);
+        calendar3.set( Calendar.YEAR, 2021);
+        calendar3.set( Calendar.DATE, 20);
+        calendar4.set( Calendar.MONTH, calendar3.get( Calendar.MONTH));
+        calendar4.set( Calendar.YEAR, calendar3.get( Calendar.YEAR));
+        calendar4.set( Calendar.DATE, calendar3.get( Calendar.DATE));
+        calendar3.set( Calendar.HOUR_OF_DAY , 10);
+        calendar3.set( Calendar.MINUTE , 30);
+        calendar4.set( Calendar.HOUR_OF_DAY , 13);
+        calendar4.set( Calendar.MINUTE , 33);
+        CalendarEvent cal1 = new CalendarEvent( calendar3, calendar4, "You Have A Meeting" + calendar3.get( Calendar.MINUTE), 10, "Meeting");
+        cal1.setColor( Color.RED);
+        database.insertEvent( cal1);
 
+        Calendar calendar = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+        calendar.set( Calendar.HOUR_OF_DAY , 0);
+        calendar.set( Calendar.MINUTE , 1);
+        calendar2.set( Calendar.HOUR_OF_DAY , 2);
+        calendar2.set( Calendar.MINUTE , 3);
+        CalendarEvent cal2=  new CalendarEvent( calendar, calendar2, "You Have A Meeting"+ calendar.get( Calendar.MINUTE), 11, "Meeting");
+        cal2.setColor( Color.BLUE);
+        database.insertEvent( cal2);
+
+        Calendar calendar5 = Calendar.getInstance();
+        Calendar calendar6 = Calendar.getInstance();
+        calendar5.set( Calendar.HOUR_OF_DAY , 2);
+        calendar5.set( Calendar.MINUTE , 1);
+        calendar6.set( Calendar.HOUR_OF_DAY , 2);
+        calendar6.set( Calendar.MINUTE , 3);
+        CalendarEvent cal3 =  new CalendarEvent( calendar5, calendar6, "Bruh", 12, "Meeting");
+        cal3.setColor( Color.DKGRAY);
+        database.insertEvent( cal3);
+
+        Calendar calendar7 = Calendar.getInstance();
+        Calendar calendar8 = Calendar.getInstance();
+        calendar7.set( Calendar.HOUR_OF_DAY , 0);
+        calendar7.set( Calendar.MINUTE , 1);
+        calendar8.set( Calendar.HOUR_OF_DAY , 0);
+        calendar8.set( Calendar.MINUTE , 3);
+        CalendarEvent cal4 =  new CalendarEvent( calendar7, calendar8, "You Have A Meeting Too", 13, "Meeting");
+        cal4.setColor( Color.GREEN);
+        database.insertEvent( cal4);
+
+        Calendar calendar9 = Calendar.getInstance();
+        Calendar calendar10 = Calendar.getInstance();
+        calendar9.set( Calendar.HOUR_OF_DAY , 11);
+        calendar9.set( Calendar.MINUTE , 10);
+        calendar10.set( Calendar.HOUR_OF_DAY , 11);
+        calendar10.set( Calendar.MINUTE , 20);
+        CalendarEvent cal5 =  new CalendarEvent( calendar9, calendar10, "You Have A Meeting Too" + calendar9.get( Calendar.MINUTE), 14, "Meeting");
+        cal5.setColor( Color.BLUE);
+        database.insertEvent( cal5);
+
+        Calendar calendar11 = Calendar.getInstance();
+        Calendar calendar12 = Calendar.getInstance();
+        calendar11.set( Calendar.HOUR_OF_DAY , 20);
+        calendar11.set( Calendar.MINUTE , 1);
+        calendar12.set( Calendar.HOUR_OF_DAY , 21);
+        calendar12.set( Calendar.MINUTE , 50);
+        CalendarEvent cal6 =  new CalendarEvent( calendar11, calendar12, "Meet with friends", 15, "Meeting");
+        cal6.setColor( Color.MAGENTA);
+        database.insertEvent( cal6);
+
+        Calendar calendar13 = Calendar.getInstance();
+        Calendar calendar14 = Calendar.getInstance();
+        calendar13.set( Calendar.HOUR_OF_DAY , 18);
+        calendar13.set( Calendar.MINUTE , 10);
+        calendar14.set( Calendar.HOUR_OF_DAY , 18);
+        calendar14.set( Calendar.MINUTE , 20);
+        CalendarEvent cal7 =  new CalendarEvent( calendar13, calendar14, "Have a cup of cofee" + calendar9.get( Calendar.MINUTE), 16, "Meeting");
+        cal7.setColor( Color.CYAN);
+        database.insertEvent( cal7);
+    }
 
 
 

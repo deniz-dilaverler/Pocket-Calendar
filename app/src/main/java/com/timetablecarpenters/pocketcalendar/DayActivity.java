@@ -83,7 +83,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             thisDay = (Calendar) extras.get(INTENT_KEY);
         }
         if (thisDay == null) {
-            Log.d(TAG, "onCreate: SA" );
+            Log.d(TAG, "onCreate: thisDay is Set" );
             thisDay = Calendar.getInstance();
         }
         TextView date = findViewById( R.id.dateText);
@@ -93,10 +93,16 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         database = new DBHelper(this, DBHelper.DB_NAME, null);
 
         Calendar calendar1 = Calendar.getInstance();
+        calendar1.set( Calendar.MONTH, thisDay.get( Calendar.MONTH));
+        calendar1.set( Calendar.YEAR, thisDay.get( Calendar.YEAR));
+        calendar1.set( Calendar.DATE, thisDay.get( Calendar.DATE));
         calendar1.add( Calendar.DATE, -1);
         calendar1.set( Calendar.HOUR_OF_DAY, 0);
         calendar1.set( Calendar.MINUTE, 0);
         Calendar calendar2 = Calendar.getInstance();
+        calendar2.set( Calendar.MONTH, thisDay.get( Calendar.MONTH));
+        calendar2.set( Calendar.YEAR, thisDay.get( Calendar.YEAR));
+        calendar2.set( Calendar.DATE, thisDay.get( Calendar.DATE));
         calendar2.add( Calendar.DATE, 1);
         calendar2.set( Calendar.HOUR_OF_DAY, 23);
         calendar2.set( Calendar.MINUTE, 59);
@@ -507,70 +513,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         //todo - once the other methods work
         //for now
         int counter;
-/*
+        /*
         ArrayList<CalendarEvent> arrayListEvents = new ArrayList<>();
-        Calendar calendar3 = Calendar.getInstance();
-        Calendar calendar4 = Calendar.getInstance();
-        calendar3.set( Calendar.HOUR_OF_DAY , 10);
-        calendar3.set( Calendar.MINUTE , 30);
-        calendar4.set( Calendar.HOUR_OF_DAY , 13);
-        calendar4.set( Calendar.MINUTE , 33);
-        arrayListEvents.add( new CalendarEvent( calendar3, calendar4, "You Have A Meeting" + calendar3.get( Calendar.MINUTE), 2, "Meeting"));
-        arrayListEvents.get(0).setColor( Color.RED);
 
-        Calendar calendar = Calendar.getInstance();
-        Calendar calendar2 = Calendar.getInstance();
-        calendar.set( Calendar.HOUR_OF_DAY , 0);
-        calendar.set( Calendar.MINUTE , 1);
-        calendar2.set( Calendar.HOUR_OF_DAY , 2);
-        calendar2.set( Calendar.MINUTE , 3);
-        arrayListEvents.add( new CalendarEvent( calendar, calendar2, "You Have A Meeting"+ calendar.get( Calendar.MINUTE), 1, "Meeting"));
-        arrayListEvents.get(1).setColor( Color.BLUE);
-
-        Calendar calendar5 = Calendar.getInstance();
-        Calendar calendar6 = Calendar.getInstance();
-        calendar5.set( Calendar.HOUR_OF_DAY , 2);
-        calendar5.set( Calendar.MINUTE , 1);
-        calendar6.set( Calendar.HOUR_OF_DAY , 2);
-        calendar6.set( Calendar.MINUTE , 3);
-        arrayListEvents.add( new CalendarEvent( calendar5, calendar6, "Bruh", 3, "Meeting"));
-        arrayListEvents.get(2).setColor( Color.DKGRAY);
-
-        Calendar calendar7 = Calendar.getInstance();
-        Calendar calendar8 = Calendar.getInstance();
-        calendar7.set( Calendar.HOUR_OF_DAY , 0);
-        calendar7.set( Calendar.MINUTE , 1);
-        calendar8.set( Calendar.HOUR_OF_DAY , 0);
-        calendar8.set( Calendar.MINUTE , 3);
-        arrayListEvents.add( new CalendarEvent( calendar7, calendar8, "You Have A Meeting Too", 4, "Meeting"));
-        arrayListEvents.get(3).setColor( Color.GREEN);
-
-        Calendar calendar9 = Calendar.getInstance();
-        Calendar calendar10 = Calendar.getInstance();
-        calendar9.set( Calendar.HOUR_OF_DAY , 11);
-        calendar9.set( Calendar.MINUTE , 10);
-        calendar10.set( Calendar.HOUR_OF_DAY , 11);
-        calendar10.set( Calendar.MINUTE , 20);
-        arrayListEvents.add( new CalendarEvent( calendar9, calendar10, "You Have A Meeting Too" + calendar9.get( Calendar.MINUTE), 5, "Meeting"));
-        arrayListEvents.get(4).setColor( Color.BLUE);
-
-        Calendar calendar11 = Calendar.getInstance();
-        Calendar calendar12 = Calendar.getInstance();
-        calendar11.set( Calendar.HOUR_OF_DAY , 20);
-        calendar11.set( Calendar.MINUTE , 1);
-        calendar12.set( Calendar.HOUR_OF_DAY , 21);
-        calendar12.set( Calendar.MINUTE , 50);
-        arrayListEvents.add( new CalendarEvent( calendar11, calendar12, "Meet with friends", 4, "Meeting"));
-        arrayListEvents.get(5).setColor( Color.MAGENTA);
-
-        Calendar calendar13 = Calendar.getInstance();
-        Calendar calendar14 = Calendar.getInstance();
-        calendar13.set( Calendar.HOUR_OF_DAY , 18);
-        calendar13.set( Calendar.MINUTE , 10);
-        calendar14.set( Calendar.HOUR_OF_DAY , 18);
-        calendar14.set( Calendar.MINUTE , 20);
-        arrayListEvents.add( new CalendarEvent( calendar13, calendar14, "Have a cup of cofee" + calendar9.get( Calendar.MINUTE), 5, "Meeting"));
-        arrayListEvents.get(6).setColor( Color.CYAN);
 
         counter = 0;
         events = new CalendarEvent[ arrayListEvents.size()];
@@ -760,7 +705,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
 
                     recent = textView;
                     textView.setText(str);
-                    //textView.setTextColor(allEventsChron[i].color);
+                    if ( allEventsChron[i].color != 0) {
+                        textView.setTextColor(allEventsChron[i].color);
+                    }
                     textView.setSingleLine();
                     layout.addView(textView, layoutParams);
 
