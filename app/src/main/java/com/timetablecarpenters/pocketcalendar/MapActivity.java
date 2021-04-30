@@ -11,7 +11,9 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -44,6 +46,8 @@ import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 import static com.google.android.libraries.places.api.model.Place.Field.LAT_LNG;
 
 import org.jetbrains.annotations.NotNull;
@@ -67,13 +71,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     //widgets
     private AutocompleteSupportFragment autocompleteFragment;
     private ImageView mGps;
+    private BottomSheetDialog bottomSheetDialog;
 
 
     //vars
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private LatLng searchCoordinates;
+    private Place placeToSearch;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,8 +123,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 Log.d(TAG, "onClick: clicked gps icon");
                 getDeviceLocation();
+
             }
         });
+
     }
 
     private void geoLocate(){
@@ -128,21 +136,34 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         Geocoder geocoder = new Geocoder(MapActivity.this);
         List<Address> list = new ArrayList<>();
+        if (placeToSearch != null) {
+            try {
+                Log.d(TAG, "geoLocate: " + placeToSearch.getLatLng().latitude + " " + placeToSearch.getLatLng().longitude);
+                list = geocoder.getFromLocation(placeToSearch.getLatLng().latitude, placeToSearch.getLatLng().longitude, 1);
+            } catch (IOException e) {
+                Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
+            }
 
-        try{
-            Log.d(TAG, "geoLocate: " + searchCoordinates.latitude + " " + searchCoordinates.longitude);
-            list = geocoder.getFromLocation(searchCoordinates.latitude, searchCoordinates.longitude, 1);
-        }catch (IOException e){
-            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
+            if (list.size() > 0) {
+                Address address = list.get(0);
+
+                Log.d(TAG, "geoLocate: found a location: " + address.toString());
+                //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
+                moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM, address.getAddressLine(0));
+
+               initSheetView();
+
+            }
         }
+    }
 
-        if(list.size() > 0){
-            Address address = list.get(0);
+    private void initSheetView() {
+        bottomSheetDialog = new BottomSheetDialog(MapActivity.this, R.style.BottomSheetTheme);
+        View sheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.bottom_sheet_layout,
+                (ViewGroup) findViewById(R.id.bottom_sheet));
 
-            Log.d(TAG, "geoLocate: found a location: " + address.toString());
-            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
-            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM, address.getAddressLine(0));
-        }
+        bottomSheetDialog.setContentView(sheetView);
+        bottomSheetDialog.show();
     }
 
     private void getDeviceLocation(){
@@ -264,7 +285,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onPlaceSelected(@NotNull Place place) {
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() );
-                searchCoordinates = place.getLatLng();
+                placeToSearch = place;
                 geoLocate();
             }
 

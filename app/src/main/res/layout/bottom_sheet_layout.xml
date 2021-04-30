@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/dialog_place_pic"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:padding="16dp" />
+
+    <LinearLayout
+        android:id="@+id/sheet_dialog_tvs"
+        android:layout_width="300dp"
+        android:layout_height="125dp"
+        android:layout_below="@id/dialog_place_pic"
+        android:layout_gravity="fill_vertical"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/place_name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            tools:text="Place Name" />
+
+        <TextView
+            android:id="@+id/address_tv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            tools:text="address stuff, I am so addressing right now yaaassss" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/save_place_button"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/dialog_place_pic"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="11dp"
+        android:layout_toEndOf="@id/sheet_dialog_tvs"
+        android:backgroundTint="#388E3C"
+        android:clickable="true"
+        android:tint="#D60D0D"
+        app:fabSize="normal"
+        app:rippleColor="#388E3C"
+        app:srcCompat="@drawable/ic_place" />
+
+</RelativeLayout>
