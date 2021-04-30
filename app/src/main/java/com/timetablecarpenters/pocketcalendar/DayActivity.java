@@ -488,16 +488,6 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     }
 
 
-
-
-
-
-
-
-
-
-
-
     /**
      * gets today's events and puts them all in an array as events property
      * @author Alperen Utku Yalçın
@@ -871,4 +861,5 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
+
 }

@@ -18,21 +18,14 @@ import static com.timetablecarpenters.pocketcalendar.NotificationChannelCreator.
 
 public class NotificationActivity extends AppCompatActivity {
     private NotificationManagerCompat notificationManager;
-    Button button;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_event_common_items);
+        notificationManager = NotificationManagerCompat.from(this);
 
-        button = findViewById(R.id.add_event_done);
-        button.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendOnChannel(v);
-                notificationManager = NotificationManagerCompat.from(NotificationActivity.this);
-            }
-        });
 
     }
     public void sendOnChannel( View v){

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+tools:context=".NotificationActivity">
 
     <Button
         android:id="@+id/colour_yellow"
@@ -181,6 +182,7 @@
         android:layout_marginEnd="16dp"
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapView" />
+        app:layout_constraintTop_toBottomOf="@+id/mapView"
+        android:onClick="sendOnChannel"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
