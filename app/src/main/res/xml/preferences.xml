@@ -7,7 +7,7 @@
         android:defaultValue="@string/default1"
         android:entries="@array/text_font_sizes"
         android:entryValues="@array/text_font_sizes"
-        android:key="In-text font size" />
+        android:key="In-text font size"/>
     <PreferenceCategory
         android:contentDescription='"Select the fonts for texts and paragraphs"'
         android:title="Font Sizes">
@@ -17,7 +17,7 @@
             android:entryValues="@array/text_font_sizes"
             android:key="In_text_font_size"
             android:summary="Medium"
-            android:title="In-text font size" />
+            android:title="In-text font size"/>
         <ListPreference
             android:defaultValue="@string/default2"
             android:entries="@array/paragraph_font_sizes"
@@ -37,7 +37,8 @@
             android:summary="Main"
             android:title="Notification sound" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Calendar">
+    <PreferenceCategory
+        android:title="Calendar">
         <Preference
             android:title="Reset Calendar"
             android:key="myButton"

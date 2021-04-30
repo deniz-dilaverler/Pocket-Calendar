@@ -712,6 +712,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private void createTextView( View view, int hour) {
         String str;
         TextView text = view.findViewById( R.id.textView1);
+        editInTextFont(text);
         RelativeLayout layout = view.findViewById( R.id.rl1);
         text.setText( hourConvert( hour));
         text.setTextColor( getBackGColor());
@@ -798,6 +799,28 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         TextView txt = findViewById( R.id.textView8);
         txt.setTextColor( getBackGColor());
     }
+
+    /**
+     * Edits the font sizes of textViews according to settings
+     * @param text is the hour of the day
+     */
+    public void editInTextFont(TextView text){
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("inTextPref", MODE_PRIVATE);
+        String inTextFontSize = sp.getString("inTextFontSize","");
+        if (inTextFontSize.equals(SMALL))
+        {
+            text.setTextSize(10);
+        }
+        if (inTextFontSize.equals(MEDIUM))
+        {
+            text.setTextSize(14);
+        }
+        if (inTextFontSize.equals(LARGE))
+        {
+            text.setTextSize(18);
+        }
+    }
+    
     /**
      *
      */

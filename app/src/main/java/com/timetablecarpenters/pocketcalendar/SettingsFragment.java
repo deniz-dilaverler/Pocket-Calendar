@@ -112,5 +112,6 @@ public class SettingsFragment extends PreferenceFragment {
         super.onPause();
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(preferenceChangeListener);
     }
+
     }
 

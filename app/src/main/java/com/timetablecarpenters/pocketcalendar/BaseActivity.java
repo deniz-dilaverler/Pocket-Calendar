@@ -48,6 +48,12 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        create();
+    }
+    /**
+     * Does the events that took place at the beginning
+     */
+    public void create(){
         toolbar = findViewById(R.id.settingsToolbar);
         setSupportActionBar(toolbar);
         if (findViewById(R.id.monthly_button) != null) {
@@ -61,6 +67,7 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
 
         this.gestureDetector = new GestureDetector(BaseActivity.this, this);
         editInTextFont();
+
     }
 
 
@@ -100,6 +107,15 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
     }
 
     /**
+     * After user press back button in the settings
+     * Update the classes
+     */
+    public void updateClass(){
+
+    }
+
+
+    /**
      * creates the menu
      * @param menu
      * @return
@@ -131,6 +147,7 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
                     break;
                 case R.id.daily_button:
                     intent = new Intent(BaseActivity.this, DayActivity.class);
+                    //Toast.makeText(BaseActivity.this,"Deneme123",Toast.LENGTH_LONG).show();
                     break;
                 default:
                     intent = null;
@@ -186,22 +203,36 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
      */
     public void editInTextFont(){
         TextView textView = findViewById(R.id.dateText);
+        Button monthlyButton = findViewById(R.id.monthly_button);
+        Button weeklyButton = findViewById(R.id.weekly_button);
+        Button dailyButton = findViewById(R.id.daily_button);
         SharedPreferences sp = getApplicationContext().getSharedPreferences("inTextPref", MODE_PRIVATE);
         String inTextFontSize = sp.getString("inTextFontSize","");
         if (inTextFontSize.equals(SMALL))
         {
             textView.setTextSize(16);
+            monthlyButton.setTextSize(10);
+            weeklyButton.setTextSize(10);
+            dailyButton.setTextSize(10);
+
         }
         if (inTextFontSize.equals(MEDIUM))
         {
             textView.setTextSize(20);
+            monthlyButton.setTextSize(14);
+            weeklyButton.setTextSize(14);
+            dailyButton.setTextSize(14);
         }
         if (inTextFontSize.equals(LARGE))
         {
             textView.setTextSize(40);
+            monthlyButton.setTextSize(18);
+            weeklyButton.setTextSize(18);
+            dailyButton.setTextSize(18);
         }
         //Toast.makeText(BaseActivity.this,"is selected",Toast.LENGTH_LONG).show();
     }
+
     /**
      * After the user pressed the back
      * Shows the dialog that asks the user
@@ -224,7 +255,6 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
                 dialog.dismiss();
             }
         }).show();
-
     }
 
 
@@ -271,5 +301,12 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         return false;
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        //When BACK BUTTON is pressed, the activity on the stack is restarted
+        create();
     }
 }

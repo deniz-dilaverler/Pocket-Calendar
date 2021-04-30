@@ -2,6 +2,7 @@ package com.timetablecarpenters.pocketcalendar;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -73,6 +74,7 @@ public class WeekActivity extends BaseActivity {
             View row = content.findViewById(rowIds[i]);
             TextView weekDayName = (row.findViewById(R.id.text_date_name));
             weekDayName.setText(dateNames[i]);
+            editInTextFont(weekDayName);
             weekDayName.setTextColor( getBackGColor());
             Log.d(TAG, "onCreate: day = " + day.get(Calendar.YEAR)+ " " + day.get(Calendar.MONTH)+ " " + day.get(Calendar.DAY_OF_MONTH));
             cursor = dbHelper.getEventsInAnInterval(day, day);
@@ -89,7 +91,9 @@ public class WeekActivity extends BaseActivity {
                 });
             }
             day.add(Calendar.DATE, 1);
+
         }
+
     }
     private int getBackGColor() {
         return ResourcesCompat.getColor(getResources(), R.color.month_activity_beckground_unusable, null);
@@ -123,4 +127,26 @@ public class WeekActivity extends BaseActivity {
 
 
     }
+
+    /**
+     * Edits the font sizes of textViews according to settings
+     * @param weekDayName is the day name of the week
+     */
+    public void editInTextFont(TextView weekDayName){
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("inTextPref", MODE_PRIVATE);
+        String inTextFontSize = sp.getString("inTextFontSize","");
+        if (inTextFontSize.equals(SMALL))
+        {
+            weekDayName.setTextSize(10);
+        }
+        if (inTextFontSize.equals(MEDIUM))
+        {
+            weekDayName.setTextSize(14);
+        }
+        if (inTextFontSize.equals(LARGE))
+        {
+            weekDayName.setTextSize(18);
+        }
+    }
+
 }

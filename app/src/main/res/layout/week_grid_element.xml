@@ -9,7 +9,8 @@
         android:id="@+id/text_date_name"
         android:layout_width="91dp"
         android:layout_height="90dp"
-        android:text="Someday" />
+        android:text="Someday"
+        android:textSize="14sp" />
 
     <ListView
         android:id="@+id/events_of_day_list"
