@@ -22,7 +22,6 @@ import java.util.Calendar;
 
 public class MonthActivity extends BaseActivity {
     private View[] weeks, dayInWeek;
-    private CalendarEvent[] events;
     private CalendarEvent[][] eventsInDays;
     private Calendar today;
     private DBHelper database;
@@ -212,9 +211,9 @@ public class MonthActivity extends BaseActivity {
             });
         }
     }
-    private View setView( View c, int i) {
+    private View setView( View c, int i, CalendarEvent[] eventList) {
         TextView txt = c.findViewById( R.id.mark);
-        txt.setTextColor( events[i].color);
+        txt.setTextColor( eventList[i].color);
         return c;
     }
     private void addCircles( CalendarEvent[] events, View day) {
@@ -232,44 +231,44 @@ public class MonthActivity extends BaseActivity {
             return;
         }
         else if ( events.length == 1) {
-            rl.addView( setView( c1, 0), 0);
+            rl.addView( setView( c1, 0, events), 0);
         }
         else if ( events.length == 2) {
-            rl.addView( setView( c1, 0), 0);
-            rl.addView( setView( c2, 1), 1);
+            rl.addView( setView( c1, 0, events), 0);
+            rl.addView( setView( c2, 1, events), 1);
         }
         else if ( events.length == 3) {
-            rl.addView( setView( c1, 0), 0);
-            rl.addView( setView( c2, 1), 1);
-            rl.addView( setView( c3, 2), 2);
+            rl.addView( setView( c1, 0, events), 0);
+            rl.addView( setView( c2, 1, events), 1);
+            rl.addView( setView( c3, 2, events), 2);
         }
         else if ( events.length == 4) {
-            rl.addView( setView( c1, 0), 0);
-            rl.addView( setView( c2, 1), 1);
-            rl.addView( setView( c3, 2), 2);
-            rl2.addView( setView( c4, 3), 0);
+            rl.addView( setView( c1, 0, events), 0);
+            rl.addView( setView( c2, 1, events), 1);
+            rl.addView( setView( c3, 2, events), 2);
+            rl2.addView( setView( c4, 3, events), 0);
         }
         else if ( events.length == 5) {
-            rl.addView( setView( c1, 0), 0);
-            rl.addView( setView( c2, 1), 1);
-            rl.addView( setView( c3, 2), 2);
-            rl2.addView( setView( c4, 3), 0);
-            rl2.addView( setView( c5, 4), 1);
+            rl.addView( setView( c1, 0, events), 0);
+            rl.addView( setView( c2, 1, events), 1);
+            rl.addView( setView( c3, 2, events), 2);
+            rl2.addView( setView( c4, 3, events), 0);
+            rl2.addView( setView( c5, 4, events), 1);
         }
         else if ( events.length == 6) {
-            rl.addView( setView( c1, 0), 0);
-            rl.addView( setView( c2, 1), 1);
-            rl.addView( setView( c3, 2), 2);
-            rl2.addView( setView( c4, 3), 0);
-            rl2.addView( setView( c5, 4), 1);
-            rl2.addView( setView( c6, 5), 2);
+            rl.addView( setView( c1, 0, events), 0);
+            rl.addView( setView( c2, 1, events), 1);
+            rl.addView( setView( c3, 2, events), 2);
+            rl2.addView( setView( c4, 3, events), 0);
+            rl2.addView( setView( c5, 4, events), 1);
+            rl2.addView( setView( c6, 5, events), 2);
         }
         else if ( events.length >= 7) {
-            rl.addView( setView( c1, 0), 0);
-            rl.addView( setView( c2, 1), 1);
-            rl.addView( setView( c3, 2), 2);
-            rl2.addView( setView( c4, 3), 0);
-            rl2.addView( setView( c5, 4), 1);
+            rl.addView( setView( c1, 0, events), 0);
+            rl.addView( setView( c2, 1, events), 1);
+            rl.addView( setView( c3, 2, events), 2);
+            rl2.addView( setView( c4, 3, events), 0);
+            rl2.addView( setView( c5, 4, events), 1);
             TextView txt = viewPlus.findViewById( R.id.three_dots);
             txt.setTextColor( getBackGColor());
             rl2.addView( viewPlus, 2);
@@ -293,11 +292,9 @@ public class MonthActivity extends BaseActivity {
                 counter++;
             }
         }
-        events = new CalendarEvent[counter];
         counter = 0;
         for (int i = 0; i < dBEvents.size(); i++) {
             if ( dBEvents.get(i) != null && dBEvents.get(i).getEventStart().get(Calendar.MONTH) == today.get(Calendar.MONTH)) {
-                events[counter] = dBEvents.get(i);
                 counter++;
             }
         }
