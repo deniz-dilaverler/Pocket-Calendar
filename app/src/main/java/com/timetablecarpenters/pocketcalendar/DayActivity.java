@@ -67,8 +67,6 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private Calendar thisDay;
     private final static String INTENT_KEY = "today_date";
 
-    @SuppressLint("SetTextI18n")
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.content_day); //Changed to test it normally activity_day
@@ -86,9 +84,10 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             Log.d(TAG, "onCreate: thisDay is Set" );
             thisDay = Calendar.getInstance();
         }
+        String heading = thisDay.get( Calendar.YEAR) + " " + formattedMonth( thisDay.get(
+                Calendar.MONTH)) + " " + thisDay.get( Calendar.DAY_OF_MONTH);
         TextView date = findViewById( R.id.dateText);
-        date.setText( thisDay.get( Calendar.YEAR) + " " + formattedMonth( thisDay.get(
-                Calendar.MONTH)) + " " + thisDay.get( Calendar.DAY_OF_MONTH));
+        date.setText( heading);
 
         database = new DBHelper(this, DBHelper.DB_NAME, null);
 
@@ -533,22 +532,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      * gets today's events and puts them all in an array as events property
      * @author Alperen Utku Yalçın
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void pullEventsOfDay( ArrayList<CalendarEvent> calEvents) {
-        //todo - once the other methods work
-        //for now
         int counter;
-        /*
-        ArrayList<CalendarEvent> arrayListEvents = new ArrayList<>();
-
-
-        counter = 0;
-        events = new CalendarEvent[ arrayListEvents.size()];
-        for ( CalendarEvent event : arrayListEvents) {
-            events[counter] = event;
-            counter++;
-        }*/
-
         counter = 0;
         events = new CalendarEvent[ calEvents.size()];
         for ( int i = 0; i < calEvents.size(); i++) {
