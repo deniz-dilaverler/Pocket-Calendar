@@ -16,7 +16,7 @@ import android.widget.ListView;
 
 import java.util.Calendar;
 
-public class UpcomingEvents extends BaseActivity {
+public class UpcomingEvents extends AppCompatActivity {
     private static final String TAG = "UpcomingEvents";
     Calendar today;
     final int TOTAL_DAYS = 14;
@@ -25,7 +25,7 @@ public class UpcomingEvents extends BaseActivity {
         Log.d(TAG, "onCreate: Startsss");
         setContentView(R.layout.activity_upcoming_events);
         super.onCreate(savedInstanceState);
-        toolbar.setTitle("Upcoming");
+        //toolbar.setTitle("Upcoming");
         Cursor cursor;
         DBHelper dbHelper;
         today = Calendar.getInstance();
