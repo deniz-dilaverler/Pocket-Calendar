@@ -449,12 +449,12 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( event_end.getText().equals("End:") || event_start.getText().equals("Start:") ) {
-                    Toast.makeText( DayActivity.this, "Please enter choose event interval",
+                if ( !eventType.equals("Assignment") && (event_end.getText().equals("End:") || event_start.getText().equals("Start:")) ) {
+                    Toast.makeText( DayActivity.this, "Please  choose event interval",
                             Toast.LENGTH_LONG).show();
                 }
-                else if ( event_due_time.getText().equals("Time:")) {
-                    Toast.makeText( DayActivity.this, "Please enter choose due time",
+                else if ( eventType.equals("Assignment") && event_due_time.getText().equals("Time:")) {
+                    Toast.makeText( DayActivity.this, "Please choose due time",
                             Toast.LENGTH_LONG).show();
                 }
                 else {
@@ -468,8 +468,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                         eventStart = (Calendar) eventEnd.clone();
                     }
                     if (eventStart.compareTo(eventEnd) > 0) {
-                        Toast.makeText(DayActivity.this,
-                                "Event start cannot be after event end", Toast.LENGTH_LONG).show();
+                        Toast.makeText(DayActivity.this, "Event start cannot be after event end",
+                                Toast.LENGTH_LONG).show();
                     }
                     else {
                         saveData();
