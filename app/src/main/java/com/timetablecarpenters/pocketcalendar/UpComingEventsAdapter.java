@@ -62,10 +62,17 @@ public class UpComingEventsAdapter extends CursorAdapter {
         String remainingTimeTextString;
         Calendar eventDate = Calendar.getInstance();
         eventDate.set(year, month, day, Integer.parseInt(startTime.substring(0, 2)), Integer.parseInt(startTime.substring(3)));
-        int minuteDifference = (int) TimeUnit.MINUTES.convert(eventDate.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS);
+        Calendar eventDateEnd = Calendar.getInstance();
 
-        if (minuteDifference <= 0)
-            remainingTimeTextString = "Event Passed!";
+        eventDate.set(year, month, day, Integer.parseInt(endTime.substring(0, 2)), Integer.parseInt(endTime.substring(3)));
+        int minuteDifference = (int) TimeUnit.MINUTES.convert(eventDate.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS);
+        int minuteDifferenceEventEnd = (int) TimeUnit.MINUTES.convert(eventDateEnd.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS);
+        if (minuteDifference <= 0) {
+            if (minuteDifferenceEventEnd > 0)
+                remainingTimeTextString = "Event Has Started!";
+            else
+                remainingTimeTextString = "Event Passed!";
+        }
         else if (minuteDifference > 60 * 24 )
             remainingTimeTextString = minuteDifference / (24 * 60) + " Days " + minuteDifference % 24 + " Hours left";
         else if (minuteDifference <= 24 * 60)
@@ -86,8 +93,6 @@ public class UpComingEventsAdapter extends CursorAdapter {
         progressBar.setMax(todayToMax);
         progressBar.setProgress(todayToMax - minuteDifference);
         Log.d(TAG, "bindView: Yeah Boiii");
-
-
 
     }
 }

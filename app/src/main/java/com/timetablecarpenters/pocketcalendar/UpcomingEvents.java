@@ -16,7 +16,7 @@ import android.widget.ListView;
 
 import java.util.Calendar;
 
-public class UpcomingEvents extends AppCompatActivity {
+public class UpcomingEvents extends BaseActivity {
     private static final String TAG = "UpcomingEvents";
     Calendar today;
     final int TOTAL_DAYS = 14;

@@ -37,12 +37,22 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     // constructor
+
+    /**
+     * creates a db file if a file with the name parameter doesn't exist, otherwise creates the class that interacts with the db
+     * with the name passed.
+     * @param context
+     * @param name
+     * @param factory
+     */
     public DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory) {
         super(context, name, factory, 6);
     }
 
-    // methods
-    // first time DB is created
+    /**
+     * creates the table and Collumn identities
+     * @param db
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTableStatement = "CREATE TABLE " + EVENTS_TABLE + " ( " +
@@ -62,6 +72,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(createTableStatement);
 
     }
+
+    /**
+     * if the database in the device's version no is smaller than the version it is initialised with,
+     * onUpgrade is called and resets the db.
+     * @param database
+     * @param oldVersion
+     * @param newVersion
+     */
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
         resetDb(database);
@@ -132,6 +150,13 @@ public class DBHelper extends SQLiteOpenHelper {
             return -2;
     }
 
+    /**
+     * checks wether the event is already in the db
+     * Date, name, event start and end are checked, and if there is an event in the db that correspond to these values
+     * returns false
+     * @param event
+     * @returnwether event is already on the db or not
+     */
     public boolean checkIsDataAlreadyInDB(CalendarEvent event) {
         SQLiteDatabase db = getReadableDatabase();
         Log.d(TAG, "checkIsDataAlreadyInDB: " + event.getYear() + " " + event.getMonth() + " " + event.getDay());
@@ -151,6 +176,12 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    /**
+     * deletes the event with these values that match:
+     * Date, name, event start and end
+     * @param event
+     * @return
+     */
     public boolean deleteEvent(CalendarEvent event) {
         String sqlStatement = "Delete * From " + EVENTS_TABLE + " where " + YEAR + " = " + event.getYear() + " AND "
                                                                         + MONTH + " = " + event.getMonth() + " AND "
