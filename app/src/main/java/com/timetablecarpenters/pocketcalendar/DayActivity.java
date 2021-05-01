@@ -100,7 +100,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                 Log.d(TAG, "onCreate: no event came out of intent " + e);
             }
         }
-        
+
         if (thisDay == null) {
             Log.d(TAG, "onCreate: thisDay is Set" );
             thisDay = Calendar.getInstance();
