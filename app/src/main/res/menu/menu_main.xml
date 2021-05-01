@@ -21,6 +21,7 @@
         android:orderInCategory="103"
         android:title="Achivements" />
     <item
+        android:id="@+id/customization"
         android:orderInCategory="104"
         android:title="Customization" />
     <item
