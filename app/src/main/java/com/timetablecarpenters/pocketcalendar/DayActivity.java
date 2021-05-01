@@ -1,27 +1,21 @@
 package com.timetablecarpenters.pocketcalendar;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -31,13 +25,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 
-import androidx.annotation.RequiresApi;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -262,6 +252,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                Log.d(TAG, "due date picked");
                                 endHour = hourOfDay;
                                 endMinute = minute;
                                 Calendar dueTime = Calendar.getInstance();
@@ -530,35 +521,36 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                 Log.d(TAG, "onClick: eventToAdd: " + addedEvent.getEventStart() + " end: " + addedEvent.getEventEnd());
                 if (!addedEvent.getType().equals("Assignment")) {
                     if (addedEvent.getEventEnd() == null || addedEvent.getEventEnd() == null)
-                    Toast.makeText( DayActivity.this, "Please  choose event interval",
-                            Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "onClick: error message 1");
+                        Toast.makeText( DayActivity.this, "Please  choose event interval",
+                                Toast.LENGTH_LONG).show();
                 }
                 else if (addedEvent.getType().equals("Assignment") && addedEvent.getEventEnd() == null) {
+                    Log.d(TAG, "onClick: error message 2");
                     Toast.makeText( DayActivity.this, "Please choose due time",
                             Toast.LENGTH_LONG).show();
                 }
+                else if (addedEvent.getEventStart().compareTo(addedEvent.getEventEnd()) > 0) {
+                    Log.d(TAG, "onClick: error message 3");
+                    Toast.makeText(DayActivity.this, "Event start cannot be after event end",
+                            Toast.LENGTH_LONG).show();
+                }
                 else {
-                    if (addedEvent.getEventStart().compareTo(addedEvent.getEventEnd()) > 0) {
-                        Toast.makeText(DayActivity.this, "Event start cannot be after event end",
-                                Toast.LENGTH_LONG).show();
+                    saveData();
+                    loadData();
+                    if (notes.getText() !=  null) {
+                        addedEvent.setNotes(notes.getText().toString());
                     }
-                    else {
-                        saveData();
-                        loadData();
-                        if (notes.getText() !=  null) {
-                            addedEvent.setNotes(notes.getText().toString());
-                        }
-                        DBHelper dbHelper = new DBHelper(DayActivity.this, DBHelper.DB_NAME, null);
-                        Log.d(TAG, "onClick: Right before event inserted");
-                        long insertResult = dbHelper.insertEvent(addedEvent);
-                        if (insertResult == -1)
-                            Toast.makeText(DayActivity.this, "Event couldn't be saved", Toast.LENGTH_SHORT).show();
-                        else if (insertResult == -2)
-                            Toast.makeText(DayActivity.this, "Event already exists", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(DayActivity.this, "Event successfully added", Toast.LENGTH_SHORT).show();
-                        addEventDialog.dismiss();
-                    }
+                    DBHelper dbHelper = new DBHelper(DayActivity.this, DBHelper.DB_NAME, null);
+                    Log.d(TAG, "onClick: Right before event inserted");
+                    long insertResult = dbHelper.insertEvent(addedEvent);
+                    if (insertResult == -1)
+                        Toast.makeText(DayActivity.this, "Event couldn't be saved", Toast.LENGTH_SHORT).show();
+                    else if (insertResult == -2)
+                        Toast.makeText(DayActivity.this, "Event already exists", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(DayActivity.this, "Event successfully added", Toast.LENGTH_SHORT).show();
+                    addEventDialog.dismiss();
                 }
             }
         });
