@@ -52,15 +52,15 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private TextView event_due_time, event_date, event_start, event_end;
     private EditText event_name, number_of_repetitions, notes;
     private LinearLayout addEventPopupView;
-    private Button next, save, blue;
+    private Button next, save;
     private CheckBox repeat, notification;
-    private String eventType, eventName, notifType, repetitionType;
+    private String notifType, repetitionType;
     private ScrollView scrollView;
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private Button[] colour_buttons;
     private CalendarEvent addedEvent;
-    private int endHour, endMinute, startHour, startMinute, eventColour;
-    private Calendar eventStart, eventEnd, eventDate;
+    private int startHour, startMinute, endHour, endMinute, eventColour;
+    private Calendar eventDate;
     private long eventID;
 
 
@@ -122,7 +122,6 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(DayActivity.this, "YAZILIM ÖĞREN(!)", Toast.LENGTH_SHORT).show();
                 openDialog();
             }
         });
@@ -138,6 +137,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         scrollView = (ScrollView) getLayoutInflater().inflate(R.layout.add_event_popup,null);
         addEventPopupView = (LinearLayout) scrollView.findViewById(R.id.add_event_linear);
 
+        addedEvent = new CalendarEvent(null, null, null, eventID, null);
         addNameAndType();
 
         // Next button removes itself from the popup if event type and name are given
@@ -146,9 +146,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                eventName = event_name.getText().toString();
-                if (!eventName.equals("") && eventType != null) {
-                    next.setEnabled(false);
+                if (!event_name.getText().toString().equals("") && addedEvent.getType() != null) {
+                    addedEvent.setName(event_name.getText().toString());
+                    event_name.setEnabled(false);
                     event_type_spinner.setEnabled(false);
                     addEventPopupView.removeView(nextButtonView);
                     updatePopupView();
@@ -171,10 +171,10 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      * @author Elifsena Öz
      */
     private void updatePopupView() {
-        if (eventType.equals("Assignment")) {
+        if (addedEvent.getType().equals("Assignment")) {
             addDueDate();
         }
-        else if (eventType.equals("Birthday")) {
+        else if (addedEvent.getType().equals("Birthday")) {
             // todo gift bought
         }
         else {
@@ -249,6 +249,11 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                 endHour = hourOfDay;
                                 endMinute = minute;
+                                Calendar dueTime = Calendar.getInstance();
+                                dueTime.set(eventDate.get(Calendar.YEAR), eventDate.get(Calendar.MONTH),
+                                        eventDate.get(Calendar.DATE), endHour, endMinute);
+                                addedEvent.setEventEnd(dueTime);
+                                addedEvent.setEventStart(dueTime);
                                 event_due_time.setText(endHour + ":" + endMinute);
                             }
                         },24,0,true
@@ -307,6 +312,10 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                 startHour = hourOfDay;
                                 startMinute = minute;
+                                Calendar eventStart = Calendar.getInstance();
+                                eventStart.set(eventDate.get(Calendar.YEAR), eventDate.get(Calendar.MONTH),
+                                        eventDate.get(Calendar.DAY_OF_MONTH), startHour, startMinute);
+                                addedEvent.setEventStart(eventStart);
                                 event_start.setText("Start: " + startHour + ":" + startMinute);
                             }
                         },24,0,true
@@ -326,8 +335,12 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                endHour = hourOfDay;
-                                endMinute = minute;
+                                int endHour = hourOfDay;
+                                int endMinute = minute;
+                                Calendar eventEnd = Calendar.getInstance();
+                                eventEnd.set(eventDate.get(Calendar.YEAR), eventDate.get(Calendar.MONTH),
+                                        eventDate.get(Calendar.DATE), endHour, endMinute);
+                                addedEvent.setEventEnd(eventEnd);
                                 event_end.setText("End: " + endHour + ":" + endMinute);
                             }
                         },24,0,true
@@ -388,7 +401,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      * @author Elifsena Öz
      */
     private void addRepetition() {
-        if (!eventType.equals("Exam")) {
+        if (!addedEvent.getType().equals("Exam")) {
             final View repetitionView = getLayoutInflater().inflate(R.layout.add_event_repetition_item, null);
 
             repetition_type = (Spinner) repetitionView.findViewById(R.id.repetition_type);
@@ -468,7 +481,6 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             });
         }
 
-
         notes = (EditText) commonItemsView.findViewById(R.id.notes);
         editParagraphFont(notes);
 
@@ -478,44 +490,33 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!eventType.equals("Assignment") && (event_end.getText().equals("End:") || event_start.getText().equals("Start:")) ) {
+                if (!addedEvent.getType().equals("Assignment")) {
+                    if (addedEvent.getEventEnd() == null || addedEvent.getEventEnd() == null)
                     Toast.makeText( DayActivity.this, "Please  choose event interval",
                             Toast.LENGTH_LONG).show();
                 }
-                else if (eventType.equals("Assignment") && event_due_time.getText().equals("Time:")) {
+                else if (addedEvent.getType().equals("Assignment") && addedEvent.getEventEnd() == null) {
                     Toast.makeText( DayActivity.this, "Please choose due time",
                             Toast.LENGTH_LONG).show();
                 }
                 else {
-                    eventEnd = Calendar.getInstance();
-                    eventEnd.set(eventDate.get(Calendar.YEAR), eventDate.get(Calendar.MONTH),
-                            eventDate.get(Calendar.DATE), endHour, endMinute);
-                    eventStart = Calendar.getInstance();
-                    eventStart.set(eventDate.get(Calendar.YEAR), eventDate.get(Calendar.MONTH),
-                            eventDate.get(Calendar.DAY_OF_MONTH), startHour, startMinute);
-                    if (eventType.equals("Assignment")) {
-                        eventStart = (Calendar) eventEnd.clone();
-                    }
-                    if (eventStart.compareTo(eventEnd) > 0) {
+                    if (addedEvent.getEventStart().compareTo(addedEvent.getEventEnd()) > 0) {
                         Toast.makeText(DayActivity.this, "Event start cannot be after event end",
                                 Toast.LENGTH_LONG).show();
                     }
                     else {
                         saveData();
                         loadData();
-                        addedEvent = new CalendarEvent(eventStart, eventEnd, eventName, eventID, eventType);
-
-                        if (notification.isChecked()) {
-                            // addedEvent.setNotifTime();
-                        }
-                        if (repeat.isChecked()) {
-                            // repeat event
-                        }
                         if (notes.getText() !=  null) {
                             addedEvent.setNotes(notes.getText().toString());
                         }
                         DBHelper dbHelper = new DBHelper(DayActivity.this, DBHelper.DB_NAME, null);
-                        dbHelper.insertEvent(addedEvent);
+                        if (dbHelper.insertEvent(addedEvent) == -1)
+                            Toast.makeText(DayActivity.this, "Event couldn't be saved", Toast.LENGTH_SHORT).show();
+                        else if (dbHelper.insertEvent(addedEvent) == 2)
+                            Toast.makeText(DayActivity.this, "Event already exists", Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(DayActivity.this, "Event successfully added", Toast.LENGTH_SHORT).show();
                         addEventDialog.dismiss();
                     }
                 }
@@ -539,16 +540,16 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
      */
     public void loadData() {
         SharedPreferences eventIDPref = getSharedPreferences(EVENT_ID_PREF, MODE_PRIVATE);
-        eventID = eventIDPref.getLong(EVENT_ID_VALUE, 7); // for testing purposes
+        eventID = eventIDPref.getLong(EVENT_ID_VALUE, 1); // for testing purposes
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getId() == R.id.event_type_spinner)
-            eventType = parent.getItemAtPosition(position).toString();
+            addedEvent.setType(parent.getItemAtPosition(position).toString());
         else if (parent.getId() == R.id.repetition_type)
-            repetitionType = parent.getItemAtPosition(position).toString();
-        else if (parent.getId() == R.id.notifications_spinner)
+            //todo
+        if (parent.getId() == R.id.notifications_spinner)
             notifType = parent.getItemAtPosition(position).toString();
     }
 
