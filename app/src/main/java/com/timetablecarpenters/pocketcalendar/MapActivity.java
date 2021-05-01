@@ -68,6 +68,7 @@ import java.util.List;
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = "MapActivity";
+
     public final static String INTENT_ID_KEY = "activity";
     public final static String EVENT_KEY = "event_from_maps";
 

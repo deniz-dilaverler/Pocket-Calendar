@@ -89,8 +89,18 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         //initiate...
         extras = getIntent().getExtras();
         if ( extras != null) {
-            thisDay = (Calendar) extras.get(INTENT_KEY);
+            try {
+                thisDay = (Calendar) extras.get(INTENT_KEY);
+            } catch (Exception e) {
+                Log.d(TAG, "onCreate: no  date came out of the intent");
+            }
+            try {
+                addedEvent = (CalendarEvent) extras.get(MapActivity.EVENT_KEY);
+            } catch (Exception e) {
+                Log.d(TAG, "onCreate: no event came out of intent " + e);
+            }
         }
+        
         if (thisDay == null) {
             Log.d(TAG, "onCreate: thisDay is Set" );
             thisDay = Calendar.getInstance();
