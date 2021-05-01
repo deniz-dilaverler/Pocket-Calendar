@@ -135,7 +135,7 @@
 
     <EditText
         android:id="@+id/notes"
-        android:layout_width="217dp"
+        android:layout_width="200dp"
         android:layout_height="59dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
@@ -169,7 +169,7 @@
     <fragment
         android:id="@+id/fragment"
         android:name="com.timetablecarpenters.pocketcalendar.MapFragment"
-        android:layout_width="219dp"
+        android:layout_width="200dp"
         android:layout_height="107dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
