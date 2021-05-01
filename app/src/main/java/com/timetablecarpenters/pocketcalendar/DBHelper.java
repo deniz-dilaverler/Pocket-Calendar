@@ -11,6 +11,8 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -132,10 +134,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 cv.putNull(COLOR);
             }
 
-                Location location = event.getLocation();
+                LatLng location = event.getLocation();
             if (location != null) {
-                cv.put(LATITUDE, location.getLatitude());
-                cv.put(LONGITUDE, location.getLongitude());
+                cv.put(LATITUDE, location.latitude);
+                cv.put(LONGITUDE, location.longitude);
             } else {
                 cv.putNull(LONGITUDE);
                 cv.putNull(LATITUDE);

@@ -4,6 +4,8 @@ package com.timetablecarpenters.pocketcalendar;
 import android.graphics.Color;
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import 	java.util.Calendar;
 
 /**
@@ -17,7 +19,7 @@ public class CalendarEvent {
     protected Calendar eventStart;
     protected Calendar eventEnd;
     protected String name;
-    protected Location location;
+    protected LatLng location;
     protected String notes;
     protected String notifTime;
     protected long id;
@@ -61,11 +63,11 @@ public class CalendarEvent {
         this.name = name;
     }
 
-    public Location getLocation() {
+    public LatLng getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(LatLng location) {
         this.location = location;
     }
 

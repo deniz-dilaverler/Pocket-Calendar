@@ -2,6 +2,7 @@ package com.timetablecarpenters.pocketcalendar;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Address;
@@ -53,6 +54,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -66,6 +68,8 @@ import java.util.List;
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = "MapActivity";
+    public final static String INTENT_ID_KEY = "activity";
+    public final static String EVENT_KEY = "event_from_maps";
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -83,6 +87,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Place placeToSearch;
+    private CalendarEvent event;
+    private String previousActivityKey;
 
     /**
      * initialisation of the autocompleteFragment and the GPS button, it calls getLocationPermission to check wether
@@ -93,6 +99,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            try {
+                event = (CalendarEvent) extras.get(DayActivity.MAPS_INTENT_KEY);
+            } catch (Exception e) {
+                Log.e(TAG, "onCreate: couldn't find an event: " + e );
+            }
+            previousActivityKey = (String) extras.get(INTENT_ID_KEY);
+        }
+
+        View content = findViewById(R.id.week_content);
         autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         mGps = (ImageView) findViewById((R.id.ic_gps));
 
@@ -110,6 +127,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "onMapReady: map is ready");
         mMap = googleMap;
+
 
         if (mLocationPermissionsGranted) {
             getDeviceLocation();
@@ -190,7 +208,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Todo: return the selected Place or Location object to the event Creation activity
+                event.setLocation(placeToSearch.getLatLng());
+                Class returnActivity;
+                // Todo: if there are multiple Activities to possibly return add an if statement
+                returnActivity = DayActivity.class;
+                Intent intent = new Intent(MapActivity.this, returnActivity);
+                intent.putExtra(EVENT_KEY);
+                startActivity(intent);
+
             }
         });
 

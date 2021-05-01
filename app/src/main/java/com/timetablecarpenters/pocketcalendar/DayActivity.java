@@ -62,6 +62,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private int startHour, startMinute, endHour, endMinute, eventColour;
     private Calendar eventDate;
     private long eventID;
+    private Button locationSelect;
 
 
     private CalendarEvent[] events; //the events in day
@@ -73,6 +74,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private DBHelper database;
     private Calendar thisDay;
     private final static String INTENT_KEY = "today_date";
+    public final static String MAPS_INTENT_KEY = "map_intent";
+    public final static String ACTIVITY_NAME = "day_activity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -484,7 +488,20 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         notes = (EditText) commonItemsView.findViewById(R.id.notes);
         editParagraphFont(notes);
 
-        // todo location
+        locationSelect = (Button) commonItemsView.findViewById(R.id.open_map);
+
+        locationSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DayActivity.this, MapActivity.class);
+                intent.putExtra(MAPS_INTENT_KEY, CALENDAREVENT);
+                intent.putExtra(MapActivity.INTENT_ID_KEY, ACTIVITY_NAME );
+                if (intent != null) {
+                    startActivity(intent);
+                }
+            }
+        });
+
 
         save = (Button) commonItemsView.findViewById(R.id.add_event_done);
         save.setOnClickListener(new View.OnClickListener() {
