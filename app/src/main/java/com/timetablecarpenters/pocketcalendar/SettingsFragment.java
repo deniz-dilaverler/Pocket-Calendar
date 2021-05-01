@@ -26,9 +26,11 @@ public class SettingsFragment extends PreferenceFragment {
     public static final String IN_TEXT_FONT_SIZE = "In_text_font_size";
     public static final String PARAGRAPH_FONT_SIZE = "Paragraph_font_size";
     public static final String NOTIFICATION_SOUND = "Notification_sound";
+    public static final String RESET_BUTTON = "resetButton";
     public static final String SMALL = "Small";
     public static final String MEDIUM = "Medium";
     public static final String LARGE = "Large";
+    public DBHelper dbHelper;
 
     /**
      * listens to the inputs of the settings items
@@ -38,13 +40,15 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         addPreferencesFromResource(R.xml.preferences);
-        Preference pref = findPreference("myButton");
+        Preference pref = findPreference("resetButton");
         if (pref != null) {
             pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-
+                    dbHelper = new DBHelper(getContext(),DBHelper.DB_NAME, null);
+                    dbHelper.resetDb(null);
+                    Toast.makeText(getContext(),"Calendar is reset",Toast.LENGTH_LONG).show();
                     return true;
                 }
 
@@ -102,13 +106,19 @@ public class SettingsFragment extends PreferenceFragment {
                     editor.commit();
                     //editor.apply();
                     Toast.makeText(getContext(),"Sound is selected",Toast.LENGTH_LONG).show();
-
-
                 }
+                if(key.equals(RESET_BUTTON))
+                {
+                    Preference reset = findPreference(key);
 
 
-
-
+                    SharedPreferences resetPref;
+                    resetPref = getContext().getSharedPreferences("resetPref", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = resetPref.edit();
+                    editor.putString("resetCalendar","yusuf");
+                    editor.commit();
+                    Toast.makeText(getContext(),"Calendar is reset",Toast.LENGTH_LONG).show();
+                }
             }
             };
         }
@@ -124,6 +134,9 @@ public class SettingsFragment extends PreferenceFragment {
         inText.setSummary(getPreferenceScreen().getSharedPreferences().getString(IN_TEXT_FONT_SIZE,""));
         paragraphText.setSummary(getPreferenceScreen().getSharedPreferences().getString(PARAGRAPH_FONT_SIZE,""));
         notifSound.setSummary(getPreferenceScreen().getSharedPreferences().getString(NOTIFICATION_SOUND,""));
+
+        dbHelper = new DBHelper(getContext(),DBHelper.DB_NAME, null);
+        dbHelper.resetDb(null);
 
 
     }

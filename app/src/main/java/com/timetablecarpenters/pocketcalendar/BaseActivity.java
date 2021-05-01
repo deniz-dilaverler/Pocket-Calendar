@@ -208,6 +208,9 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         Button dailyButton = findViewById(R.id.daily_button);
         SharedPreferences sp = getApplicationContext().getSharedPreferences("inTextPref", MODE_PRIVATE);
         String inTextFontSize = sp.getString("inTextFontSize","");
+        if (textView == null ||monthlyButton == null ||weeklyButton == null ||dailyButton == null ){
+            return;
+        }
         if (inTextFontSize.equals(SMALL))
         {
             textView.setTextSize(16);
