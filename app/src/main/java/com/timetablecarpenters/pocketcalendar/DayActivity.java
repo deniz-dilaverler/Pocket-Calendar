@@ -519,7 +519,6 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                     intent.putExtra(MAPS_INTENT_KEY, addedEvent);
                     intent.putExtra(MapActivity.INTENT_ID_KEY, ACTIVITY_NAME);
                     startActivity(intent);
-
                 }
             });
         }
@@ -528,6 +527,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onClick: eventToAdd: " + addedEvent.getEventStart() + " end: " + addedEvent.getEventEnd());
                 if (!addedEvent.getType().equals("Assignment")) {
                     if (addedEvent.getEventEnd() == null || addedEvent.getEventEnd() == null)
                     Toast.makeText( DayActivity.this, "Please  choose event interval",
@@ -549,9 +549,11 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                             addedEvent.setNotes(notes.getText().toString());
                         }
                         DBHelper dbHelper = new DBHelper(DayActivity.this, DBHelper.DB_NAME, null);
-                        if (dbHelper.insertEvent(addedEvent) == -1)
+                        Log.d(TAG, "onClick: Right before event inserted");
+                        long insertResult = dbHelper.insertEvent(addedEvent);
+                        if (insertResult == -1)
                             Toast.makeText(DayActivity.this, "Event couldn't be saved", Toast.LENGTH_SHORT).show();
-                        else if (dbHelper.insertEvent(addedEvent) == 2)
+                        else if (insertResult == -2)
                             Toast.makeText(DayActivity.this, "Event already exists", Toast.LENGTH_SHORT).show();
                         else
                             Toast.makeText(DayActivity.this, "Event successfully added", Toast.LENGTH_SHORT).show();
