@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.core.content.res.ResourcesCompat;
@@ -93,7 +94,6 @@ public class WeekActivity extends BaseActivity {
             day.add(Calendar.DATE, 1);
 
         }
-
     }
     private int getBackGColor() {
         return ResourcesCompat.getColor(getResources(), R.color.month_activity_beckground_unusable, null);
@@ -169,6 +169,9 @@ public class WeekActivity extends BaseActivity {
         {
 
         }
+
+
     }
+
 
 }

@@ -41,7 +41,7 @@
         android:title="Calendar">
         <Preference
             android:title="Reset Calendar"
-            android:key="myButton"
+            android:key="resetButton"
             android:summary="Set to default" />
     </PreferenceCategory>
 
