@@ -154,7 +154,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         scrollView = (ScrollView) getLayoutInflater().inflate(R.layout.add_event_popup,null);
         addEventPopupView = (LinearLayout) scrollView.findViewById(R.id.add_event_linear);
 
-        if(addedEvent != null)
+        if(addedEvent == null)
             addedEvent = new CalendarEvent(null, null, null, eventID, null);
         addNameAndType();
 
