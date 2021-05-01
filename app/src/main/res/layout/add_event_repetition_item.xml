@@ -45,6 +45,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:text="0"
         android:id="@+id/num_of_reperitions"
         android:layout_width="38dp"
         android:layout_height="wrap_content"

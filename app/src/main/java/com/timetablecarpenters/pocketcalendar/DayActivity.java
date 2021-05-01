@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -30,6 +31,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -64,7 +66,6 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private Calendar eventDate;
     private long eventID;
     private Button locationSelect;
-
 
     private CalendarEvent[] events; //the events in day
     private CalendarEvent[] orderedEventEnds; //the events in day
@@ -151,8 +152,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         addEventBuilder = new AlertDialog.Builder(this);
         scrollView = (ScrollView) getLayoutInflater().inflate(R.layout.add_event_popup,null);
         addEventPopupView = (LinearLayout) scrollView.findViewById(R.id.add_event_linear);
-
-        addedEvent = new CalendarEvent(null, null, null, eventID, null);
+        if(addedEvent == null) {
+            addedEvent = new CalendarEvent(null, null, null, eventID, null);
+        }
         addNameAndType();
 
         // Next button removes itself from the popup if event type and name are given
@@ -441,6 +443,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                     else {
                         repetition_type.setEnabled(true);
                         number_of_repetitions.setEnabled(true);
+
                     }
                 }
             });
@@ -549,6 +552,20 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                         addEventDialog.dismiss();
                     }
                 }
+                if( repeat.isChecked()) {
+                    if (number_of_repetitions != null && repetitionType != null) {
+                        int times = ConvertIntoNumeric(number_of_repetitions.toString());
+                        if (repetitionType.equalsIgnoreCase("Monthly")) {
+                            addedEvent.repeatMonthly(times, DayActivity.this);
+                        } else if (repetitionType.equalsIgnoreCase("Daily")) {
+                            addedEvent.repeatDaily(times, DayActivity.this);
+                        } else if (repetitionType.equalsIgnoreCase("Annually")) {
+                            addedEvent.repeatAnnually(times, DayActivity.this);
+                        } else if (repetitionType.equalsIgnoreCase("Weekly")) {
+                            addedEvent.repeatWeekly(times, DayActivity.this);
+                        }
+                    }
+                }
             }
         });
 
@@ -576,8 +593,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getId() == R.id.event_type_spinner)
             addedEvent.setType(parent.getItemAtPosition(position).toString());
-        else if (parent.getId() == R.id.repetition_type)
-            //todo
+        else if (parent.getId() == R.id.repetition_type) {
+            String repetitionType = parent.getItemAtPosition(position).toString();
+        }
         if (parent.getId() == R.id.notifications_spinner)
             notifType = parent.getItemAtPosition(position).toString();
     }
@@ -941,4 +959,17 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
+    private int ConvertIntoNumeric(String xVal)
+    {
+        try
+        {
+            return Integer.parseInt(xVal);
+        }
+        catch(Exception ex)
+        {
+            return 0;
+        }
+    }
+
 }
+
