@@ -14,22 +14,48 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * CursorAdapter class, takes raw data from cursor and fills the elements of list items within the
+ * ListView in UpcomingEvents activity.
+ * @version  01.05.2021
+ * @author Deniz Mert Dilaverler
+ */
 public class UpComingEventsAdapter extends CursorAdapter {
     private static final String TAG = "UpComingEventsAdapter";
     final static int MAX_DAYS = 14;
     Calendar today;
 
+    /**
+     * Today's date is saved for time comparrasant.
+     * super constructor is initialized
+     * @param context
+     * @param c
+     * @param today
+     */
     public UpComingEventsAdapter(Context context, Cursor c, Calendar today) {
         super(context, c, 0);
         this.today = today;
 
     }
 
+    /**
+     * Inflates an empty list item to be filled with the data from a cursor row
+     * @param context
+     * @param cursor
+     * @param parent
+     * @return
+     */
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.events_list_item, parent, false );
     }
 
+    /**
+     * Takes data from the cursor and appropriately fills the data within it
+     * @param view
+     * @param context
+     * @param cursor
+     */
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         View cardViewContents = view.findViewById(R.id.cardview_content);
@@ -43,12 +69,12 @@ public class UpComingEventsAdapter extends CursorAdapter {
         String startTime = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_START));
         String endTime = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_END));
         int year = cursor.getInt(cursor.getColumnIndex(DBHelper.YEAR));
-        int month = cursor.getInt(cursor.getColumnIndex(DBHelper.MONTH)); // because db stores month values starting from 0
+        int month = cursor.getInt(cursor.getColumnIndex(DBHelper.MONTH));
         int day = cursor.getInt(cursor.getColumnIndex(DBHelper.DAY));
         String title = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_NAME));
         String eventType = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_TYPE));
 
-        String dateTextString = String.format("%d.%d.%d", day, month + 1, year);
+        String dateTextString = String.format("%d.%d.%d", day, month + 1, year); //increment month by 1 because the db and the Calendar class stores month values starting from 0
         dateText.setText(dateTextString);
 
         String timeTextString = startTime;
@@ -92,7 +118,7 @@ public class UpComingEventsAdapter extends CursorAdapter {
         int todayToMax =  (int) TimeUnit.MINUTES.convert(max.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS);
         progressBar.setMax(todayToMax);
         progressBar.setProgress(todayToMax - minuteDifference);
-        Log.d(TAG, "bindView: Yeah Boiii");
+        Log.d(TAG, "bindView: End");
 
     }
 }
