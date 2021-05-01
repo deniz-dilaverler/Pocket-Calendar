@@ -5,9 +5,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 /**
  * Has the methods and variables to check if the user's device can use Google maps or not
@@ -29,7 +31,7 @@ public class GoogleMapsAvailability {
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(activity);
 
         if (available == ConnectionResult.SUCCESS) {
-            // everything is fine can make map request
+            Log.d(TAG, "isServicesOK: everything is fine can make map request");
             return true;
         } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
             // an error ocured but we can resolve it
@@ -41,4 +43,6 @@ public class GoogleMapsAvailability {
         }
         return false;
     }
+
+
 }

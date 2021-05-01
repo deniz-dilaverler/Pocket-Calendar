@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 
@@ -176,23 +177,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Geocoder geocoder = new Geocoder(MapActivity.this);
         List<Address> list = new ArrayList<>();
         if (placeToSearch != null) {
-            try {
-                Log.d(TAG, "geoLocate: " + placeToSearch.getLatLng().latitude + " " + placeToSearch.getLatLng().longitude);
-                list = geocoder.getFromLocation(placeToSearch.getLatLng().latitude, placeToSearch.getLatLng().longitude, 1);
-            } catch (IOException e) {
-                Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
-            }
+            moveCamera(placeToSearch.getLatLng(), DEFAULT_ZOOM, placeToSearch.getName());
+            initSheetView();
 
-            if (list.size() > 0) {
-                Address address = list.get(0);
-
-                Log.d(TAG, "geoLocate: found a location: " + address.toString());
-                //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
-                moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM, address.getAddressLine(0));
-
-               initSheetView();
-
-            }
         }
     }
 
@@ -375,21 +362,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onPlaceSelected(@NotNull Place place) {
                 // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName() );
+                Log.i(TAG, "onPlaceSelected: " + place.getName() );
                 placeToSearch = place;
                 mMap.clear();
                 geoLocate();
             }
-
             @Override
             public void onError(@NotNull Status status) {
                 // TODO: Handle the error.
+                Toast.makeText(MapActivity.this, "Error occured during searching", Toast.LENGTH_SHORT);
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
-
-
     }
+
+
 }
 
 
