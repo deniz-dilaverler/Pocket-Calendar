@@ -504,7 +504,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DayActivity.this, MapActivity.class);
-                intent.putExtra(MAPS_INTENT_KEY, CALENDAREVENT);
+                // intent.putExtra(MAPS_INTENT_KEY, addedEvent);
                 intent.putExtra(MapActivity.INTENT_ID_KEY, ACTIVITY_NAME );
                 if (intent != null) {
                     startActivity(intent);
