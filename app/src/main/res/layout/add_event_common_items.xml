@@ -11,17 +11,18 @@
         android:layout_height="35dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="#FFEB3B"
-        app:layout_constraintEnd_toStartOf="@+id/clour_orange"
+
+        android:backgroundTint="@color/yellow"
+        app:layout_constraintEnd_toStartOf="@+id/colour_orange"
         app:layout_constraintTop_toBottomOf="@+id/colour_blue" />
 
     <Button
-        android:id="@+id/clour_orange"
+        android:id="@+id/colour_orange"
         android:layout_width="25dp"
         android:layout_height="35dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="#FF5722"
+        android:backgroundTint="@color/orange"
         app:layout_constraintEnd_toStartOf="@+id/colour_red"
         app:layout_constraintTop_toBottomOf="@+id/colour_purple" />
 
@@ -30,7 +31,7 @@
         android:layout_width="25dp"
         android:layout_height="35dp"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="#9C27B0"
+        android:backgroundTint="@color/purple"
         app:layout_constraintBaseline_toBaselineOf="@+id/add_event_colour"
         app:layout_constraintEnd_toStartOf="@+id/colour_pink" />
 
@@ -39,9 +40,10 @@
         android:layout_width="25dp"
         android:layout_height="35dp"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="#1974BD"
+        android:backgroundTint="@color/dark_blue"
         app:layout_constraintBaseline_toBaselineOf="@+id/add_event_colour"
-        app:layout_constraintEnd_toStartOf="@+id/colour_purple" />
+        app:layout_constraintEnd_toStartOf="@+id/colour_purple"
+        app:strokeColor="@color/grey" />
 
     <Button
         android:id="@+id/colour_red"
@@ -49,7 +51,7 @@
         android:layout_height="35dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:backgroundTint="#E81000"
+        android:backgroundTint="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/colour_pink" />
 
@@ -59,9 +61,9 @@
         android:layout_height="35dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="#2EAC33"
+        android:backgroundTint="@color/green"
         app:layout_constraintEnd_toStartOf="@+id/colour_yellow"
-        app:layout_constraintTop_toBottomOf="@+id/colour_teal" />
+        app:layout_constraintTop_toBottomOf="@+id/colour_ligth_blue" />
 
     <TextView
         android:id="@+id/add_event_colour"
@@ -75,20 +77,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/colour_teal"
+        android:id="@+id/colour_ligth_blue"
         android:layout_width="25dp"
         android:layout_height="35dp"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="#00BCD4"
+        android:backgroundTint="@color/ligth_blue"
         app:layout_constraintBaseline_toBaselineOf="@+id/add_event_colour"
-        app:layout_constraintEnd_toStartOf="@+id/colour_blue" />
+        app:layout_constraintEnd_toStartOf="@+id/colour_blue"
+        app:strokeColor="@color/grey" />
 
     <Button
         android:id="@+id/colour_pink"
         android:layout_width="25dp"
         android:layout_height="35dp"
         android:layout_marginEnd="16dp"
-        android:backgroundTint="#E91E63"
+        android:backgroundTint="@color/pink"
         app:layout_constraintBaseline_toBaselineOf="@+id/add_event_colour"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -153,23 +156,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/notes" />
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="219dp"
-        android:layout_height="106dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notes" />
-
     <Button
         android:id="@+id/add_event_done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="12dp"
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapView" />
+        tools:layout_editor_absoluteY="335dp" />
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.timetablecarpenters.pocketcalendar.MapFragment"
+        android:layout_width="219dp"
+        android:layout_height="107dp"
+        tools:layout_editor_absoluteX="177dp"
+        tools:layout_editor_absoluteY="213dp" />
+
+    <Button
+        android:id="@+id/open_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="OPEN MAP"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,11 +7,14 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -51,11 +54,12 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private LinearLayout addEventPopupView;
     private Button next, save, blue;
     private CheckBox repeat, notification;
-    private String eventType, eventName;
+    private String eventType, eventName, notifType, repetitionType;
     private ScrollView scrollView;
     private DatePickerDialog.OnDateSetListener dateSetListener;
+    private Button[] colour_buttons;
     private CalendarEvent addedEvent;
-    private int endHour, endMinute, startHour, startMinute;
+    private int endHour, endMinute, startHour, startMinute, eventColour;
     private Calendar eventStart, eventEnd, eventDate;
     private long eventID;
 
@@ -442,7 +446,28 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             }
         });
 
-        // todo color and notification
+        // initialize colour buttons
+        colour_buttons = new Button[8];
+        colour_buttons[0] = commonItemsView.findViewById(R.id.colour_ligth_blue);
+        colour_buttons[1] = commonItemsView.findViewById(R.id.colour_blue);
+        colour_buttons[2] = commonItemsView.findViewById(R.id.colour_purple);
+        colour_buttons[3] = commonItemsView.findViewById(R.id.colour_pink);
+        colour_buttons[4] = commonItemsView.findViewById(R.id.colour_red);
+        colour_buttons[5] = commonItemsView.findViewById(R.id.colour_orange);
+        colour_buttons[6] = commonItemsView.findViewById(R.id.colour_yellow);
+        colour_buttons[7] = commonItemsView.findViewById(R.id.colour_green);
+
+        for (Button b : colour_buttons) {
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    b.setAnimation(new AlphaAnimation(15f, 15f));
+                    b.setEnabled(false);
+
+                }
+            });
+        }
+
 
         notes = (EditText) commonItemsView.findViewById(R.id.notes);
         editParagraphFont(notes);
@@ -453,11 +478,11 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( !eventType.equals("Assignment") && (event_end.getText().equals("End:") || event_start.getText().equals("Start:")) ) {
+                if (!eventType.equals("Assignment") && (event_end.getText().equals("End:") || event_start.getText().equals("Start:")) ) {
                     Toast.makeText( DayActivity.this, "Please  choose event interval",
                             Toast.LENGTH_LONG).show();
                 }
-                else if ( eventType.equals("Assignment") && event_due_time.getText().equals("Time:")) {
+                else if (eventType.equals("Assignment") && event_due_time.getText().equals("Time:")) {
                     Toast.makeText( DayActivity.this, "Please choose due time",
                             Toast.LENGTH_LONG).show();
                 }
@@ -479,6 +504,16 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                         saveData();
                         loadData();
                         addedEvent = new CalendarEvent(eventStart, eventEnd, eventName, eventID, eventType);
+
+                        if (notification.isChecked()) {
+                            // addedEvent.setNotifTime();
+                        }
+                        if (repeat.isChecked()) {
+                            // repeat event
+                        }
+                        if (notes.getText() !=  null) {
+                            addedEvent.setNotes(notes.getText().toString());
+                        }
                         DBHelper dbHelper = new DBHelper(DayActivity.this, DBHelper.DB_NAME, null);
                         dbHelper.insertEvent(addedEvent);
                         addEventDialog.dismiss();
@@ -509,12 +544,12 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (parent.getId() == R.id.event_type_spinner) {
+        if (parent.getId() == R.id.event_type_spinner)
             eventType = parent.getItemAtPosition(position).toString();
-        }
-        if (parent.getId() == R.id.repetition_type) {
-            // todo - use set methods to create repetition
-        }
+        else if (parent.getId() == R.id.repetition_type)
+            repetitionType = parent.getItemAtPosition(position).toString();
+        else if (parent.getId() == R.id.notifications_spinner)
+            notifType = parent.getItemAtPosition(position).toString();
     }
 
     @Override
