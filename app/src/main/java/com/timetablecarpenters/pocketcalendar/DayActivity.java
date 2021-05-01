@@ -97,6 +97,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             }
             try {
                 addedEvent = (CalendarEvent) extras.get(MapActivity.EVENT_KEY);
+                Log.d(TAG, "onCreate: event called back!");
             } catch (Exception e) {
                 Log.d(TAG, "onCreate: no event came out of intent " + e);
             }
@@ -152,7 +153,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         scrollView = (ScrollView) getLayoutInflater().inflate(R.layout.add_event_popup,null);
         addEventPopupView = (LinearLayout) scrollView.findViewById(R.id.add_event_linear);
 
-        addedEvent = new CalendarEvent(null, null, null, eventID, null);
+        if(addedEvent != null)
+            addedEvent = new CalendarEvent(null, null, null, eventID, null);
         addNameAndType();
 
         // Next button removes itself from the popup if event type and name are given
