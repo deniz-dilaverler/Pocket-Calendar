@@ -552,6 +552,20 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                         Toast.makeText(DayActivity.this, "Event successfully added", Toast.LENGTH_SHORT).show();
                     addEventDialog.dismiss();
                 }
+                if( repeat.isChecked()) {
+                    if (number_of_repetitions != null && repetitionType != null) {
+                        int times = ConvertIntoNumeric(number_of_repetitions.toString());
+                        if (repetitionType.equalsIgnoreCase("Monthly")) {
+                            addedEvent.repeatMonthly(times, DayActivity.this);
+                        } else if (repetitionType.equalsIgnoreCase("Daily")) {
+                            addedEvent.repeatDaily(times, DayActivity.this);
+                        } else if (repetitionType.equalsIgnoreCase("Annually")) {
+                            addedEvent.repeatAnnually(times, DayActivity.this);
+                        } else if (repetitionType.equalsIgnoreCase("Weekly")) {
+                            addedEvent.repeatWeekly(times, DayActivity.this);
+                        }
+                    }
+                }
             }
         });
 
@@ -943,5 +957,16 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         intent.putExtra( INTENT_KEY, thisDay);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+    private int ConvertIntoNumeric(String xVal)
+    {
+        try
+        {
+            return Integer.parseInt(xVal);
+        }
+        catch(Exception ex)
+        {
+            return 0;
+        }
     }
 }

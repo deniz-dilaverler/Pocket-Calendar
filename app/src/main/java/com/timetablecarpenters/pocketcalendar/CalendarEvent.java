@@ -1,6 +1,7 @@
 package com.timetablecarpenters.pocketcalendar;
 
 
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Parcel;
@@ -228,7 +229,47 @@ public class CalendarEvent implements Parcelable {
             return false;
         }
     }
+    public void repeatMonthly(int times,Context context){
+        Calendar newEventStart = eventStart;
+        Calendar newEventEnd = eventEnd;
+        DBHelper dbHelper = new DBHelper(context,"helper",null);
+        for (int i = 0; i< times;i++) {
+            newEventStart.add(Calendar.MONTH,1);
+            newEventEnd.add(Calendar.MONTH,1);
+            dbHelper.insertEvent( new CalendarEvent(newEventStart,newEventEnd, this.name,this.id, this.type));
+        }
+    }
+    public void repeatWeekly(int times,Context context){
+        Calendar newEventStart = eventStart;
+        Calendar newEventEnd = eventEnd;
+        DBHelper dbHelper = new DBHelper(context,"helper",null);
+        for (int i = 0; i< times;i++) {
+            newEventStart.add(Calendar.DAY_OF_MONTH,7);
+            newEventEnd.add(Calendar.DAY_OF_MONTH,7);
+            dbHelper.insertEvent( new CalendarEvent(newEventStart,newEventEnd, this.name,this.id, this.type));
+        }
 
+    }
+    public void repeatDaily(int times, Context context){
+        Calendar newEventStart = eventStart;
+        Calendar newEventEnd = eventEnd;
+        DBHelper dbHelper = new DBHelper(context,"helper",null);
+        for (int i = 0; i< times;i++) {
+            newEventStart.add(Calendar.DAY_OF_MONTH,1);
+            newEventEnd.add(Calendar.DAY_OF_MONTH,1);
+            dbHelper.insertEvent( new CalendarEvent(newEventStart,newEventEnd, this.name,this.id, this.type));
+        }
+    }
+    public void repeatAnnually(int times,Context context){
+        Calendar newEventStart = eventStart;
+        Calendar newEventEnd = eventEnd;
+        DBHelper dbHelper = new DBHelper(context,"helper",null);
+        for (int i = 0; i< times;i++) {
+            newEventStart.add(Calendar.YEAR,1);
+            newEventEnd.add(Calendar.YEAR,1);
+            dbHelper.insertEvent( new CalendarEvent(newEventStart,newEventEnd, this.name,this.id, this.type));
+        }
+    }
 
 
 }
