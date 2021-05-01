@@ -33,6 +33,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.w3c.dom.Text;
@@ -500,18 +501,19 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
 
         locationSelect = (Button) commonItemsView.findViewById(R.id.open_map);
 
-        locationSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DayActivity.this, MapActivity.class);
-                // intent.putExtra(MAPS_INTENT_KEY, addedEvent);
-                intent.putExtra(MapActivity.INTENT_ID_KEY, ACTIVITY_NAME );
-                if (intent != null) {
-                    startActivity(intent);
+        if(GoogleMapsAvailability.isServicesOK(this)) {
+            locationSelect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(DayActivity.this, MapActivity.class);
+                    // intent.putExtra(MAPS_INTENT_KEY, addedEvent);
+                    intent.putExtra(MapActivity.INTENT_ID_KEY, ACTIVITY_NAME);
+                    if (intent != null) {
+                        startActivity(intent);
+                    }
                 }
-            }
-        });
-
+            });
+        }
 
         save = (Button) commonItemsView.findViewById(R.id.add_event_done);
         save.setOnClickListener(new View.OnClickListener() {
