@@ -2,24 +2,25 @@ package com.timetablecarpenters.pocketcalendar;
 
 import android.database.Cursor;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.util.Log;
-import android.view.View;
-import android.widget.Adapter;
 import android.widget.ListView;
-
 import java.util.Calendar;
 
+/**
+ * An activity that shows the user events coming up on the next 14 days
+ * @author Deniz Mert Dilaverler
+ * @version 01.05.2021
+ */
 public class UpcomingEvents extends BaseActivity {
     private static final String TAG = "UpcomingEvents";
     Calendar today;
     final int TOTAL_DAYS = 14;
+
+    /**
+     * calls when the Activity is started, receives data from the db about the events on the next 14 days.
+     * Passes the cursor that comes from the DBHelper to UpComingEventsAdapter for the ListView to be inflated
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate: Startsss");

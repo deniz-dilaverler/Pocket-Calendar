@@ -18,7 +18,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-
+/**
+ * Google Maps fragment that shows the passed location
+ * doesn't allow user interaction, solely for location viewing.
+ * @version 1.05.2021
+ * @author Deniz Mert Dilaverler
+ */
 public class MapFragment extends Fragment {
     private static final String TAG = "MapForView";
     
@@ -36,6 +41,7 @@ public class MapFragment extends Fragment {
          * If Google Play services is not installed on the device, the user will be prompted to
          * install it inside the SupportMapFragment. This method will only be triggered once the
          * user has installed Google Play services and returned to the app.
+         *
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
@@ -49,6 +55,13 @@ public class MapFragment extends Fragment {
         }
     };
 
+    /**
+     * Creates the fragment
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -57,6 +70,11 @@ public class MapFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_map_for_view, container, false);
     }
 
+    /**
+     * Called immediately after onCreateView. Initializes the fragment properties
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -66,7 +84,13 @@ public class MapFragment extends Fragment {
             mapFragment.getMapAsync(callback);
         }
     }
-    
+
+    /**
+     * checks if the map is ready or not, if ready
+     * moves the camera of Map to the passed location
+     * @param location
+     * @return whether the operation was successful
+     */
     public boolean moveToLocation(LatLng location) {
         if (mapReady) {
             if (location == null) {

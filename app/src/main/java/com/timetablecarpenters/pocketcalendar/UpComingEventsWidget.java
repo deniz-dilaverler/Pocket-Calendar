@@ -10,11 +10,19 @@ import android.net.Uri;
 import android.widget.RemoteViews;
 
 /**
- * Implementation of App Widget functionality.
+ * Creates the home screen App Widget for viewing Upcoming events
+ * @author Deniz Mert Dilaverler
+ * @version 01.05.2021
  */
 public class UpComingEventsWidget extends AppWidgetProvider {
     private static final String TAG = "UpComingEventsWidget";
 
+    /**
+     * Updates widget by calling a remoteAdapter to set inflate and fill its ListView
+     * @param context
+     * @param appWidgetManager
+     * @param appWidgetId
+     */
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         Intent intent = new Intent(context, UpcomingEvents.class);
@@ -33,6 +41,12 @@ public class UpComingEventsWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
+    /**
+     * calls updateAppWidget on the each widget that the user has
+     * @param context
+     * @param appWidgetManager
+     * @param appWidgetIds
+     */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
@@ -41,6 +55,11 @@ public class UpComingEventsWidget extends AppWidgetProvider {
         }
     }
 
+    /**
+     * Method called when the widget is initialized for the first time,
+     * this method has no implementation or function on our app
+     * @param context
+     */
     @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created

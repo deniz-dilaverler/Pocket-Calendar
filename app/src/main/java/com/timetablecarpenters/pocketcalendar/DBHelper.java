@@ -90,6 +90,10 @@ public class DBHelper extends SQLiteOpenHelper {
         resetDb(database);
     }
 
+    /**
+     * deletes the events table on the db and creates a new empty one.
+     * @param db
+     */
     public void resetDb(SQLiteDatabase db) {
         if (db == null)
             db = getWritableDatabase();
@@ -185,7 +189,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * deletes the event with these values that match:
      * Date, name, event start and end
      * @param event
-     * @return
+     * @return Whether deletion was succesful or not
      */
     public boolean deleteEvent(CalendarEvent event) {
         String sqlStatement = "Delete * From " + EVENTS_TABLE + " where " + YEAR + " = " + event.getYear() + " AND "

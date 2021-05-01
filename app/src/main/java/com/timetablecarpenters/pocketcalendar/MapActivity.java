@@ -88,7 +88,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private Place placeToSearch;
+    private Place placeSearched;
     private CalendarEvent event;
     private String previousActivityKey;
 
@@ -159,7 +159,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 Log.d(TAG, "onClick: clicked gps icon");
                 getDeviceLocation();
-
             }
         });
 
@@ -167,35 +166,42 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     /**
      * Finds the location with the Latlng value that the Place instance provide. Takes the camera to the location of the place
-     * calls the initSheetView().initSheetView() initializes the SheetView that shows the user, the location they searched for.
-     */
+     * calls the initSheetView(). initSheetView() initializes the SheetView that shows the user, the location they searched for.
+            */
     private void geoLocate() {
         Log.d(TAG, "geoLocate: geolocating");
 
        //String searchString = autocompleteFragment.getText().toString();
 
         Geocoder geocoder = new Geocoder(MapActivity.this);
-        if (placeToSearch != null) {
-            moveCamera(placeToSearch.getLatLng(), DEFAULT_ZOOM, placeToSearch.getName());
+        if (placeSearched != null) {
+            moveCamera(placeSearched.getLatLng(), DEFAULT_ZOOM, placeSearched.getName());
             initSheetView();
-
         }
     }
 
+    /**
+     * initializes the sheetView and fills it with the data from the Place object received from the google Places API.
+     * Image metadata is turned into a bitmap to be shown in the sheetview.
+     */
     private void initSheetView() {
         bottomSheetDialog = new BottomSheetDialog(MapActivity.this, R.style.BottomSheetTheme);
         View sheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.bottom_sheet_layout,
                 (ViewGroup) findViewById(R.id.bottom_sheet));
 
         bottomSheetDialog.setContentView(sheetView);
-        ((TextView) sheetView.findViewById(R.id.place_name_tv)).setText(placeToSearch.getName());
-        ((TextView) sheetView.findViewById(R.id.address_tv)).setText(placeToSearch.getAddress());
+        ((TextView) sheetView.findViewById(R.id.place_name_tv)).setText(placeSearched.getName());
+        ((TextView) sheetView.findViewById(R.id.address_tv)).setText(placeSearched.getAddress());
         ImageView imageView = ((ImageView) sheetView.findViewById((R.id.dialog_place_pic)));
         AppCompatImageView  button = (AppCompatImageView) sheetView.findViewById(R.id.save_place_button);
         button.setOnClickListener(new View.OnClickListener() {
+            /**
+             * when the user clicks, opens dayActivity with the CalendarEvent instance that got its location set.
+             * @param v
+             */
             @Override
             public void onClick(View v) {
-                event.setLocation(placeToSearch.getLatLng());
+                event.setLocation(placeSearched.getLatLng());
                 Class returnActivity;
                 // Todo: if there are multiple Activities to possibly return add an if statement
                 returnActivity = DayActivity.class;
@@ -207,7 +213,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-        List<PhotoMetadata> photos = placeToSearch.getPhotoMetadatas();
+        List<PhotoMetadata> photos = placeSearched.getPhotoMetadatas();
         if( photos == null || photos.size() == 0) {
             Log.d(TAG, "initSheetView: attributions " );
             imageView.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_broken_image, null));
@@ -244,6 +250,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         bottomSheetDialog.show();
     }
 
+    /**
+     * if Location permissions are granted gets user's location and moves the camera to it
+     */
     private void getDeviceLocation(){
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
@@ -276,6 +285,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    /**
+     * moves the camera to the passed Latlng position and marks it
+     * @param latLng
+     * @param zoom
+     * @param title
+     */
     private void moveCamera(LatLng latLng, float zoom, String title){
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
@@ -287,6 +302,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+    /**
+     * initializes the map on a seperate thread and calls a callback method when done
+     */
     private void initMap(){
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment_encapsulater);
@@ -294,6 +312,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(MapActivity.this);
     }
 
+    /**
+     * Checks the user Location permissions if permission isn't given yet, asks the user to enable location permissiom
+     *  and sets  mLocationPermissionsGranted true;
+     */
     private void getLocationPermission(){
         Log.d(TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
@@ -342,7 +364,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
-
+    /**
+     * Initializes Google Places autocomplete API that handles Place searches
+     */
     private void initPlacesAutoComplete() {
         // Initialize the SDK
         Places.initialize(getApplicationContext(), "AIzaSyAaoyx0rOYoobFetCe34LdwVo6BLKp2HCU");
@@ -359,14 +383,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Log.d(TAG, "initPlacesAutoComplete: " +  this.getResources().getConfiguration().locale.getCountry()) ;
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            /**
+             * Is called when a place has been selected and there are no errors ocured in the process
+             * sets Place instance to place to be used in the later stages.
+             * calls geoLocate which moves the camera to the Place object's location
+             * @param place
+             */
             @Override
             public void onPlaceSelected(@NotNull Place place) {
-                // TODO: Get info about the selected place.
                 Log.i(TAG, "onPlaceSelected: " + place.getName() );
-                placeToSearch = place;
+                placeSearched = place;
                 mMap.clear();
                 geoLocate();
             }
+
+            /**
+             * Is called when an error has occured in the process. Shows a message to the user that an
+             * error has occured
+             * @param status
+             */
             @Override
             public void onError(@NotNull Status status) {
                 // TODO: Handle the error.

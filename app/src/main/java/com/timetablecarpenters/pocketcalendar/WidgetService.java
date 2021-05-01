@@ -13,6 +13,11 @@ import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * Uses RemoteViewFactory to inflate and populate ListView and its items
+ * @author Deniz Mert Dilaverler
+ * @version 02.05.2021
+ */
 public class WidgetService extends RemoteViewsService {
     private static final String TAG = "WidgetService";
     @Override
@@ -20,7 +25,9 @@ public class WidgetService extends RemoteViewsService {
         return new WidgetItemFactory(getApplicationContext(), intent);
     }
 
-
+    /**
+     * Inflates and populates ListView and its items
+     */
     class WidgetItemFactory implements  RemoteViewsFactory {
         private final int TOTAL_DAYS = 7;
         private Context context;
@@ -28,15 +35,19 @@ public class WidgetService extends RemoteViewsService {
         private Cursor cursor;
         private ArrayList<CalendarEvent> events;
 
+        /**
+         * initializes the WidgetItemFactor's appWidgetId and context
+         * @param context
+         * @param intent
+         */
         WidgetItemFactory(Context context, Intent intent) {
             this.context = context;
             this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID );
-            this.cursor = cursor;
         }
 
         /**
-         * recieves events from the db and puts them inside an ArrayList to be extracted agains to inflate the ListView items
+         * recieves events from the db in an Arraylist to inflate the ListView items
          */
         @Override
         public void onCreate() {
@@ -46,16 +57,6 @@ public class WidgetService extends RemoteViewsService {
             until.add(Calendar.DATE, TOTAL_DAYS);
             events = dbHelper.getEventsInAnIntervalInArray(today, until);
 
-        }
-
-        @Override
-        public void onDataSetChanged() {
-
-        }
-
-        @Override
-        public void onDestroy() {
-            // events.clear();
         }
 
         /**
@@ -124,5 +125,17 @@ public class WidgetService extends RemoteViewsService {
         public boolean hasStableIds() {
             return true;
         }
+
+        // are not implemented
+        @Override
+        public void onDataSetChanged() {
+
+        }
+
+        @Override
+        public void onDestroy() {
+            // events.clear();
+        }
+
     }
 }

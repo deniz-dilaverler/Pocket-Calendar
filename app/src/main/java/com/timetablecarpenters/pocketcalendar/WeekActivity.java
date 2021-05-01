@@ -99,7 +99,7 @@ public class WeekActivity extends BaseActivity {
         return ResourcesCompat.getColor(getResources(), R.color.month_activity_beckground_unusable, null);
     }
     /**
-     * when a leftSwipe is notifed by the super class adds a week to the date of weekView and refreshes the activity
+     * when a leftSwipe is notified by the super class adds a week to the date of weekView and refreshes the activity
      */
     @Override
     public void leftSwipe() {

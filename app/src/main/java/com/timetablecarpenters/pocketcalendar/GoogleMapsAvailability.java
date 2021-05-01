@@ -23,7 +23,7 @@ public class GoogleMapsAvailability {
     /**
      * Checks form the google API wether the user is applicable to use the maps function
      * @param activity
-     * @return
+     * @return whether the user's device can use Google play services or not
      */
     public static boolean isServicesOK(AppCompatActivity activity) {
         Log.d(TAG, "isServicesOK: checking google services version");
