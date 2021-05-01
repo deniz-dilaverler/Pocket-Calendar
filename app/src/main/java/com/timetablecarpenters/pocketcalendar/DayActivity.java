@@ -55,6 +55,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private Calendar eventDate;
     private long eventID;
     private Button locationSelect;
+    private MapFragment mapFragment;
 
 
     private CalendarEvent[] events; //the events in day
@@ -493,9 +494,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
 
         notes = (EditText) commonItemsView.findViewById(R.id.notes);
         editParagraphFont(notes);
-
+        /*
         // initialize Location editing UI elements
-        MapFragment mapFragment = (MapFragment) (getSupportFragmentManager().findFragmentById(R.id.map_fragment));
+        mapFragment = (MapFragment) (getSupportFragmentManager().findFragmentById(R.id.map_fragment));
         locationSelect = (Button) commonItemsView.findViewById(R.id.open_map);
         // show the location on the map if the user has chosen one
         if(addedEvent.getLocation()!= null) {
@@ -513,16 +514,15 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                 }
             });
         }
-
+        */
         save = (Button) commonItemsView.findViewById(R.id.add_event_done);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: eventToAdd: " + addedEvent.getEventStart() + " end: " + addedEvent.getEventEnd());
-                if (!addedEvent.getType().equals("Assignment")) {
-                    if (addedEvent.getEventEnd() == null || addedEvent.getEventEnd() == null)
-                        Log.d(TAG, "onClick: error message 1");
-                        Toast.makeText( DayActivity.this, "Please  choose event interval",
+                if (!addedEvent.getType().equals("Assignment") &&  (addedEvent.getEventEnd() == null || addedEvent.getEventEnd() == null)) {
+                    Log.d(TAG, "onClick: error message 1");
+                    Toast.makeText( DayActivity.this, "Please  choose event interval",
                                 Toast.LENGTH_LONG).show();
                 }
                 else if (addedEvent.getType().equals("Assignment") && addedEvent.getEventEnd() == null) {
