@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -49,7 +50,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private AlertDialog.Builder addEventBuilder;
     private AlertDialog addEventDialog;
     private Spinner event_type_spinner, notification_spinner;
-    private Spinner repetition_type;
+    private Spinner repetition_type, color_spinner;
     private TextView event_due_time, event_date, event_start, event_end;
     private EditText event_name, number_of_repetitions, notes;
     private LinearLayout addEventPopupView;
@@ -488,9 +489,13 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    b.setAnimation(new AlphaAnimation(15f, 15f));
+                    for ( Button d : colour_buttons) {
+                        d.setEnabled(true);
+                    }
                     b.setEnabled(false);
-
+                    Toast.makeText(DayActivity.this, "Color chosen",
+                            Toast.LENGTH_SHORT).show();
+                    // set event colour
                 }
             });
         }
