@@ -118,7 +118,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(DayActivity.this, "YAZILIM ÖĞREN", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DayActivity.this, "YAZILIM ÖĞREN(!)", Toast.LENGTH_SHORT).show();
                 openDialog();
             }
         });
@@ -194,6 +194,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         event_type_spinner.setAdapter(eventNamesAdapter);
         event_type_spinner.setOnItemSelectedListener(this);
         event_name = (EditText) typeAndNameView.findViewById(R.id.event_name_edit);
+        editParagraphFont(event_name);
         addEventPopupView.addView(typeAndNameView);
     }
 
@@ -444,6 +445,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         // todo color and notification
 
         notes = (EditText) commonItemsView.findViewById(R.id.notes);
+        editParagraphFont(notes);
 
         // todo location
 
@@ -736,6 +738,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
 
                     recent = textView;
                     textView.setText(str);
+                    editParagraphFont(textView);
                     if ( allEventsChron[i].color != 0) {
                         textView.setTextColor(allEventsChron[i].color);
                     }
@@ -802,6 +805,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
 
     /**
      * Edits the font sizes of textViews according to settings
+     * It changes the font sizes of in-texts
      * @param text is the hour of the day
      */
     public void editInTextFont(TextView text){
@@ -820,7 +824,29 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             text.setTextSize(18);
         }
     }
-    
+
+    /**
+     * Edits the font sizes of textViews according to settings
+     * It changes the font sizes of paragraphs
+     * @param text is the hour of the day
+     */
+    public void editParagraphFont(TextView text){
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("paragraphPref", MODE_PRIVATE);
+        String paragraphFontSize = sp.getString("paragraphFontSize","");
+        if (paragraphFontSize.equals(SMALL))
+        {
+            text.setTextSize(10);
+        }
+        if (paragraphFontSize.equals(MEDIUM))
+        {
+            text.setTextSize(12);
+        }
+        if (paragraphFontSize.equals(LARGE))
+        {
+            text.setTextSize(16);
+        }
+    }
+
     /**
      *
      */

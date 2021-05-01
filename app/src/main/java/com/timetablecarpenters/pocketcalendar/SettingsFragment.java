@@ -18,6 +18,7 @@ import java.util.Calendar;
 /**
  * Listens the settings functions and implement their tasks
  * Creates SharedPreferences to save and use data
+ * @author Yusuf Şenyüz
  * @version 28.04.2021
  */
 public class SettingsFragment extends PreferenceFragment {
@@ -78,11 +79,31 @@ public class SettingsFragment extends PreferenceFragment {
                 {
                     Preference paragraphText = findPreference(key);
                     paragraphText.setSummary(sharedPreferences.getString(key,""));
+                    ListPreference paragraphList = (ListPreference) paragraphText;
+
+                    SharedPreferences paragraphPref;
+                    paragraphPref = getContext().getSharedPreferences("paragraphPref", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = paragraphPref.edit();
+                    editor.putString("paragraphFontSize", paragraphList.getValue());
+                    editor.commit();
+                    //editor.apply();
+                    Toast.makeText(getContext(),"Font size is selected",Toast.LENGTH_LONG).show();
                 }
                 if(key.equals(NOTIFICATION_SOUND))
                 {
                     Preference notifSound = findPreference(key);
                     notifSound.setSummary(sharedPreferences.getString(key,""));
+                    ListPreference notifList = (ListPreference) notifSound;
+
+                    SharedPreferences notifPref;
+                    notifPref = getContext().getSharedPreferences("notifPref", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = notifPref.edit();
+                    editor.putString("notificationSound", notifList.getValue());
+                    editor.commit();
+                    //editor.apply();
+                    Toast.makeText(getContext(),"Sound is selected",Toast.LENGTH_LONG).show();
+
+
                 }
 
 

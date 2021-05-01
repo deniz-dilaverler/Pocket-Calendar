@@ -19,7 +19,7 @@
             android:summary="Medium"
             android:title="In-text font size"/>
         <ListPreference
-            android:defaultValue="@string/default2"
+            android:defaultValue="@string/default1"
             android:entries="@array/paragraph_font_sizes"
             android:entryValues="@array/paragraph_font_sizes"
             android:key="Paragraph_font_size"

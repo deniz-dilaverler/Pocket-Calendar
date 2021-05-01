@@ -113,7 +113,7 @@ public class WeekActivity extends BaseActivity {
     }
 
     /**
-     * when a rightSwipe is notifed by the super class subtracts a week from the date of weekView and refreshes the activity
+     * when a rightSwipe is notified by the super class subtracts a week from the date of weekView and refreshes the activity
      */
     @Override
     public void rightSwipe() {
@@ -130,6 +130,7 @@ public class WeekActivity extends BaseActivity {
 
     /**
      * Edits the font sizes of textViews according to settings
+     * It changes the font sizes of in-texts
      * @param weekDayName is the day name of the week
      */
     public void editInTextFont(TextView weekDayName){
@@ -146,6 +147,27 @@ public class WeekActivity extends BaseActivity {
         if (inTextFontSize.equals(LARGE))
         {
             weekDayName.setTextSize(18);
+        }
+    }
+    /**
+     * Edits the font sizes of textViews according to settings
+     * It changes the font sizes of paragraphs
+     * @param weekDayName is the day name of the week
+     */
+    public void editParagraphFont(TextView weekDayName){
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("paragraphPref", MODE_PRIVATE);
+        String paragraphFontSize = sp.getString("paragraphFontSize","");
+        if (paragraphFontSize.equals(SMALL))
+        {
+
+        }
+        if (paragraphFontSize.equals(MEDIUM))
+        {
+
+        }
+        if (paragraphFontSize.equals(LARGE))
+        {
+
         }
     }
 

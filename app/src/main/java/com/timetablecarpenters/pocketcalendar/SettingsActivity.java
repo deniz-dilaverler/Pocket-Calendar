@@ -17,6 +17,7 @@ import android.widget.Button;
 /**
  * In the settings menu, the user will be able to adjust the in text font size,
  * paragraph font size, notification sound, the calendar reset button.
+ * @author Yusuf Şenyüz
  * @version 22.04.21
  *
  */
