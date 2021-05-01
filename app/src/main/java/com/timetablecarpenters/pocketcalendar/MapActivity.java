@@ -175,7 +175,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
        //String searchString = autocompleteFragment.getText().toString();
 
         Geocoder geocoder = new Geocoder(MapActivity.this);
-        List<Address> list = new ArrayList<>();
         if (placeToSearch != null) {
             moveCamera(placeToSearch.getLatLng(), DEFAULT_ZOOM, placeToSearch.getName());
             initSheetView();
