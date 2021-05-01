@@ -189,9 +189,6 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         if (addedEvent.getType().equals("Assignment")) {
             addDueDate();
         }
-        else if (addedEvent.getType().equals("Birthday")) {
-            // todo gift bought
-        }
         else {
             addInterval();
             addRepetition();
@@ -499,18 +496,23 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         notes = (EditText) commonItemsView.findViewById(R.id.notes);
         editParagraphFont(notes);
 
+        // initialize Location editing UI elements
+        MapFragment mapFragment = (MapFragment) (getSupportFragmentManager().findFragmentById(R.id.map_fragment));
         locationSelect = (Button) commonItemsView.findViewById(R.id.open_map);
+        // show the location on the map if the user has chosen one
+        if(addedEvent.getLocation()!= null) {
+            mapFragment.moveToLocation(addedEvent.getLocation());
+        }
 
         if(GoogleMapsAvailability.isServicesOK(this)) {
             locationSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(DayActivity.this, MapActivity.class);
-                    // intent.putExtra(MAPS_INTENT_KEY, addedEvent);
+                    intent.putExtra(MAPS_INTENT_KEY, addedEvent);
                     intent.putExtra(MapActivity.INTENT_ID_KEY, ACTIVITY_NAME);
-                    if (intent != null) {
-                        startActivity(intent);
-                    }
+                    startActivity(intent);
+
                 }
             });
         }

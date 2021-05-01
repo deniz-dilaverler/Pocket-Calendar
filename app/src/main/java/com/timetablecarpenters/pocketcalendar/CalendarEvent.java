@@ -3,6 +3,8 @@ package com.timetablecarpenters.pocketcalendar;
 
 import android.graphics.Color;
 import android.location.Location;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -10,11 +12,12 @@ import 	java.util.Calendar;
 
 /**
  * CalendarEvent class that creates a CalendarEvent instance with the specified properties and methods
+ * implements Parcelable interface to be sent trough Intents
  * @author Yarkın Sakıncı
  * @version 21.04.2021
  */
 
-public class CalendarEvent {
+public class CalendarEvent implements Parcelable {
     protected String type;
     protected Calendar eventStart;
     protected Calendar eventEnd;
@@ -25,12 +28,74 @@ public class CalendarEvent {
     protected long id;
     protected int color;
 
+    /**
+     * initializes the core values of CalendarEvent
+     * @param eventStart
+     * @param eventEnd
+     * @param name
+     * @param id
+     * @param type
+     */
     public CalendarEvent(Calendar eventStart, Calendar eventEnd, String name, long id, String type) {
         this.eventStart = eventStart;
         this.eventEnd = eventEnd;
         this.name = name;
         this.id = id;
         this.type = type;
+    }
+
+    /**
+     * unwraps the Parcel back to CalendarEvent
+     * @param in
+     */
+    protected CalendarEvent(Parcel in) {
+        type = in.readString();
+        name = in.readString();
+        location = in.readParcelable(LatLng.class.getClassLoader());
+        notes = in.readString();
+        notifTime = in.readString();
+        id = in.readLong();
+        color = in.readInt();
+        eventStart = (Calendar) in.readSerializable();
+        eventEnd = (Calendar) in.readSerializable();
+    }
+
+    /**
+     * manages the disassembly of the parcel
+     */
+    public static final Creator<CalendarEvent> CREATOR = new Creator<CalendarEvent>() {
+        @Override
+        public CalendarEvent createFromParcel(Parcel in) {
+            return new CalendarEvent(in);
+        }
+
+        @Override
+        public CalendarEvent[] newArray(int size) {
+            return new CalendarEvent[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * writes the data of the class to a Parcel object
+     * @param dest
+     * @param flags
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(type);
+        dest.writeString(name);
+        dest.writeParcelable(location, flags);
+        dest.writeString(notes);
+        dest.writeString(notifTime);
+        dest.writeLong(id);
+        dest.writeInt(color);
+        dest.writeSerializable(eventStart);
+        dest.writeSerializable(eventEnd);
     }
 
     // returns long value depending on the result of operation
@@ -151,7 +216,7 @@ public class CalendarEvent {
         return result;
     }
 
-    //ADDED BY ALPEREN TEMPORARILY
+    //TODO: ADDED BY ALPEREN TEMPORARILY
     public void setColor(int c) {
         color = c;
     }
@@ -163,5 +228,8 @@ public class CalendarEvent {
             return false;
         }
     }
+
+
+
 }
 

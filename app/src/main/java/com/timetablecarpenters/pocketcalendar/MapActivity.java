@@ -200,7 +200,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 // Todo: if there are multiple Activities to possibly return add an if statement
                 returnActivity = DayActivity.class;
                 Intent intent = new Intent(MapActivity.this, returnActivity);
-                // intent.putExtra(EVENT_KEY);
+                intent.putExtra(EVENT_KEY, event);
+                Log.d(TAG, "onClick: event start: " + event.eventStart + " event end: " + event.eventEnd);
                 startActivity(intent);
 
             }

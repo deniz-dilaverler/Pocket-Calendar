@@ -67,14 +67,14 @@ public class MapFragment extends Fragment {
         }
     }
     
-    public boolean moveToLocation(Location location) {
+    public boolean moveToLocation(LatLng location) {
         if (mapReady) {
             if (location == null) {
                 Log.d(TAG, "moveToLocation: location is null");
                 return false;
             }
                     
-            LatLng postion = new LatLng(location.getLatitude(), location.getLongitude());
+            LatLng postion = new LatLng(location.latitude, location.longitude);
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(postion, ZOOM));
             MarkerOptions options = new MarkerOptions().position(postion);
             map.addMarker(options);
