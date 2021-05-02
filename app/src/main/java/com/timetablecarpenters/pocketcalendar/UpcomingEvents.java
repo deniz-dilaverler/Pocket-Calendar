@@ -13,8 +13,8 @@ import java.util.Calendar;
  */
 public class UpcomingEvents extends BaseActivity {
     private static final String TAG = "UpcomingEvents";
-    Calendar today;
-    final int TOTAL_DAYS = 14;
+    public Calendar today;
+    public final int TOTAL_DAYS = 14;
 
     /**
      * calls when the Activity is started, receives data from the db about the events on the next 14 days.

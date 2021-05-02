@@ -32,7 +32,6 @@ public class WidgetService extends RemoteViewsService {
         private final int TOTAL_DAYS = 7;
         private Context context;
         private int appWidgetId;
-        private Cursor cursor;
         private ArrayList<CalendarEvent> events;
 
         /**
@@ -40,7 +39,7 @@ public class WidgetService extends RemoteViewsService {
          * @param context
          * @param intent
          */
-        WidgetItemFactory(Context context, Intent intent) {
+        public WidgetItemFactory(Context context, Intent intent) {
             this.context = context;
             this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID );
