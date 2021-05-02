@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+<<<<<<< HEAD
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,22 +15,21 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+=======
+import android.content.Intent;
+import android.content.SharedPreferences;
+>>>>>>> eventAddActivity
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 
 import androidx.core.content.res.ResourcesCompat;
@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class DayActivity extends BaseActivity implements AdapterView.OnItemSelectedListener {
+public class DayActivity extends BaseActivity  {
     private static final String TAG = "DayActivity";
     public static final String EVENT_KEY = "event";
     public static final String EVENT_ID_PREF = "eventID";
@@ -146,6 +146,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         editInTextFont( findViewById( R.id.textView8));
 
         FloatingActionButton fab = findViewById(R.id.add_event_button);
+<<<<<<< HEAD
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -600,12 +601,43 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                     addEventDialog.dismiss();
                     startActivity(intent);
                 }
-                    Intent intent = new Intent(DayActivity.this,ReminderBroadCast.class);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(DayActivity.this,0,intent,0);
+                if ( notification.isChecked()) {
+                    String notificationSpinner = notification_spinner.getSelectedItem().toString();
+                    Intent intent = new Intent(DayActivity.this, ReminderBroadCast.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(DayActivity.this, 0, intent, 0);
                     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                    long timeAtButtonClick = System.currentTimeMillis();
-                    long tenSecondMillis = 1000*10;
-                    alarmManager.set(AlarmManager.RTC_WAKEUP,timeAtButtonClick+tenSecondMillis,pendingIntent);
+                    long dueTimeInMs = addedEvent.getEventStart().getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                    long differenceToDue;
+                    if( notificationSpinner.equalsIgnoreCase("5 minutes prior"))
+                    {
+                        differenceToDue = 5 * 60 * 1000;
+                    }
+                    else if( notificationSpinner.equalsIgnoreCase("10 minutes prior"))
+                    {
+                        differenceToDue = 10 * 60 * 1000;
+                    }
+                    else if( notificationSpinner.equalsIgnoreCase("30 minutes prior"))
+                    {
+                        differenceToDue = 30 * 60 * 1000;
+                    }
+                    else if( notificationSpinner.equalsIgnoreCase("1 hour prior"))
+                    {
+                        differenceToDue = 60 * 60 * 1000;
+                    }
+                    else if( notificationSpinner.equalsIgnoreCase("6 hours prior"))
+                    {
+                        differenceToDue = 6* 60 * 60 * 1000;
+                    }
+                    else
+                    {
+                        differenceToDue = 12 * 60 * 60 * 1000;
+                    }
+                    Log.d(TAG, "dueTimeInMs - differenceToDue " + (dueTimeInMs - differenceToDue) );
+                    Log.d(TAG, "dueTimeInMs - differenceToDue " + (dueTimeInMs + "-" + differenceToDue) );
+                    Log.d(TAG, "dueTimeInMs - differenceToDue " + addedEvent.getEventStart().toString() );
+
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, dueTimeInMs - differenceToDue, pendingIntent);
+                }
                 if( repeat.isChecked()) {
                     repetition_type.setEnabled(false);
                     number_of_repetitions.setEnabled(false);
@@ -769,6 +801,12 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         ( ( TextView) findViewById( R.id.dateText)).setTextColor( color);
     }
     /**
+=======
+        fab.setOnClickListener(new DayActivity.ViewChangeClickListener());
+    }
+
+    /**
+>>>>>>> eventAddActivity
      * gets today's events and puts them all in an array as events property
      * @author Alperen Utku Yalçın
      */
@@ -979,6 +1017,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                     layout.addView(textView, layoutParams);
 
 
+<<<<<<< HEAD
                     int finalI1 = i;
                     textView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -987,6 +1026,13 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                             Intent intent = new Intent(DayActivity.this, EventActivity.class);
                             intent.putExtra(EventActivity.EVENT_VIEW_INTENT_KEY, allEventsChron[finalI1] );
                             startActivity(intent);
+=======
+
+                    textView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            
+>>>>>>> eventAddActivity
                         }
                     });
                 }
@@ -1024,6 +1070,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         if (event.getNotes() != null) {
             eventNotes.setText("Notes: " + event.getNotes());
         }
+
 
         //todo initialize buttons
 
@@ -1161,12 +1208,88 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             return 0;
         }
     }
+<<<<<<< HEAD
     public void createNotificationChannel(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel("channel","channel1", NotificationManager.IMPORTANCE_HIGH);
             channel.setDescription("simple channel");
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
+
+
+    /**
+     * Reports the name of the month according to the number
+     * @param month number
+     * @return Sring month name
+     */
+    private String formattedMonth(int month) {
+        if (month == 0)
+            return "Jan";
+        if (month == 1)
+            return "Feb";
+        if (month == 2)
+            return "Mar";
+        if (month == 3)
+            return "Apr";
+        if (month == 4)
+            return "May";
+        if (month == 5)
+            return "Jun";
+        if (month == 6)
+            return "Jul";
+        if (month == 7)
+            return "Aug";
+        if (month == 8)
+            return "Sep";
+        if (month == 9)
+            return "Oct";
+        if (month == 10)
+            return "Nov";
+
+        // For 11th month and if anything goes wrong
+        return "Dec";
+    }
+
+    public class ViewChangeClickListener implements View.OnClickListener {
+        /**
+         * when clicked creates an intent of the desired activity and starts the activity
+         *
+         * @param v
+         */
+        @Override
+        public void onClick(View v) {
+            Intent intent;
+            switch (v.getId()) {
+                case R.id.add_event_button:
+                    Log.d(TAG, "onClick: oldu");
+                    intent = new Intent(DayActivity.this, AddEvent.class);
+                    intent.putExtra(AddEvent.DATE_KEY, thisDay);
+                    startActivity(intent);
+                    break;
+            }
+>>>>>>> eventAddActivity
         }
+    }
+    private long compareDates(Calendar calendar1, Calendar calendar2){
+        long result;
+        result = 0;
+        long yearDifferenceInMs = 0;
+        long monthDifferenceInMs = 0;
+        long dayDifferenceInMs = 0;
+        long hourDifferenceInMs = 0;
+        long minuteDifferenceInMs =0;
+        long secondDifferenceInMs = 0;
+
+        secondDifferenceInMs = calendar1.get(Calendar.SECOND) - calendar2.get(Calendar.SECOND);
+        minuteDifferenceInMs = (calendar1.get(Calendar.MINUTE) - calendar2.get(Calendar.MINUTE)) * 60;
+        hourDifferenceInMs = (calendar1.get(Calendar.HOUR_OF_DAY) - calendar2.get(Calendar.HOUR_OF_DAY)) * 60 * 60;
+        dayDifferenceInMs = (calendar1.get(Calendar.DAY_OF_MONTH) - calendar2.get(Calendar.DAY_OF_MONTH))* 60 * 60 * 24;
+        monthDifferenceInMs = (calendar1.get(Calendar.MONTH) - calendar2.get(Calendar.MONTH))* 60 * 60 * 24 * 30;
+        yearDifferenceInMs = (calendar1.get(Calendar.YEAR) - calendar2.get(Calendar.YEAR))* 60 * 60 * 24 * 12 * 30;
+        result = secondDifferenceInMs + minuteDifferenceInMs + hourDifferenceInMs + dayDifferenceInMs
+                + monthDifferenceInMs + yearDifferenceInMs;
+
+        return result * 1000;
+
     }
 }
