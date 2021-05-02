@@ -235,12 +235,13 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         }
         //Toast.makeText(BaseActivity.this,"is selected",Toast.LENGTH_LONG).show();
     }
-    
+
+
     @Override
     public void onRestart() {
         super.onRestart();
         //When BACK BUTTON is pressed, the activity on the stack is restarted
-        create();
+       create();
     }
 
     /**
