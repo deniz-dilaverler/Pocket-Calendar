@@ -1,17 +1,12 @@
 package com.timetablecarpenters.pocketcalendar;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
-import java.util.Calendar;
 
 /**
  * User can change background calors via customizable screen
@@ -29,7 +24,8 @@ public class CustomizableScreen2 extends AppCompatActivity {
     private static boolean applied;
     private static int backgroundColorUnapplied, textColorUnapplied;
     public final int[] ids = {R.id.default1, R.id.default2, R.id.default3, R.id.default4,
-            R.id.default5, R.id.default6, R.id.default7};
+            R.id.default5, R.id.default6, R.id.default14, R.id.default8, R.id.default9, R.id.default10,
+            R.id.default11, R.id.default12, R.id.default13, R.id.default7};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
