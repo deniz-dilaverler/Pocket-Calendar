@@ -72,6 +72,7 @@ public class CustomizableScreen2 extends AppCompatActivity {
         ColorDrawable cd = (ColorDrawable) input.getBackground();
         backgroundColorUnapplied = cd.getColor();
         textColorUnapplied = input.getCurrentTextColor();
+
         if ( Color.red( backgroundColorUnapplied) > 125 && Color.green( backgroundColorUnapplied) > 125 && Color.blue( backgroundColorUnapplied) > 125) {
             buttonBackgroundColorUn = manipulateColor( backgroundColorUnapplied, (float) 0.7);
         }
@@ -82,18 +83,28 @@ public class CustomizableScreen2 extends AppCompatActivity {
                 buttonBackgroundColorUn = manipulateColor( backgroundColorUnapplied, (float) 1.2);
         }
         else {
-            buttonBackgroundColorUn = manipulateColor( backgroundColorUnapplied, (float) 0.8);
+            buttonBackgroundColorUn = manipulateColor( backgroundColorUnapplied, textColorUnapplied, (float) 0.8); // %70 first one then.
         }
     }
-    public static int manipulateColor(int color, float factor) {
-        int a = Color.alpha(color);
-        int r = Math.round( Color.red(color) * factor);
-        int g = Math.round( Color.green(color) * factor);
-        int b = Math.round( Color.blue(color) * factor);
+    public static int manipulateColor(int color1, int color2, float factor) {
+        int a = Color.alpha( ( color1 + color2) /2 );
+        int r = Math.round( Color.red( color1) * factor + ( 1 - factor) * Color.red( color2));
+        int g = Math.round( Color.green( color1) * factor + ( 1 - factor) * Color.green( color2));
+        int b = Math.round( Color.blue( color1) * factor + ( 1 - factor) * Color.blue( color2));
         return Color.argb(a,
                 Math.min( r,255),
                 Math.min( g,255),
                 Math.min( b,255));
+    }
+    public static int manipulateColor(int color, float factor) {
+        int a = Color.alpha(color);
+        int r = Math.round(Color.red(color) * factor);
+        int g = Math.round(Color.green(color) * factor);
+        int b = Math.round(Color.blue(color) * factor);
+        return Color.argb(a,
+                Math.min(r, 255),
+                Math.min(g, 255),
+                Math.min(b, 255));
     }
     public static void apply() {
         backgroundColor = backgroundColorUnapplied;

@@ -62,6 +62,9 @@ public class WeekActivity extends BaseActivity {
         last = (Calendar) first.clone();
         last.add(Calendar.DAY_OF_YEAR, 6);
 
+        ( ( TextView) findViewById( R.id.dateText)).setTextColor( getBackGColor());
+        findViewById( R.id.back_week).setBackgroundColor( CustomizableScreen2.backgroundColor);
+
         dateText = (TextView) findViewById(R.id.dateText);
         dateString = MONTH_NAMES[first.get(Calendar.MONTH)] + " " + first.get(Calendar.DATE) + "  -  " +
                 MONTH_NAMES[last.get(Calendar.MONTH)] + " " + last.get(Calendar.DATE);
@@ -75,6 +78,7 @@ public class WeekActivity extends BaseActivity {
             weekDayName.setText(DATE_NAMES[i]);
             editInTextFont(weekDayName);
             weekDayName.setTextColor( getBackGColor());
+            row.findViewById( R.id.events_of_day_list).setBackgroundColor( getButtonColor());
             Log.d(TAG, "onCreate: day = " + day.get(Calendar.YEAR)+ " " + day.get(Calendar.MONTH)+ " " + day.get(Calendar.DAY_OF_MONTH));
             cursor = dbHelper.getEventsInAnInterval(day, day);
             // check if there are any events on that day
@@ -92,9 +96,36 @@ public class WeekActivity extends BaseActivity {
 
         }
     }
+
+    /**
+     * Sets the text colors to a specific value (For testing purposes only)
+     * @author Alperen
+     * @return int color value
+     */
     private int getBackGColor() {
-        return ResourcesCompat.getColor(getResources(), R.color.month_activity_beckground_unusable, null);
+        if (CustomizableScreen2.textColor != 0) {
+            return CustomizableScreen2.textColor;
+        }
+        else {
+            CustomizableScreen2.initiate();
+            return CustomizableScreen2.textColor;
+        }
     }
+    /**
+     * Sets the text colors to a specific value (For testing purposes only)
+     * @author Alperen
+     * @return int color value
+     */
+    private int getButtonColor() {
+        if (CustomizableScreen2.buttonBackgroundColor != 0) {
+            return CustomizableScreen2.buttonBackgroundColor;
+        }
+        else {
+            CustomizableScreen2.initiate();
+            return CustomizableScreen2.buttonBackgroundColor;
+        }
+    }
+
     /**
      * when a leftSwipe is notified by the super class adds a week to the date of weekView and refreshes the activity
      */

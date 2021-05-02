@@ -140,8 +140,10 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         View someView = findViewById( R.id.day_back_color1);
         someView.setBackgroundColor( CustomizableScreen2.backgroundColor);
         someView = findViewById( R.id.day_back_color2);
-        someView.setBackgroundColor( CustomizableScreen2.backgroundColor);
+        someView.setBackgroundColor( getButtonColor());
+        setOtherTexts();
 
+        editInTextFont( findViewById( R.id.textView8));
 
         FloatingActionButton fab = findViewById(R.id.add_event_button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -743,12 +745,16 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private int getBackGColor() {
         if (CustomizableScreen2.textColor != 0) {
             return CustomizableScreen2.textColor;
-        }
-        else {
+        } else {
             CustomizableScreen2.initiate();
             return CustomizableScreen2.textColor;
         }
-    }/*
+    }
+    /**
+     * Sets the text colors to a specific value (For testing purposes only)
+     * @author Alperen
+     * @return int color value
+     */
     private int getButtonColor() {
         if (CustomizableScreen2.buttonBackgroundColor != 0) {
             return CustomizableScreen2.buttonBackgroundColor;
@@ -757,17 +763,10 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             CustomizableScreen2.initiate();
             return CustomizableScreen2.buttonBackgroundColor;
         }
-    }*/
+    }
     private void setOtherTexts() {
         int color = getBackGColor();
-        /*
-        ( ( Button)findViewById( R.id.daily_button)).setTextColor( color);
-        ( ( Button)findViewById( R.id.daily_button)).setBackgroundColor( getButtonColor());
-        ( ( Button)findViewById( R.id.weekly_button)).setTextColor( color);
-        ( ( Button)findViewById( R.id.weekly_button)).setBackgroundColor( getButtonColor());
-        ( ( Button)findViewById( R.id.monthly_button)).setTextColor( color);
-        ( ( Button)findViewById( R.id.monthly_button)).setBackgroundColor( getButtonColor());*/
-        ( ( TextView)findViewById( R.id.dateText)).setTextColor( color);
+        ( ( TextView) findViewById( R.id.dateText)).setTextColor( color);
     }
     /**
      * gets today's events and puts them all in an array as events property
