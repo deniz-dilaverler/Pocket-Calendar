@@ -16,6 +16,9 @@ import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
+/**
+ * This activity shows the user information about their event
+ */
 public class EventActivity extends BaseActivity {
     public final static String EVENT_VIEW_INTENT_KEY ="get_event";
     private CalendarEvent event;
@@ -51,7 +54,7 @@ public class EventActivity extends BaseActivity {
 
         buttonDelete.setOnClickListener(new View.OnClickListener() {
             /**
-             * deletes the activity from db and opens dayActivity
+             * Deletes the activity from db and opens dayActivity
              * @param v
              */
             @Override
