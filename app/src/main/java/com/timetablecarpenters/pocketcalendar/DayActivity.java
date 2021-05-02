@@ -555,14 +555,71 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                 if( repeat.isChecked()) {
                     if (number_of_repetitions != null && repetitionType != null) {
                         int times = ConvertIntoNumeric(number_of_repetitions.toString());
+                        saveData();
+                        loadData();
                         if (repetitionType.equalsIgnoreCase("Monthly")) {
-                            addedEvent.repeatMonthly(times, DayActivity.this);
-                        } else if (repetitionType.equalsIgnoreCase("Daily")) {
-                            addedEvent.repeatDaily(times, DayActivity.this);
-                        } else if (repetitionType.equalsIgnoreCase("Annually")) {
-                            addedEvent.repeatAnnually(times, DayActivity.this);
-                        } else if (repetitionType.equalsIgnoreCase("Weekly")) {
-                            addedEvent.repeatWeekly(times, DayActivity.this);
+                            Calendar newEventStart = addedEvent.getEventStart();
+                            Calendar newEventEnd = addedEvent.getEventEnd();
+                            DBHelper dbHelper = new DBHelper(DayActivity.this,DBHelper.DB_NAME,null);
+                            for (int i = 0; i< times;i++) {
+                                newEventStart.add(Calendar.MONTH, 1);
+                                newEventEnd.add(Calendar.MONTH, 1);
+                                CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
+                                        addedEvent.getId() + i * 1000, addedEvent.getType());
+                                newEvent.setColor(addedEvent.getColor());
+                                newEvent.setLocation(addedEvent.getLocation());
+                                newEvent.setNotes(addedEvent.getNotes());
+                                newEvent.setNotifTime(addedEvent.getNotifTime());
+                                dbHelper.insertEvent(newEvent);
+                            }
+                        }
+                        else if (repetitionType.equalsIgnoreCase("Daily")) {
+                            Calendar newEventStart = addedEvent.getEventStart();
+                            Calendar newEventEnd = addedEvent.getEventEnd();
+                            DBHelper dbHelper = new DBHelper(DayActivity.this,DBHelper.DB_NAME,null);
+                            for (int i = 0; i< times;i++) {
+                                newEventStart.add(Calendar.DAY_OF_MONTH, 1);
+                                newEventEnd.add(Calendar.DAY_OF_MONTH, 1);
+                                CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
+                                        addedEvent.getId() + i * 1000, addedEvent.getType());
+                                newEvent.setColor(addedEvent.getColor());
+                                newEvent.setLocation(addedEvent.getLocation());
+                                newEvent.setNotes(addedEvent.getNotes());
+                                newEvent.setNotifTime(addedEvent.getNotifTime());
+                                dbHelper.insertEvent(newEvent);
+                            }
+                        }
+                        else if (repetitionType.equalsIgnoreCase("Annually")) {
+                            Calendar newEventStart = addedEvent.getEventStart();
+                            Calendar newEventEnd = addedEvent.getEventEnd();
+                            DBHelper dbHelper = new DBHelper(DayActivity.this,DBHelper.DB_NAME,null);
+                            for (int i = 0; i< times;i++) {
+                                newEventStart.add(Calendar.YEAR, 7);
+                                newEventEnd.add(Calendar.YEAR, 7);
+                                CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
+                                        addedEvent.getId() + i * 1000, addedEvent.getType());
+                                newEvent.setColor(addedEvent.getColor());
+                                newEvent.setLocation(addedEvent.getLocation());
+                                newEvent.setNotes(addedEvent.getNotes());
+                                newEvent.setNotifTime(addedEvent.getNotifTime());
+                                dbHelper.insertEvent(newEvent);
+                            }
+                        }
+                        else if (repetitionType.equalsIgnoreCase("Weekly")) {
+                            Calendar newEventStart = addedEvent.getEventStart();
+                            Calendar newEventEnd = addedEvent.getEventEnd();
+                            DBHelper dbHelper = new DBHelper(DayActivity.this,DBHelper.DB_NAME,null);
+                            for (int i = 0; i< times;i++) {
+                                newEventStart.add(Calendar.DAY_OF_MONTH,7);
+                                newEventEnd.add(Calendar.DAY_OF_MONTH,7);
+                                CalendarEvent newEvent = new CalendarEvent(newEventStart,newEventEnd, addedEvent.getName(),
+                                        addedEvent.getId() + i*1000, addedEvent.getType());
+                                newEvent.setColor(addedEvent.getColor());
+                                newEvent.setLocation(addedEvent.getLocation());
+                                newEvent.setNotes(addedEvent.getNotes());
+                                newEvent.setNotifTime(addedEvent.getNotifTime());
+                                dbHelper.insertEvent( newEvent);
+                            }
                         }
                     }
                 }
