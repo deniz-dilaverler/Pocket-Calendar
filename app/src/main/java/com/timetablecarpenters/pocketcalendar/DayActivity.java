@@ -1,13 +1,19 @@
 package com.timetablecarpenters.pocketcalendar;
 
+import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -126,6 +132,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         setOrderedEventStarts();
         setOrderedEventEnds();
         initiateRelativeLayouts();
+        createNotificationChannel();
 
         FloatingActionButton fab = findViewById(R.id.add_event_button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -577,6 +584,12 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                         Toast.makeText(DayActivity.this, "Event successfully added", Toast.LENGTH_SHORT).show();
                     addEventDialog.dismiss();
                 }
+                    Intent intent = new Intent(DayActivity.this,ReminderBroadCast.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(DayActivity.this,0,intent,0);
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                    long timeAtButtonClick = System.currentTimeMillis();
+                    long tenSecondMillis = 1000*10;
+                    alarmManager.set(AlarmManager.RTC_WAKEUP,timeAtButtonClick+tenSecondMillis,pendingIntent);
                 if( repeat.isChecked()) {
                     repetition_type.setEnabled(false);
                     number_of_repetitions.setEnabled(false);
@@ -1100,6 +1113,14 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         catch(Exception ex)
         {
             return 0;
+        }
+    }
+    public void createNotificationChannel(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel("channel","channel1", NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("simple channel");
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 }
