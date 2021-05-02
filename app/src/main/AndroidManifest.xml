@@ -56,7 +56,6 @@
             android:theme="@style/Theme.PocketCalendar.NoActionBar"
             android:label="EventView"/>
         <activity
-
             android:screenOrientation="portrait"
             android:name=".CustomizableScreen2"
             android:label="Customise"
@@ -92,6 +91,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AddEvent"
+            android:label="Add Event"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.PocketCalendar.NoActionBar"/>
 
         <service
             android:name=".WidgetService"
