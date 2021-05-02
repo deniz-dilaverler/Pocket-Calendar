@@ -578,10 +578,11 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                     addEventDialog.dismiss();
                 }
                 if( repeat.isChecked()) {
+                    repetition_type.setEnabled(false);
+                    number_of_repetitions.setEnabled(false);
                     if (number_of_repetitions != null && repetitionType != null) {
                         int times = ConvertIntoNumeric(number_of_repetitions.toString());
-                        saveData();
-                        loadData();
+
                         if (repetitionType.equalsIgnoreCase("Monthly")) {
                             Calendar newEventStart = addedEvent.getEventStart();
                             Calendar newEventEnd = addedEvent.getEventEnd();
@@ -589,8 +590,10 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                             for (int i = 0; i< times;i++) {
                                 newEventStart.add(Calendar.MONTH, 1);
                                 newEventEnd.add(Calendar.MONTH, 1);
+                                saveData();
+                                loadData();
                                 CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
-                                        addedEvent.getId() + i * 1000, addedEvent.getType());
+                                        eventID, addedEvent.getType());
                                 newEvent.setColor(addedEvent.getColor());
                                 newEvent.setLocation(addedEvent.getLocation());
                                 newEvent.setNotes(addedEvent.getNotes());
@@ -605,8 +608,10 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                             for (int i = 0; i< times;i++) {
                                 newEventStart.add(Calendar.DAY_OF_MONTH, 1);
                                 newEventEnd.add(Calendar.DAY_OF_MONTH, 1);
+                                saveData();
+                                loadData();
                                 CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
-                                        addedEvent.getId() + i * 1000, addedEvent.getType());
+                                        eventID, addedEvent.getType());
                                 newEvent.setColor(addedEvent.getColor());
                                 newEvent.setLocation(addedEvent.getLocation());
                                 newEvent.setNotes(addedEvent.getNotes());
@@ -621,8 +626,10 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                             for (int i = 0; i< times;i++) {
                                 newEventStart.add(Calendar.YEAR, 7);
                                 newEventEnd.add(Calendar.YEAR, 7);
+                                saveData();
+                                loadData();
                                 CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
-                                        addedEvent.getId() + i * 1000, addedEvent.getType());
+                                        eventID, addedEvent.getType());
                                 newEvent.setColor(addedEvent.getColor());
                                 newEvent.setLocation(addedEvent.getLocation());
                                 newEvent.setNotes(addedEvent.getNotes());
@@ -637,8 +644,10 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                             for (int i = 0; i< times;i++) {
                                 newEventStart.add(Calendar.DAY_OF_MONTH,7);
                                 newEventEnd.add(Calendar.DAY_OF_MONTH,7);
-                                CalendarEvent newEvent = new CalendarEvent(newEventStart,newEventEnd, addedEvent.getName(),
-                                        addedEvent.getId() + i*1000, addedEvent.getType());
+                                saveData();
+                                loadData();
+                                CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
+                                        eventID, addedEvent.getType());
                                 newEvent.setColor(addedEvent.getColor());
                                 newEvent.setLocation(addedEvent.getLocation());
                                 newEvent.setNotes(addedEvent.getNotes());
@@ -675,8 +684,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getId() == R.id.event_type_spinner)
             addedEvent.setType(parent.getItemAtPosition(position).toString());
-        else if (parent.getId() == R.id.repetition_type)
-            //todo
+        else if (parent.getId() == R.id.repetition_type) {
+            String repetitionType = parent.getItemAtPosition(position).toString();
+        }
         if (parent.getId() == R.id.notifications_spinner)
             notifType = parent.getItemAtPosition(position).toString();
     }
