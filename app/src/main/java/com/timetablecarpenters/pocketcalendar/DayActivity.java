@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-<<<<<<< HEAD
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,10 +14,10 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-=======
+
 import android.content.Intent;
 import android.content.SharedPreferences;
->>>>>>> eventAddActivity
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -146,7 +145,7 @@ public class DayActivity extends BaseActivity  {
         editInTextFont( findViewById( R.id.textView8));
 
         FloatingActionButton fab = findViewById(R.id.add_event_button);
-<<<<<<< HEAD
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -540,27 +539,7 @@ public class DayActivity extends BaseActivity  {
 
         notes = (EditText) commonItemsView.findViewById(R.id.add_notes);
         editParagraphFont(notes);
-        /*
-        // initialize Location editing UI elements
-        mapFragment = (MapFragment) (getSupportFragmentManager().findFragmentById(R.id.map_fragment));
-        locationSelect = (Button) commonItemsView.findViewById(R.id.open_map);
-        // show the location on the map if the user has chosen one
-        if(addedEvent.getLocation()!= null) {
-            mapFragment.moveToLocation(addedEvent.getLocation());
-        }
 
-        if(GoogleMapsAvailability.isServicesOK(this)) {
-            locationSelect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(DayActivity.this, MapActivity.class);
-                    intent.putExtra(MAPS_INTENT_KEY, addedEvent);
-                    intent.putExtra(MapActivity.INTENT_ID_KEY, ACTIVITY_NAME);
-                    startActivity(intent);
-                }
-            });
-        }
-        */
         save = (Button) commonItemsView.findViewById(R.id.add_event_save);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -758,13 +737,6 @@ public class DayActivity extends BaseActivity  {
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-
-
-
-
-
-
-
 
 
 
@@ -1017,7 +989,7 @@ public class DayActivity extends BaseActivity  {
                     layout.addView(textView, layoutParams);
 
 
-<<<<<<< HEAD
+
                     int finalI1 = i;
                     textView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -1026,13 +998,13 @@ public class DayActivity extends BaseActivity  {
                             Intent intent = new Intent(DayActivity.this, EventActivity.class);
                             intent.putExtra(EventActivity.EVENT_VIEW_INTENT_KEY, allEventsChron[finalI1] );
                             startActivity(intent);
-=======
+
 
                     textView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             
->>>>>>> eventAddActivity
+
                         }
                     });
                 }
@@ -1208,7 +1180,7 @@ public class DayActivity extends BaseActivity  {
             return 0;
         }
     }
-<<<<<<< HEAD
+
     public void createNotificationChannel(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel("channel","channel1", NotificationManager.IMPORTANCE_HIGH);
@@ -1267,7 +1239,7 @@ public class DayActivity extends BaseActivity  {
                     startActivity(intent);
                     break;
             }
->>>>>>> eventAddActivity
+
         }
     }
     private long compareDates(Calendar calendar1, Calendar calendar2){
