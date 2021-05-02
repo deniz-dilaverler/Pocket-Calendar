@@ -335,12 +335,11 @@ public class DayActivity extends BaseActivity  {
                     layout.addView(textView, layoutParams);
 
 
-                    int finalI = i;
+
                     textView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            textView.setText("POG");
-                            openEventDialog(allEventsChron[finalI]);
+                            
                         }
                     });
                 }

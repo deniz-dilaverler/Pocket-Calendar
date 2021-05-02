@@ -29,6 +29,7 @@ import java.util.Calendar;
 public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     public static final String DATE_KEY = "Date";
+    public static final String ADD_ACTIVITY_NAME = "add_activity";
     public static final String TAG = "AddEventActivity";
     public static final String EVENT_ID_PREF = "eventID";
     public static final String EVENT_ID_VALUE = "value";
@@ -466,8 +467,8 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(AddEvent.this, MapActivity.class);
-                    intent.putExtra(MAPS_INTENT_KEY, addedEvent);
-                    intent.putExtra(MapActivity.INTENT_ID_KEY, ACTIVITY_NAME);
+                    intent.putExtra(MapActivity.EVENT_KEY, addedEvent);
+                    intent.putExtra(MapActivity.INTENT_ID_KEY, ADD_ACTIVITY_NAME);
                     startActivity(intent);
                 }
             });
