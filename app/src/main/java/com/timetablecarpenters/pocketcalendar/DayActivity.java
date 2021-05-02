@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -448,6 +449,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private void addCommonItems() {
         final View commonItemsView = getLayoutInflater().inflate(R.layout.add_event_common_items, null);
 
+        // initialize the spinner for notifications
         notification_spinner = (Spinner) commonItemsView.findViewById(R.id.notifications_spinner);
         ArrayAdapter<String> notificationTimesAdapter = new ArrayAdapter<>(DayActivity.this,
                 android.R.layout.simple_spinner_item,
@@ -455,10 +457,12 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         notification_spinner.setAdapter(notificationTimesAdapter);
         notification_spinner.setEnabled(false);
 
+        // initialize the checkbox for notifications
         notification = (CheckBox) commonItemsView.findViewById(R.id.notification_checkbox);
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // disable spinner when checkbox is not checked
                 if (notification.isChecked())
                     notification_spinner.setEnabled(true);
                 else
@@ -481,13 +485,34 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // enable all buttons except the one clicked
                     for ( Button d : colour_buttons) {
                         d.setEnabled(true);
                     }
                     b.setEnabled(false);
-                    Toast.makeText(DayActivity.this, "Color chosen",
-                            Toast.LENGTH_SHORT).show();
-                    // set event colour
+
+                    // check which color is choosen
+                    if (b.getId() == R.id.colour_ligth_blue)
+                        addedEvent.setColor(R.color.ligth_blue);
+                    else if (b.getId() == R.id.colour_blue)
+                        addedEvent.setColor(R.color.dark_blue);
+                    else if (b.getId() == R.id.colour_purple)
+                        addedEvent.setColor(R.color.purple);
+                    else if (b.getId() == R.id.colour_pink)
+                        addedEvent.setColor(R.color.pink);
+                    else if (b.getId() == R.id.colour_red)
+                        addedEvent.setColor(R.color.red);
+                    else if (b.getId() == R.id.colour_orange)
+                        addedEvent.setColor(R.color.orange);
+                    else if (b.getId() == R.id.colour_yellow)
+                        addedEvent.setColor(R.color.yellow);
+                    else if (b.getId() == R.id.colour_green)
+                        addedEvent.setColor(R.color.green);
+
+                    // create message to inform the user
+                    if (addedEvent.getColor() != R.color.primary_text)
+                        Toast.makeText(DayActivity.this, "Colour chosen",
+                                Toast.LENGTH_SHORT).show();
                 }
             });
         }
