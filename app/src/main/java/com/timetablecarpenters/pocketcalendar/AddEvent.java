@@ -56,6 +56,7 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
     private MapFragment mapFragment;
     LayoutInflater layoutInflater;
     private View addEventView;
+    private ArrayAdapter<String> eventTypesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
             try {
                 addedEvent = (CalendarEvent) extras.get(MapActivity.EVENT_KEY);
                 Log.d(TAG, "onCreate: event called back!");
+                setAddEventView();
             } catch (Exception e) {
                 Log.d(TAG, "onCreate: no event came out of intent " + e);
             }
@@ -95,9 +97,9 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
         final View typeAndNameView = layoutInflater.inflate(R.layout.add_event_type_and_name_item, null);
 
         event_type_spinner = (Spinner) typeAndNameView.findViewById(R.id.event_type_spinner);
-        ArrayAdapter<String> eventNamesAdapter = new ArrayAdapter<>(AddEvent.this,
+        eventTypesAdapter = new ArrayAdapter<>(AddEvent.this,
                 android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.event_types));
-        event_type_spinner.setAdapter(eventNamesAdapter);
+        event_type_spinner.setAdapter(eventTypesAdapter);
         event_type_spinner.setOnItemSelectedListener(this);
         event_name = (EditText) typeAndNameView.findViewById(R.id.add_event_name);
         // editParagraphFont(event_name);
@@ -707,11 +709,24 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
         }
     }
 
+    public void setAddEventView() {
+        event_type_spinner.setSelection(eventTypesAdapter.getPosition(addedEvent.getType()));
+        event_name.setText(addedEvent.getName());
+        event_date.setText(formattedMonth(addedEvent.getMonth()) + " " + addedEvent.getDay() + " " + addedEvent.getYear());
+        if (addedEvent.getType().equals("Assignment"))
+            event_due_time.setText(addedEvent.getEventStartTime());
+        else {
+            event_start.setText(addedEvent.getEventStartTime());
+            event_end.setText(addedEvent.getEventEndTime());
+        }
+        notes.setText(addedEvent.getNotes());
+    }
+
 
     /**
      * Edits the font sizes of textViews according to settings
      * It changes the font sizes of in-texts
-     * @param text is the hour of the day
+     *  text is the hour of the day
      */
     /*
     public void editInTextFont(TextView text){
@@ -734,7 +749,7 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
     /**
      * Edits the font sizes of textViews according to settings
      * It changes the font sizes of paragraphs
-     * @param text is the hour of the day
+     *  text is the hour of the day
      *//*
     public void editParagraphFont(TextView text){
         SharedPreferences sp = getApplicationContext().getSharedPreferences("paragraphPref", MODE_PRIVATE);
