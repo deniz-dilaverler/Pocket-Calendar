@@ -93,6 +93,7 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
 
         if(addedEvent == null)
             addedEvent = new CalendarEvent(null, null, null, eventID, null);
+            addedEvent.setColor(R.color.primary_text);
 
         final View typeAndNameView = layoutInflater.inflate(R.layout.add_event_type_and_name_item, null);
 
@@ -709,9 +710,14 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
         }
     }
 
+    /**
+     * Sets options for the current event
+     */
     public void setAddEventView() {
+        Log.d(TAG, "setAddEventView: nonono");
         event_type_spinner.setSelection(eventTypesAdapter.getPosition(addedEvent.getType()));
         event_name.setText(addedEvent.getName());
+        next.performClick();
         event_date.setText(formattedMonth(addedEvent.getMonth()) + " " + addedEvent.getDay() + " " + addedEvent.getYear());
         if (addedEvent.getType().equals("Assignment"))
             event_due_time.setText(addedEvent.getEventStartTime());
