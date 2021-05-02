@@ -25,7 +25,7 @@ public class SettingsFragment extends PreferenceFragment {
     private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
     public static final String IN_TEXT_FONT_SIZE = "In_text_font_size";
     public static final String PARAGRAPH_FONT_SIZE = "Paragraph_font_size";
-    public static final String NOTIFICATION_SOUND = "Notification_sound";
+
     public static final String RESET_BUTTON = "resetButton";
     public static final String SMALL = "Small";
     public static final String MEDIUM = "Medium";
@@ -98,20 +98,6 @@ public class SettingsFragment extends PreferenceFragment {
                     //editor.apply();
                     Toast.makeText(getContext(),"Font size is selected",Toast.LENGTH_LONG).show();
                 }
-                if(key.equals(NOTIFICATION_SOUND))
-                {
-                    Preference notifSound = findPreference(key);
-                    notifSound.setSummary(sharedPreferences.getString(key,""));
-                    ListPreference notifList = (ListPreference) notifSound;
-
-                    SharedPreferences notifPref;
-                    notifPref = getContext().getSharedPreferences("notifPref", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = notifPref.edit();
-                    editor.putString("notificationSound", notifList.getValue());
-                    editor.commit();
-                    //editor.apply();
-                    Toast.makeText(getContext(),"Sound is selected",Toast.LENGTH_LONG).show();
-                }
                 if(key.equals(RESET_BUTTON))
                 {
                     Preference reset = findPreference(key);
@@ -134,11 +120,11 @@ public class SettingsFragment extends PreferenceFragment {
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(preferenceChangeListener);
         Preference inText = findPreference(IN_TEXT_FONT_SIZE);
         Preference paragraphText = findPreference(PARAGRAPH_FONT_SIZE);
-        Preference notifSound = findPreference(NOTIFICATION_SOUND);
+
 
         inText.setSummary(getPreferenceScreen().getSharedPreferences().getString(IN_TEXT_FONT_SIZE,""));
         paragraphText.setSummary(getPreferenceScreen().getSharedPreferences().getString(PARAGRAPH_FONT_SIZE,""));
-        notifSound.setSummary(getPreferenceScreen().getSharedPreferences().getString(NOTIFICATION_SOUND,""));
+
 
         dbHelper = new DBHelper(getContext(),DBHelper.DB_NAME, null);
         dbHelper.resetDb(null);
