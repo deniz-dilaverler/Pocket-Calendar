@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -448,6 +449,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private void addCommonItems() {
         final View commonItemsView = getLayoutInflater().inflate(R.layout.add_event_common_items, null);
 
+        // initialize the spinner for notifications
         notification_spinner = (Spinner) commonItemsView.findViewById(R.id.notifications_spinner);
         ArrayAdapter<String> notificationTimesAdapter = new ArrayAdapter<>(DayActivity.this,
                 android.R.layout.simple_spinner_item,
@@ -455,10 +457,12 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         notification_spinner.setAdapter(notificationTimesAdapter);
         notification_spinner.setEnabled(false);
 
+        // initialize the checkbox for notifications
         notification = (CheckBox) commonItemsView.findViewById(R.id.notification_checkbox);
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // disable spinner when checkbox is not checked
                 if (notification.isChecked())
                     notification_spinner.setEnabled(true);
                 else
@@ -481,13 +485,34 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // enable all buttons except the one clicked
                     for ( Button d : colour_buttons) {
                         d.setEnabled(true);
                     }
                     b.setEnabled(false);
-                    Toast.makeText(DayActivity.this, "Color chosen",
-                            Toast.LENGTH_SHORT).show();
-                    // set event colour
+
+                    // check which color is choosen
+                    if (b.getId() == R.id.colour_ligth_blue)
+                        addedEvent.setColor(R.color.ligth_blue);
+                    else if (b.getId() == R.id.colour_blue)
+                        addedEvent.setColor(R.color.dark_blue);
+                    else if (b.getId() == R.id.colour_purple)
+                        addedEvent.setColor(R.color.purple);
+                    else if (b.getId() == R.id.colour_pink)
+                        addedEvent.setColor(R.color.pink);
+                    else if (b.getId() == R.id.colour_red)
+                        addedEvent.setColor(R.color.red);
+                    else if (b.getId() == R.id.colour_orange)
+                        addedEvent.setColor(R.color.orange);
+                    else if (b.getId() == R.id.colour_yellow)
+                        addedEvent.setColor(R.color.yellow);
+                    else if (b.getId() == R.id.colour_green)
+                        addedEvent.setColor(R.color.green);
+
+                    // create message to inform the user
+                    if (addedEvent.getColor() != R.color.primary_text)
+                        Toast.makeText(DayActivity.this, "Colour chosen",
+                                Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -553,19 +578,23 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                     addEventDialog.dismiss();
                 }
                 if( repeat.isChecked()) {
+                    repetition_type.setEnabled(false);
+                    number_of_repetitions.setEnabled(false);
                     if (number_of_repetitions != null && repetitionType != null) {
-                        int times = ConvertIntoNumeric(number_of_repetitions.toString());
-                        saveData();
-                        loadData();
+                        int number = Integer.parseInt(number_of_repetitions.getText().toString());
+                        Log.d(TAG, "onClick: repetition number " + number );
+
                         if (repetitionType.equalsIgnoreCase("Monthly")) {
                             Calendar newEventStart = addedEvent.getEventStart();
                             Calendar newEventEnd = addedEvent.getEventEnd();
                             DBHelper dbHelper = new DBHelper(DayActivity.this,DBHelper.DB_NAME,null);
-                            for (int i = 0; i< times;i++) {
+                            for (int i = 0; i< number;i++) {
                                 newEventStart.add(Calendar.MONTH, 1);
                                 newEventEnd.add(Calendar.MONTH, 1);
+                                saveData();
+                                loadData();
                                 CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
-                                        addedEvent.getId() + i * 1000, addedEvent.getType());
+                                        eventID, addedEvent.getType());
                                 newEvent.setColor(addedEvent.getColor());
                                 newEvent.setLocation(addedEvent.getLocation());
                                 newEvent.setNotes(addedEvent.getNotes());
@@ -577,11 +606,14 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                             Calendar newEventStart = addedEvent.getEventStart();
                             Calendar newEventEnd = addedEvent.getEventEnd();
                             DBHelper dbHelper = new DBHelper(DayActivity.this,DBHelper.DB_NAME,null);
-                            for (int i = 0; i< times;i++) {
+                            Log.d(TAG, "onClick: database helper intialized");
+                            for (int i = 0; i< number;i++) {
                                 newEventStart.add(Calendar.DAY_OF_MONTH, 1);
                                 newEventEnd.add(Calendar.DAY_OF_MONTH, 1);
+                                saveData();
+                                loadData();
                                 CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
-                                        addedEvent.getId() + i * 1000, addedEvent.getType());
+                                        eventID, addedEvent.getType());
                                 newEvent.setColor(addedEvent.getColor());
                                 newEvent.setLocation(addedEvent.getLocation());
                                 newEvent.setNotes(addedEvent.getNotes());
@@ -593,11 +625,13 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                             Calendar newEventStart = addedEvent.getEventStart();
                             Calendar newEventEnd = addedEvent.getEventEnd();
                             DBHelper dbHelper = new DBHelper(DayActivity.this,DBHelper.DB_NAME,null);
-                            for (int i = 0; i< times;i++) {
+                            for (int i = 0; i< number;i++) {
                                 newEventStart.add(Calendar.YEAR, 7);
                                 newEventEnd.add(Calendar.YEAR, 7);
+                                saveData();
+                                loadData();
                                 CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
-                                        addedEvent.getId() + i * 1000, addedEvent.getType());
+                                        eventID, addedEvent.getType());
                                 newEvent.setColor(addedEvent.getColor());
                                 newEvent.setLocation(addedEvent.getLocation());
                                 newEvent.setNotes(addedEvent.getNotes());
@@ -609,11 +643,13 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                             Calendar newEventStart = addedEvent.getEventStart();
                             Calendar newEventEnd = addedEvent.getEventEnd();
                             DBHelper dbHelper = new DBHelper(DayActivity.this,DBHelper.DB_NAME,null);
-                            for (int i = 0; i< times;i++) {
+                            for (int i = 0; i< number;i++) {
                                 newEventStart.add(Calendar.DAY_OF_MONTH,7);
                                 newEventEnd.add(Calendar.DAY_OF_MONTH,7);
-                                CalendarEvent newEvent = new CalendarEvent(newEventStart,newEventEnd, addedEvent.getName(),
-                                        addedEvent.getId() + i*1000, addedEvent.getType());
+                                saveData();
+                                loadData();
+                                CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
+                                        eventID, addedEvent.getType());
                                 newEvent.setColor(addedEvent.getColor());
                                 newEvent.setLocation(addedEvent.getLocation());
                                 newEvent.setNotes(addedEvent.getNotes());
@@ -650,8 +686,9 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getId() == R.id.event_type_spinner)
             addedEvent.setType(parent.getItemAtPosition(position).toString());
-        else if (parent.getId() == R.id.repetition_type)
-            //todo
+        else if (parent.getId() == R.id.repetition_type) {
+            repetitionType = parent.getItemAtPosition(position).toString();
+        }
         if (parent.getId() == R.id.notifications_spinner)
             notifType = parent.getItemAtPosition(position).toString();
     }
