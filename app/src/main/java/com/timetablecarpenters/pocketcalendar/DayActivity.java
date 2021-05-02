@@ -37,8 +37,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private static final String TAG = "DayActivity";
     public static final String EVENT_ID_PREF = "eventID";
     public static final String EVENT_ID_VALUE = "value";
-    private AlertDialog.Builder addEventBuilder;
-    private AlertDialog addEventDialog;
+    private AlertDialog.Builder addEventBuilder, eventBuilder;
+    private AlertDialog addEventDialog, eventDialog;
     private Spinner event_type_spinner, notification_spinner;
     private Spinner repetition_type, color_spinner;
     private TextView event_due_time, event_date, event_start, event_end;
@@ -203,7 +203,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                 android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.event_types));
         event_type_spinner.setAdapter(eventNamesAdapter);
         event_type_spinner.setOnItemSelectedListener(this);
-        event_name = (EditText) typeAndNameView.findViewById(R.id.event_name_edit);
+        event_name = (EditText) typeAndNameView.findViewById(R.id.add_event_name);
         editParagraphFont(event_name);
         addEventPopupView.addView(typeAndNameView);
     }
@@ -216,7 +216,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         final View dueDateView = getLayoutInflater().inflate(R.layout.add_event_due_date_item, null);
 
         // Displays a dialog to pick a date
-        event_date = (TextView) dueDateView.findViewById(R.id.due_date);
+        event_date = (TextView) dueDateView.findViewById(R.id.add_due_date);
         event_date.setText(getTodaysDate());
         eventDate = (Calendar) thisDay.clone();
 
@@ -244,7 +244,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         };
 
         // Displays a dialog to pick time
-        event_due_time = (TextView) dueDateView.findViewById(R.id.due_time);
+        event_due_time = (TextView) dueDateView.findViewById(R.id.add_due_time);
         event_due_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -280,7 +280,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         final View intervalView = getLayoutInflater().inflate(R.layout.add_event_interval_item, null);
 
         // Displays a dialog to pick a date
-        event_date = (TextView) intervalView.findViewById(R.id.event_date);
+        event_date = (TextView) intervalView.findViewById(R.id.add_event_date);
         event_date.setText(getTodaysDate());
         eventDate = (Calendar) thisDay.clone();
 
@@ -418,7 +418,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             repetition_type.setAdapter(repetitionTypesAdapter);
             repetition_type.setOnItemSelectedListener(DayActivity.this);
             repetition_type.setEnabled(false);
-            number_of_repetitions = (EditText) repetitionView.findViewById(R.id.num_of_reperitions);
+            number_of_repetitions = (EditText) repetitionView.findViewById(R.id.num_of_repetitions);
             number_of_repetitions.setEnabled(false);
 
             // displays repetition options if the box is checked
@@ -492,7 +492,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             });
         }
 
-        notes = (EditText) commonItemsView.findViewById(R.id.notes);
+        notes = (EditText) commonItemsView.findViewById(R.id.add_notes);
         editParagraphFont(notes);
         /*
         // initialize Location editing UI elements
@@ -515,7 +515,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             });
         }
         */
-        save = (Button) commonItemsView.findViewById(R.id.add_event_done);
+        save = (Button) commonItemsView.findViewById(R.id.add_event_save);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -828,16 +828,55 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                     layout.addView(textView, layoutParams);
 
 
+                    int finalI = i;
                     textView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             textView.setText("POG");
-
+                            openEventDialog(allEventsChron[finalI]);
                         }
                     });
                 }
             }
         }
+    }
+
+    /**
+     * Opens a popup that shows information about the event
+     * @param event
+     */
+    private void openEventDialog(CalendarEvent event) {
+        eventBuilder = new AlertDialog.Builder(this);
+        final View eventView = getLayoutInflater().inflate(R.layout.event_view, null);
+
+        TextView eventName = (TextView) eventView.findViewById(R.id.event_name);
+        eventName.setText(event.getName());
+
+        TextView eventType = (TextView) eventView.findViewById(R.id.event_type);
+        eventType.setText(event.getType());
+
+        TextView eventTime = (TextView) eventView.findViewById(R.id.event_time);
+        if (event.getEventEnd().equals(event.getEventStart())) {
+            eventTime.setText(event.getEventStartTime());
+        }
+        else {
+            eventTime.setText(event.getEventStartTime() + " - " + event.getEventEndTime());
+        }
+
+        TextView eventNotifications = (TextView) eventView.findViewById(R.id.event_notifications);
+        if (event.getNotifTime() != null)
+            eventNotifications.setText("Notifications" + event.getNotifTime());
+
+        TextView eventNotes = (TextView) eventView.findViewById(R.id.event_notes);
+        if (event.getNotes() != null) {
+            eventNotes.setText("Notes: " + event.getNotes());
+        }
+
+        //todo initialize buttons
+
+        eventBuilder.setView(eventView);
+        eventDialog = eventBuilder.create();
+        eventDialog.show();
     }
 
     private Calendar discriminateEvent( CalendarEvent event, boolean b) {

@@ -134,7 +134,7 @@
         app:layout_constraintTop_toBottomOf="@+id/add_event_notification" />
 
     <EditText
-        android:id="@+id/notes"
+        android:id="@+id/add_notes"
         android:layout_width="200dp"
         android:layout_height="59dp"
         android:layout_marginEnd="16dp"
@@ -154,10 +154,10 @@
         android:text="Location"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notes" />
+        app:layout_constraintTop_toBottomOf="@+id/add_notes" />
 
     <Button
-        android:id="@+id/add_event_done"
+        android:id="@+id/add_event_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

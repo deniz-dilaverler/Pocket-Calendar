@@ -18,16 +18,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/due_date"
+        android:id="@+id/add_due_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:text="currentDay"
         app:layout_constraintBaseline_toBaselineOf="@+id/add_event_due_date"
-        app:layout_constraintEnd_toStartOf="@+id/due_time" />
+        app:layout_constraintEnd_toStartOf="@+id/add_due_time" />
 
     <TextView
-        android:id="@+id/due_time"
+        android:id="@+id/add_due_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
