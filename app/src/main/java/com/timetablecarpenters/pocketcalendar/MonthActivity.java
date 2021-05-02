@@ -4,18 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 
 import org.w3c.dom.Text;
 
@@ -82,10 +76,10 @@ public class MonthActivity extends BaseActivity {
         insertEvents();
         pullEvents( database.getEventsInAnIntervalInArray( calendar1, calendar2));
         initiateWeeks();
-        /*
-        View someView = findViewById( R.id.background);
-        View root = someView.getRootView();
-        root.setBackgroundColor( CustomizableScreen2.backgroundColor);*/
+
+        View someView = findViewById( R.id.back_background);
+        someView.setBackgroundColor( CustomizableScreen2.backgroundColor);
+        setOtherTexts();
     }
     /**
      * Reports the name of the month according to the number
@@ -199,7 +193,22 @@ public class MonthActivity extends BaseActivity {
             return CustomizableScreen2.textColor;
         }
         else {
-            return Color.BLACK;
+            CustomizableScreen2.initiate();
+            return CustomizableScreen2.textColor;
+        }
+    }
+    /**
+     * Sets the text colors to a specific value (For testing purposes only)
+     * @author Alperen
+     * @return int color value
+     */
+    private int getButtonColor() {
+        if (CustomizableScreen2.buttonBackgroundColor != 0) {
+            return CustomizableScreen2.buttonBackgroundColor;
+        }
+        else {
+            CustomizableScreen2.initiate();
+            return CustomizableScreen2.buttonBackgroundColor;
         }
     }
     /**
@@ -231,7 +240,7 @@ public class MonthActivity extends BaseActivity {
             if (eventCountDays[dayCount] != null) {
                 addCircles(eventCountDays[dayCount], day);
             }
-
+            backG.setBackgroundColor( getButtonColor());
             date.setText(str);
             date.setTextColor(getBackGColor());
             day.setOnClickListener(new View.OnClickListener() {
@@ -435,6 +444,18 @@ public class MonthActivity extends BaseActivity {
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         finish();
+    }
+    private void setOtherTexts() {
+        int color = getBackGColor();
+        ( ( Button)findViewById( R.id.daily_button)).setTextColor( color);
+        ( ( Button)findViewById( R.id.daily_button)).setBackgroundColor( getButtonColor());
+        ( ( Button)findViewById( R.id.weekly_button)).setTextColor( color);
+        ( ( Button)findViewById( R.id.weekly_button)).setBackgroundColor( getButtonColor());
+        ( ( Button)findViewById( R.id.monthly_button)).setTextColor( color);
+        ( ( Button)findViewById( R.id.monthly_button)).setBackgroundColor( getButtonColor());
+        ( ( TextView)findViewById( R.id.dateText)).setTextColor( color);
+
+
     }
     /**
      * TO CREATE EVENTS ----  TEST ONLY Method.

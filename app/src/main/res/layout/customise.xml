@@ -38,6 +38,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
+        android:background="#FFFFFF"
         android:text="@string/a"
         android:textAlignment="center"
         android:textColor="#000000"
@@ -139,5 +140,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/default6" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="272dp"
+        android:layout_marginTop="437dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginBottom="22dp"
+        android:background="#000000"
+        android:text="Apply"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/default5"
+        app:rippleColor="#000000" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
