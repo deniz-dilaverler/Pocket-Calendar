@@ -156,8 +156,10 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         scrollView = (ScrollView) getLayoutInflater().inflate(R.layout.add_event_popup,null);
         addEventPopupView = (LinearLayout) scrollView.findViewById(R.id.add_event_linear);
 
-        if(addedEvent == null)
+        if(addedEvent == null) {
             addedEvent = new CalendarEvent(null, null, null, eventID, null);
+            addedEvent.setColor(R.color.primary_text);
+        }
         addNameAndType();
 
         // Next button removes itself from the popup if event type and name are given
@@ -585,7 +587,10 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                         Toast.makeText(DayActivity.this, "Event already exists", Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(DayActivity.this, "Event successfully added", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(DayActivity.this, DayActivity.class);
+                    intent.putExtra(INTENT_KEY, thisDay );
                     addEventDialog.dismiss();
+                    startActivity(intent);
                 }
                     Intent intent = new Intent(DayActivity.this,ReminderBroadCast.class);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(DayActivity.this,0,intent,0);
@@ -912,6 +917,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         text.setTextColor( getBackGColor());
 
         View recent = layout;
+        // i is a global variable so that the clickListener can see the value
         for ( int i = 0; i < allEventsChron.length ; i++) {
             if ( allEventsChron[i] != null) {
                 if (isEventStart[i]) {
@@ -938,12 +944,14 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                     layout.addView(textView, layoutParams);
 
 
-                    int finalI = i;
+                    int finalI1 = i;
                     textView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            textView.setText("POG");
-                            openEventDialog(allEventsChron[finalI]);
+                            Log.d(TAG, "onClick: event clicked");
+                            Intent intent = new Intent(DayActivity.this, EventActivity.class);
+                            intent.putExtra(EventActivity.EVENT_VIEW_INTENT_KEY, allEventsChron[finalI1] );
+                            startActivity(intent);
                         }
                     });
                 }

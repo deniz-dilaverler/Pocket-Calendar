@@ -56,8 +56,7 @@ public class WeekActivity extends BaseActivity {
             today.setFirstDayOfWeek(Calendar.MONDAY);
             // "calculate" the start date of the week
             first = (Calendar) today.clone();
-            first.add(Calendar.DAY_OF_WEEK,
-                    first.getFirstDayOfWeek() - first.get(Calendar.DAY_OF_WEEK));
+            first.set(Calendar.DAY_OF_WEEK, first.getFirstDayOfWeek());
         }
         // and add six days to the end date
         last = (Calendar) first.clone();

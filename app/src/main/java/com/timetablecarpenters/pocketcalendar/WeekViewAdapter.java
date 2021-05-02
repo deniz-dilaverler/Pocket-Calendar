@@ -42,13 +42,18 @@ public class WeekViewAdapter extends CursorAdapter {
         TextView eventText = (TextView) view.findViewById(R.id.event_text);
         String timeTextString;
         String eventEndString;
+        int color;
 
         timeTextString = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_START));
         eventEndString = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_END));
+        color = cursor.getInt(cursor.getColumnIndex(DBHelper.COLOR));
+
         if (eventEndString != null && !eventEndString.equalsIgnoreCase(timeTextString)) {
             timeTextString = timeTextString + " - " + eventEndString;
         }
         timeText.setText(timeTextString);
+        timeText.setTextColor(color);
         eventText.setText(cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_NAME)));
+        eventText.setTextColor(color);
     }
 }

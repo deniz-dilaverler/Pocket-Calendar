@@ -192,12 +192,12 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return Whether deletion was succesful or not
      */
     public boolean deleteEvent(CalendarEvent event) {
-        String sqlStatement = "Delete * From " + EVENTS_TABLE + " where " + YEAR + " = " + event.getYear() + " AND "
+        String sqlStatement = "DELETE FROM " + EVENTS_TABLE + " WHERE " + YEAR + " = " + event.getYear() + " AND "
                                                                         + MONTH + " = " + event.getMonth() + " AND "
                                                                         + DAY + " = " + event.getDay() + " AND "
-                                                                        + EVENT_NAME + " = " + event.getName() + " AND "
-                                                                        + EVENT_START + " = " + event.getEventStartTime() + " AND "
-                                                                        + EVENT_END + " = " + event.getEventEndTime() + " ;";
+                                                                        + EVENT_NAME + " = '" + event.getName() + "' AND "
+                                                                        + EVENT_START + " = '" + event.getEventStartTime() + "' AND "
+                                                                        + EVENT_END + " = '" + event.getEventEndTime() + "' ;";
         SQLiteDatabase db = getWritableDatabase();
          if (!checkIsDataAlreadyInDB(event)) {
              return false;
@@ -215,7 +215,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return Cursor that houses the data of an event.
      */
     public Cursor getEventsInAnInterval(Calendar from, Calendar to) {
-        String queryStart = "Select * from " + EVENTS_TABLE + " where ";
+        String queryStart = "SELECT * FROM " + EVENTS_TABLE + " WHERE ";
         String queryMiddle;
 
         if (to.getTime().getTime() - from.getTime().getTime() < 0)

@@ -73,6 +73,7 @@ public class UpComingEventsAdapter extends CursorAdapter {
         int day = cursor.getInt(cursor.getColumnIndex(DBHelper.DAY));
         String title = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_NAME));
         String eventType = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_TYPE));
+        int color = cursor.getInt(cursor.getColumnIndex(DBHelper.COLOR));
 
         String dateTextString = String.format("%d.%d.%d", day, month + 1, year); //increment month by 1 because the db and the Calendar class stores month values starting from 0
         dateText.setText(dateTextString);
@@ -84,6 +85,7 @@ public class UpComingEventsAdapter extends CursorAdapter {
 
         String eventDescTextString = title + " (" + eventType + ")";
         eventDescText.setText(eventDescTextString);
+        eventDescText.setTextColor(color);
 
         String remainingTimeTextString;
         Calendar eventDate = Calendar.getInstance();

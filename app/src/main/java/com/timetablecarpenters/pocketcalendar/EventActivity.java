@@ -17,6 +17,7 @@ import org.w3c.dom.Text;
 import java.util.Calendar;
 
 public class EventActivity extends AppCompatActivity {
+    public final static String EVENT_VIEW_INTENT_KEY ="get_event";
     private CalendarEvent event;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,7 @@ public class EventActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras != null)
-            event = (CalendarEvent) extras.get(DayActivity.EVENT_KEY);
+            event = (CalendarEvent) extras.get(EVENT_VIEW_INTENT_KEY);
 
         if(event != null) {
             initEventView();
@@ -46,6 +47,7 @@ public class EventActivity extends AppCompatActivity {
         Button buttonEdit = (Button) content.findViewById(R.id.button_edit);
         Button buttonOpenMaps = (Button) content.findViewById(R.id.to_maps_button);
         TextView dateText = (TextView) content.findViewById(R.id.date_text_view);
+        TextView timeText = (TextView) content.findViewById(R.id.event_time);
 
         buttonDelete.setOnClickListener(new View.OnClickListener() {
             /**
@@ -59,6 +61,7 @@ public class EventActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(EventActivity.this, DayActivity.class);
                 intent.putExtra(DayActivity.INTENT_KEY, event.eventStart);
+                startActivity(intent);
             }
         });
         buttonEdit.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +79,11 @@ public class EventActivity extends AppCompatActivity {
         Calendar eventStart = event.getEventStart();
         String dateTextString = String.format("%d.%d.%d", eventStart.get(Calendar.DAY_OF_MONTH), eventStart.get(Calendar.MONTH ) + 1,  eventStart.get(Calendar.YEAR));
         dateText.setText(dateTextString);
-
+        // set time text
+        String timeTextString = event.getEventStartTime();
+        if (!timeTextString.equalsIgnoreCase(event.getEventEndTime()))
+            timeTextString += "-" + event.getEventEndTime();
+        timeText.setText(timeTextString);
         // set notes text
         String notesText = event.getNotes();
         if(notesText != null) {

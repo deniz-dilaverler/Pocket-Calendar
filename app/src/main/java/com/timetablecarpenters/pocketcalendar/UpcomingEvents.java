@@ -32,6 +32,7 @@ public class UpcomingEvents extends BaseActivity {
         today = Calendar.getInstance();
         ListView eventsList = (ListView) findViewById(R.id.events_list);
         dbHelper = new DBHelper(this, DBHelper.DB_NAME, null);
+
         Calendar maxDay = (Calendar) today.clone();
         maxDay.add(Calendar.DATE, TOTAL_DAYS);
         cursor = dbHelper.getEventsInAnInterval(today, maxDay);
