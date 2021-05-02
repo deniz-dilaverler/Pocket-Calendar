@@ -48,6 +48,11 @@ public class SettingsFragment extends PreferenceFragment {
                 public boolean onPreferenceClick(Preference preference) {
                     dbHelper = new DBHelper(getContext(),DBHelper.DB_NAME, null);
                     dbHelper.resetDb(null);
+                    ListPreference inText =(ListPreference) findPreference("In-text font size");
+                    ListPreference paragraph =(ListPreference) findPreference("Paragraph_font_size");
+                    inText.setValue(MEDIUM);
+                    paragraph.setValue(LARGE);
+
                     Toast.makeText(getContext(),"Calendar is reset",Toast.LENGTH_LONG).show();
                     return true;
                 }
