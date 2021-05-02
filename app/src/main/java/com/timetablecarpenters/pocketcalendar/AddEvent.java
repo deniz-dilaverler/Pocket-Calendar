@@ -628,7 +628,7 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
         repetition_type.setEnabled(false);
         number_of_repetitions.setEnabled(false);
         if (number_of_repetitions != null && repetitionType != null) {
-            int number = Integer.parseInt(number_of_repetitions.getText().toString());
+            int number = ConvertIntoNumeric(number_of_repetitions.getText().toString());
             Log.d(TAG, "onClick: repetition number " + number );
 
             if (repetitionType.equalsIgnoreCase("Monthly")) {
@@ -752,6 +752,16 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
             text.setTextSize(16);
         }
     }*/
-
+    private int ConvertIntoNumeric(String xVal)
+    {
+        try
+        {
+            return Integer.parseInt(xVal);
+        }
+        catch(Exception ex)
+        {
+            return 0;
+        }
+    }
 
 }
