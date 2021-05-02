@@ -14,13 +14,6 @@
         android:title="Coming Up"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/About_Devs"
-        android:orderInCategory="102"
-        android:title="About The Devs" />
-    <item
-        android:orderInCategory="103"
-        android:title="Achivements" />
-    <item
         android:id="@+id/customization"
         android:orderInCategory="104"
         android:title="Customization" />
