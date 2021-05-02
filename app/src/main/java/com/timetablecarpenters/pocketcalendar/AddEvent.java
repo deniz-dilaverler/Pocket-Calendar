@@ -529,123 +529,10 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
                         Toast.makeText(AddEvent.this, "Event successfully added", Toast.LENGTH_SHORT).show();
                 }
                 if ( notification.isChecked()) {
-                    String notificationSpinner = notification_spinner.getSelectedItem().toString();
-                    Intent intent = new Intent(AddEvent.this, ReminderBroadCast.class);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(AddEvent.this, 0, intent, 0);
-                    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                    long dueTimeInMs = addedEvent.getEventStart().getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
-                    long differenceToDue;
-                    if( notificationSpinner.equalsIgnoreCase("5 minutes prior"))
-                    {
-                        differenceToDue = 5 * 60 * 1000;
-                    }
-                    else if( notificationSpinner.equalsIgnoreCase("10 minutes prior"))
-                    {
-                        differenceToDue = 10 * 60 * 1000;
-                    }
-                    else if( notificationSpinner.equalsIgnoreCase("30 minutes prior"))
-                    {
-                        differenceToDue = 30 * 60 * 1000;
-                    }
-                    else if( notificationSpinner.equalsIgnoreCase("1 hour prior"))
-                    {
-                        differenceToDue = 60 * 60 * 1000;
-                    }
-                    else if( notificationSpinner.equalsIgnoreCase("6 hours prior"))
-                    {
-                        differenceToDue = 6* 60 * 60 * 1000;
-                    }
-                    else
-                    {
-                        differenceToDue = 12 * 60 * 60 * 1000;
-                    }
-                    Log.d(TAG, "dueTimeInMs - differenceToDue " + (dueTimeInMs - differenceToDue) );
-                    Log.d(TAG, "dueTimeInMs - differenceToDue " + (dueTimeInMs + "-" + differenceToDue) );
-                    Log.d(TAG, "dueTimeInMs - differenceToDue " + addedEvent.getEventStart().toString() );
-
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, dueTimeInMs - differenceToDue, pendingIntent);
+                    addNotificationToEvent();
                 }
                 if( repeat.isChecked()) {
-                    repetition_type.setEnabled(false);
-                    number_of_repetitions.setEnabled(false);
-                    if (number_of_repetitions != null && repetitionType != null) {
-                        int number = Integer.parseInt(number_of_repetitions.getText().toString());
-                        Log.d(TAG, "onClick: repetition number " + number );
-
-                        if (repetitionType.equalsIgnoreCase("Monthly")) {
-                            Calendar newEventStart = addedEvent.getEventStart();
-                            Calendar newEventEnd = addedEvent.getEventEnd();
-                            DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
-                            for (int i = 0; i< number;i++) {
-                                newEventStart.add(Calendar.MONTH, 1);
-                                newEventEnd.add(Calendar.MONTH, 1);
-                                saveData();
-                                loadData();
-                                CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
-                                        eventID, addedEvent.getType());
-                                newEvent.setColor(addedEvent.getColor());
-                                newEvent.setLocation(addedEvent.getLocation());
-                                newEvent.setNotes(addedEvent.getNotes());
-                                newEvent.setNotifTime(addedEvent.getNotifTime());
-                                dbHelper.insertEvent(newEvent);
-                            }
-                        }
-                        else if (repetitionType.equalsIgnoreCase("Daily")) {
-                            Calendar newEventStart = addedEvent.getEventStart();
-                            Calendar newEventEnd = addedEvent.getEventEnd();
-                            DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
-                            Log.d(TAG, "onClick: database helper intialized");
-                            for (int i = 0; i< number;i++) {
-                                newEventStart.add(Calendar.DAY_OF_MONTH, 1);
-                                newEventEnd.add(Calendar.DAY_OF_MONTH, 1);
-                                saveData();
-                                loadData();
-                                CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
-                                        eventID, addedEvent.getType());
-                                newEvent.setColor(addedEvent.getColor());
-                                newEvent.setLocation(addedEvent.getLocation());
-                                newEvent.setNotes(addedEvent.getNotes());
-                                newEvent.setNotifTime(addedEvent.getNotifTime());
-                                dbHelper.insertEvent(newEvent);
-                            }
-                        }
-                        else if (repetitionType.equalsIgnoreCase("Annually")) {
-                            Calendar newEventStart = addedEvent.getEventStart();
-                            Calendar newEventEnd = addedEvent.getEventEnd();
-                            DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
-                            for (int i = 0; i< number;i++) {
-                                newEventStart.add(Calendar.YEAR, 7);
-                                newEventEnd.add(Calendar.YEAR, 7);
-                                saveData();
-                                loadData();
-                                CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
-                                        eventID, addedEvent.getType());
-                                newEvent.setColor(addedEvent.getColor());
-                                newEvent.setLocation(addedEvent.getLocation());
-                                newEvent.setNotes(addedEvent.getNotes());
-                                newEvent.setNotifTime(addedEvent.getNotifTime());
-                                dbHelper.insertEvent(newEvent);
-                            }
-                        }
-                        else if (repetitionType.equalsIgnoreCase("Weekly")) {
-                            Calendar newEventStart = addedEvent.getEventStart();
-                            Calendar newEventEnd = addedEvent.getEventEnd();
-                            DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
-                            for (int i = 0; i< number;i++) {
-                                newEventStart.add(Calendar.DAY_OF_MONTH,7);
-                                newEventEnd.add(Calendar.DAY_OF_MONTH,7);
-                                saveData();
-                                loadData();
-                                CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
-                                        eventID, addedEvent.getType());
-                                newEvent.setColor(addedEvent.getColor());
-                                newEvent.setLocation(addedEvent.getLocation());
-                                newEvent.setNotes(addedEvent.getNotes());
-                                newEvent.setNotifTime(addedEvent.getNotifTime());
-                                dbHelper.insertEvent( newEvent);
-                            }
-                        }
-                    }
+                    repeatEvent();
                 }
             }
         });
@@ -692,6 +579,127 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
             channel.setDescription("simple channel");
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    public void addNotificationToEvent() {
+        String notificationSpinner = notification_spinner.getSelectedItem().toString();
+        Intent intent = new Intent(AddEvent.this, ReminderBroadCast.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(AddEvent.this, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        long dueTimeInMs = addedEvent.getEventStart().getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+        long differenceToDue;
+        if( notificationSpinner.equalsIgnoreCase("5 minutes prior"))
+        {
+            differenceToDue = 5 * 60 * 1000;
+        }
+        else if( notificationSpinner.equalsIgnoreCase("10 minutes prior"))
+        {
+            differenceToDue = 10 * 60 * 1000;
+        }
+        else if( notificationSpinner.equalsIgnoreCase("30 minutes prior"))
+        {
+            differenceToDue = 30 * 60 * 1000;
+        }
+        else if( notificationSpinner.equalsIgnoreCase("1 hour prior"))
+        {
+            differenceToDue = 60 * 60 * 1000;
+        }
+        else if( notificationSpinner.equalsIgnoreCase("6 hours prior"))
+        {
+            differenceToDue = 6* 60 * 60 * 1000;
+        }
+        else
+        {
+            differenceToDue = 12 * 60 * 60 * 1000;
+        }
+        Log.d(TAG, "dueTimeInMs - differenceToDue " + (dueTimeInMs - differenceToDue) );
+        Log.d(TAG, "dueTimeInMs - differenceToDue " + (dueTimeInMs + "-" + differenceToDue) );
+        Log.d(TAG, "dueTimeInMs - differenceToDue " + addedEvent.getEventStart().toString() );
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, dueTimeInMs - differenceToDue, pendingIntent);
+    }
+
+    public void repeatEvent() {
+        repetition_type.setEnabled(false);
+        number_of_repetitions.setEnabled(false);
+        if (number_of_repetitions != null && repetitionType != null) {
+            int number = Integer.parseInt(number_of_repetitions.getText().toString());
+            Log.d(TAG, "onClick: repetition number " + number );
+
+            if (repetitionType.equalsIgnoreCase("Monthly")) {
+                Calendar newEventStart = addedEvent.getEventStart();
+                Calendar newEventEnd = addedEvent.getEventEnd();
+                DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
+                for (int i = 0; i< number;i++) {
+                    newEventStart.add(Calendar.MONTH, 1);
+                    newEventEnd.add(Calendar.MONTH, 1);
+                    saveData();
+                    loadData();
+                    CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
+                            eventID, addedEvent.getType());
+                    newEvent.setColor(addedEvent.getColor());
+                    newEvent.setLocation(addedEvent.getLocation());
+                    newEvent.setNotes(addedEvent.getNotes());
+                    newEvent.setNotifTime(addedEvent.getNotifTime());
+                    dbHelper.insertEvent(newEvent);
+                }
+            }
+            else if (repetitionType.equalsIgnoreCase("Daily")) {
+                Calendar newEventStart = addedEvent.getEventStart();
+                Calendar newEventEnd = addedEvent.getEventEnd();
+                DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
+                Log.d(TAG, "onClick: database helper intialized");
+                for (int i = 0; i< number;i++) {
+                    newEventStart.add(Calendar.DAY_OF_MONTH, 1);
+                    newEventEnd.add(Calendar.DAY_OF_MONTH, 1);
+                    saveData();
+                    loadData();
+                    CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
+                            eventID, addedEvent.getType());
+                    newEvent.setColor(addedEvent.getColor());
+                    newEvent.setLocation(addedEvent.getLocation());
+                    newEvent.setNotes(addedEvent.getNotes());
+                    newEvent.setNotifTime(addedEvent.getNotifTime());
+                    dbHelper.insertEvent(newEvent);
+                }
+            }
+            else if (repetitionType.equalsIgnoreCase("Annually")) {
+                Calendar newEventStart = addedEvent.getEventStart();
+                Calendar newEventEnd = addedEvent.getEventEnd();
+                DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
+                for (int i = 0; i< number;i++) {
+                    newEventStart.add(Calendar.YEAR, 7);
+                    newEventEnd.add(Calendar.YEAR, 7);
+                    saveData();
+                    loadData();
+                    CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
+                            eventID, addedEvent.getType());
+                    newEvent.setColor(addedEvent.getColor());
+                    newEvent.setLocation(addedEvent.getLocation());
+                    newEvent.setNotes(addedEvent.getNotes());
+                    newEvent.setNotifTime(addedEvent.getNotifTime());
+                    dbHelper.insertEvent(newEvent);
+                }
+            }
+            else if (repetitionType.equalsIgnoreCase("Weekly")) {
+                Calendar newEventStart = addedEvent.getEventStart();
+                Calendar newEventEnd = addedEvent.getEventEnd();
+                DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
+                for (int i = 0; i< number;i++) {
+                    newEventStart.add(Calendar.DAY_OF_MONTH,7);
+                    newEventEnd.add(Calendar.DAY_OF_MONTH,7);
+                    saveData();
+                    loadData();
+                    CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
+                            eventID, addedEvent.getType());
+                    newEvent.setColor(addedEvent.getColor());
+                    newEvent.setLocation(addedEvent.getLocation());
+                    newEvent.setNotes(addedEvent.getNotes());
+                    newEvent.setNotifTime(addedEvent.getNotifTime());
+                    dbHelper.insertEvent( newEvent);
+                }
+            }
         }
     }
 
