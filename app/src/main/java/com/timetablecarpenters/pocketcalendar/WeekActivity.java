@@ -10,7 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import androidx.core.content.res.ResourcesCompat;
@@ -26,7 +25,7 @@ public class WeekActivity extends BaseActivity {
     private static final String TAG = "WeekActivity";
     public int[] rowIds = {R.id.monday_row, R.id.tuesday_row, R.id.wednesday_row, R.id.thursday_row, R.id.friday_row, R.id.saturday_row, R.id.sunday_row};
     public Calendar first;
-    TextView dateText;
+    public TextView dateText;
 
     /**
      * Set's up the weekActivity view and its functionalities
@@ -65,8 +64,8 @@ public class WeekActivity extends BaseActivity {
         last.add(Calendar.DAY_OF_YEAR, 6);
 
         dateText = (TextView) findViewById(R.id.dateText);
-        dateString = monthNames[first.get(Calendar.MONTH)] + " " + first.get(Calendar.DATE) + "  -  " +
-                monthNames[last.get(Calendar.MONTH)] + " " + last.get(Calendar.DATE);
+        dateString = MONTH_NAMES[first.get(Calendar.MONTH)] + " " + first.get(Calendar.DATE) + "  -  " +
+                MONTH_NAMES[last.get(Calendar.MONTH)] + " " + last.get(Calendar.DATE);
         dateText.setText(dateString);
 
         day = (Calendar) first.clone();
@@ -74,7 +73,7 @@ public class WeekActivity extends BaseActivity {
         for(int i = 0 ; i < 7 ; i++) {
             View row = content.findViewById(rowIds[i]);
             TextView weekDayName = (row.findViewById(R.id.text_date_name));
-            weekDayName.setText(dateNames[i]);
+            weekDayName.setText(DATE_NAMES[i]);
             editInTextFont(weekDayName);
             weekDayName.setTextColor( getBackGColor());
             Log.d(TAG, "onCreate: day = " + day.get(Calendar.YEAR)+ " " + day.get(Calendar.MONTH)+ " " + day.get(Calendar.DAY_OF_MONTH));
