@@ -97,11 +97,6 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
             case R.id.customization:
                 intent = new Intent(this, CustomizableScreen.class);
                 break;
-            case R.id.About_Devs:
-                //todo: this is for testing purposes, remove in final version
-                //intent = new Intent(this, MapsActivity.class);
-                break;
-
         }
 
         if (intent != null) {
