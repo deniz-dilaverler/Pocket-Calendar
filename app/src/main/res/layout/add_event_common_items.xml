@@ -164,6 +164,8 @@
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="16dp"
         android:text="Save"
+        android:background="@drawable/custom_button"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/open_map" />
@@ -176,6 +178,8 @@
         android:layout_marginTop="16dp"
         android:text="OPEN MAP"
         android:textSize="10sp"
+        android:background="@drawable/custom_button"
+        android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
