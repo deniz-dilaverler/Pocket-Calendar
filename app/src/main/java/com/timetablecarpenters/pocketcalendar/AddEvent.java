@@ -1,15 +1,14 @@
 package com.timetablecarpenters.pocketcalendar;
 
-import android.app.Activity;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.DatePickerDialog;
-import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,58 +19,83 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.app.Fragment;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
-import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.Calendar;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.timetablecarpenters.pocketcalendar.DayActivity.ACTIVITY_NAME;
-import static com.timetablecarpenters.pocketcalendar.DayActivity.MAPS_INTENT_KEY;
+public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
-public class AddEventDialog extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    public static final String TAG = "Add Event";
+    public static final String DATE_KEY = "Date";
+    public static final String TAG = "AddEventActivity";
     public static final String EVENT_ID_PREF = "eventID";
     public static final String EVENT_ID_VALUE = "value";
-    private AlertDialog.Builder addEventBuilder, eventBuilder;
-    private AlertDialog addEventDialog, eventDialog;
     private Spinner event_type_spinner, notification_spinner;
-    private Spinner repetition_type, color_spinner;
+    private Spinner repetition_type;
     private TextView event_due_time, event_date, event_start, event_end;
     private EditText event_name, number_of_repetitions, notes;
-    private LinearLayout addEventPopupView;
+    private LinearLayout linearLayout;
     private Button next, save;
     private CheckBox repeat, notification;
     private String notifType, repetitionType;
-    private ScrollView scrollView;
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private Button[] colour_buttons;
     private CalendarEvent addedEvent;
-    private int startHour, startMinute, endHour, endMinute, eventColour;
-    private Calendar eventDate;
+    private int startHour, startMinute, endHour, endMinute;
+    private Calendar eventDate, thisDay;
     private long eventID;
     private Button locationSelect;
     private MapFragment mapFragment;
-    private Activity context;
     LayoutInflater layoutInflater;
+    private View addEventView;
 
-    public AddEventDialog() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: Starts");
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_event_add);
+        layoutInflater = getLayoutInflater();
 
-        layoutInflater = context.getLayoutInflater();
-        scrollView = (ScrollView) layoutInflater.inflate(R.layout.add_event_popup,null);
-        addEventPopupView = (LinearLayout) scrollView.findViewById(R.id.add_event_linear);
+        Bundle extras = getIntent().getExtras();
+        if ( extras != null) {
+            try {
+                thisDay = (Calendar) extras.get(DATE_KEY);
+            } catch (Exception e) {
+                Log.d(TAG, "onCreate: no  date came out of the intent");
+            }
+            try {
+                addedEvent = (CalendarEvent) extras.get(MapActivity.EVENT_KEY);
+                Log.d(TAG, "onCreate: event called back!");
+            } catch (Exception e) {
+                Log.d(TAG, "onCreate: no event came out of intent " + e);
+            }
+        }
+
+        addEvent();
+    }
+
+    public void addEvent() {
+
+        addEventView = (View) layoutInflater.inflate(R.layout.activity_event_add, null);
+        linearLayout = (LinearLayout) findViewById(R.id.add_event_linear);
 
         if(addedEvent == null)
             addedEvent = new CalendarEvent(null, null, null, eventID, null);
-        addNameAndType();
+
+        final View typeAndNameView = layoutInflater.inflate(R.layout.add_event_type_and_name_item, null);
+
+        event_type_spinner = (Spinner) typeAndNameView.findViewById(R.id.event_type_spinner);
+        ArrayAdapter<String> eventNamesAdapter = new ArrayAdapter<>(AddEvent.this,
+                android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.event_types));
+        event_type_spinner.setAdapter(eventNamesAdapter);
+        event_type_spinner.setOnItemSelectedListener(this);
+        event_name = (EditText) typeAndNameView.findViewById(R.id.add_event_name);
+        // editParagraphFont(event_name);
+
+        linearLayout.addView(typeAndNameView);
+        Log.d(TAG, "addEvent: successful");
 
         // Next button removes itself from the popup if event type and name are given
         final View nextButtonView = (View) layoutInflater.inflate(R.layout.add_event_next, null);
@@ -83,17 +107,17 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
                     addedEvent.setName(event_name.getText().toString());
                     event_name.setEnabled(false);
                     event_type_spinner.setEnabled(false);
-                    addEventPopupView.removeView(nextButtonView);
+                    linearLayout.removeView(nextButtonView);
                     updatePopupView();
                 }
                 else {
-                    Toast.makeText(AddEventDialog.this, "Please enter event name",
+                    Toast.makeText(AddEvent.this, "Please enter event name",
                             Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        addEventPopupView.addView(nextButtonView);
-
+        linearLayout.addView(nextButtonView);
+        Log.d(TAG, "addEvent: successful");
     }
 
     /**
@@ -109,24 +133,6 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
             addRepetition();
         }
         addCommonItems();
-        addEventBuilder.setView(scrollView);
-    }
-
-    /**
-     * Adds name and type choices to add event popup
-     * @author Elifsena Öz
-     */
-    private void addNameAndType() {
-        final View typeAndNameView = layoutInflater.inflate(R.layout.add_event_type_and_name_item, null);
-
-        event_type_spinner = (Spinner) typeAndNameView.findViewById(R.id.event_type_spinner);
-        ArrayAdapter<String> eventNamesAdapter = new ArrayAdapter<>(context,
-                android.R.layout.simple_spinner_item, context.getResources().getStringArray(R.array.event_types));
-        event_type_spinner.setAdapter(eventNamesAdapter);
-        event_type_spinner.setOnItemSelectedListener(this);
-        event_name = (EditText) typeAndNameView.findViewById(R.id.add_event_name);
-        // editParagraphFont(event_name);
-        addEventPopupView.addView(typeAndNameView);
     }
 
     /**
@@ -139,7 +145,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
         // Displays a dialog to pick a date
         event_date = (TextView) dueDateView.findViewById(R.id.add_due_date);
         event_date.setText(getTodaysDate());
-        eventDate = (Calendar) getThisDay().clone();
+        eventDate = (Calendar) thisDay.clone();
 
         event_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +154,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
                 final int month = eventDate.get(Calendar.MONTH);
                 final int year = eventDate.get(Calendar.YEAR);
 
-                DatePickerDialog dialog = new DatePickerDialog(context,
+                DatePickerDialog dialog = new DatePickerDialog(AddEvent.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         dateSetListener, year, month, day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -170,7 +176,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
             @Override
             public void onClick(View v) {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(
-                        context,
+                        AddEvent.this,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -190,7 +196,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
                 timePickerDialog.show();
             }
         });
-        addEventPopupView.addView(dueDateView);
+        linearLayout.addView(dueDateView);
     }
 
     /**
@@ -203,7 +209,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
         // Displays a dialog to pick a date
         event_date = (TextView) intervalView.findViewById(R.id.add_event_date);
         event_date.setText(getTodaysDate());
-        eventDate = (Calendar) getThisDay().clone();
+        eventDate = (Calendar) thisDay.clone();
 
         event_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,7 +218,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
                 final int month = eventDate.get(Calendar.MONTH);
                 final int year = eventDate.get(Calendar.YEAR);
 
-                DatePickerDialog dialog = new DatePickerDialog(context,
+                DatePickerDialog dialog = new DatePickerDialog(AddEvent.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         dateSetListener, year, month, day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -234,7 +240,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
             @Override
             public void onClick(View v) {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(
-                        context,
+                        AddEvent.this,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -259,7 +265,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
             @Override
             public void onClick(View v) {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(
-                        context,
+                        AddEvent.this,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -277,12 +283,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
                 timePickerDialog.show();
             }
         });
-        addEventPopupView.addView(intervalView);
-    }
-
-    public Calendar getThisDay() {
-         Calendar thisDay = Calendar.getInstance();
-         return thisDay;
+        linearLayout.addView(intervalView);
     }
 
     /**
@@ -290,9 +291,9 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
      * @return Month Day Year (ex. May 1 2021)
      */
     private String getTodaysDate() {
-        final int day = getThisDay().get(Calendar.DAY_OF_MONTH);
-        final int month = getThisDay().get(Calendar.MONTH);
-        final int year = getThisDay().get(Calendar.YEAR);
+        final int day = thisDay.get(Calendar.DAY_OF_MONTH);
+        final int month = thisDay.get(Calendar.MONTH);
+        final int year = thisDay.get(Calendar.YEAR);
         return formattedMonth(month) + " " + day + " " + year;
     }
 
@@ -338,9 +339,9 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
             final View repetitionView = layoutInflater.inflate(R.layout.add_event_repetition_item, null);
 
             repetition_type = (Spinner) repetitionView.findViewById(R.id.repetition_type);
-            ArrayAdapter<String> repetitionTypesAdapter = new ArrayAdapter<>(context,
+            ArrayAdapter<String> repetitionTypesAdapter = new ArrayAdapter<>(AddEvent.this,
                     android.R.layout.simple_spinner_item,
-                    context.getResources().getStringArray(R.array.repetition_types));
+                    getResources().getStringArray(R.array.repetition_types));
             repetition_type.setAdapter(repetitionTypesAdapter);
             repetition_type.setOnItemSelectedListener(this);
             repetition_type.setEnabled(false);
@@ -363,7 +364,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
                 }
             });
 
-            addEventPopupView.addView(repetitionView);
+            linearLayout.addView(repetitionView);
         }
     }
 
@@ -376,9 +377,9 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
 
         // initialize the spinner for notifications
         notification_spinner = (Spinner) commonItemsView.findViewById(R.id.notifications_spinner);
-        ArrayAdapter<String> notificationTimesAdapter = new ArrayAdapter<>(context,
+        ArrayAdapter<String> notificationTimesAdapter = new ArrayAdapter<>(AddEvent.this,
                 android.R.layout.simple_spinner_item,
-                context.getResources().getStringArray(R.array.notification_times));
+                getResources().getStringArray(R.array.notification_times));
         notification_spinner.setAdapter(notificationTimesAdapter);
         notification_spinner.setEnabled(false);
 
@@ -405,6 +406,9 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
         colour_buttons[5] = commonItemsView.findViewById(R.id.colour_orange);
         colour_buttons[6] = commonItemsView.findViewById(R.id.colour_yellow);
         colour_buttons[7] = commonItemsView.findViewById(R.id.colour_green);
+
+        // set default event colour
+        addedEvent.setColor(R.color.primary_text);
 
         // add onclick listener to buttons
         for (Button b : colour_buttons) {
@@ -437,7 +441,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
 
                     // create message to inform the user
                     if (addedEvent.getColor() != R.color.primary_text)
-                        Toast.makeText(context, "Colour chosen",
+                        Toast.makeText(AddEvent.this, "Colour chosen",
                                 Toast.LENGTH_SHORT).show();
                 }
             });
@@ -449,7 +453,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
 
         // initialize Location editing UI elements
         MapFragment mapFragment = new MapFragment();
-        parent.getSupportFragmentManager().beginTransaction().add(R.id.map_container, mapFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.map_container, mapFragment).commit();
 
         locationSelect = (Button) commonItemsView.findViewById(R.id.open_map);
         // show the location on the map if the user has chosen one
@@ -457,18 +461,17 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
             mapFragment.moveToLocation(addedEvent.getLocation());
         }
 
-        /*
-        if(GoogleMapsAvailability.isServicesOK(context.this)) {
+        if(GoogleMapsAvailability.isServicesOK(AddEvent.this)) {
             locationSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, MapActivity.class);
+                    Intent intent = new Intent(AddEvent.this, MapActivity.class);
                     intent.putExtra(MAPS_INTENT_KEY, addedEvent);
                     intent.putExtra(MapActivity.INTENT_ID_KEY, ACTIVITY_NAME);
                     startActivity(intent);
                 }
             });
-        }*/
+        }
 
         // initialize the button that saves events
         save = (Button) commonItemsView.findViewById(R.id.add_event_save);
@@ -480,24 +483,24 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
                 // Check if event interval is given for events except assignment
                 if (!addedEvent.getType().equals("Assignment") &&  (addedEvent.getEventEnd() == null || addedEvent.getEventEnd() == null)) {
                     Log.d(TAG, "onClick: error message 1");
-                    Toast.makeText( context, "Please  choose event interval",
+                    Toast.makeText(AddEvent.this, "Please  choose event interval",
                             Toast.LENGTH_LONG).show();
                 }
                 // check if due time is given for assignment
                 else if (addedEvent.getType().equals("Assignment") && addedEvent.getEventEnd() == null) {
                     Log.d(TAG, "onClick: error message 2");
-                    Toast.makeText( context, "Please choose due time",
+                    Toast.makeText(AddEvent.this, "Please choose due time",
                             Toast.LENGTH_LONG).show();
                 }
                 // check event start and event end
                 else if (addedEvent.getEventStart().compareTo(addedEvent.getEventEnd()) > 0) {
                     Log.d(TAG, "onClick: error message 3");
-                    Toast.makeText(context, "Event start cannot be after event end",
+                    Toast.makeText(AddEvent.this, "Event start cannot be after event end",
                             Toast.LENGTH_LONG).show();
                 }
                 // finalize the event and add to the database
                 else {
-                    addEventPopupView.removeView(commonItemsView);
+                    linearLayout.removeView(commonItemsView);
                     saveData();
                     loadData();
 
@@ -505,18 +508,17 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
                         addedEvent.setNotes(notes.getText().toString());
                     }
 
-                    DBHelper dbHelper = new DBHelper(context, DBHelper.DB_NAME, null);
+                    DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME, null);
                     Log.d(TAG, "onClick: Right before event inserted");
                     long insertResult = dbHelper.insertEvent(addedEvent);
 
                     // report the user if the event is saved
                     if (insertResult == -1)
-                        Toast.makeText(context, "Event couldn't be saved", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddEvent.this, "Event couldn't be saved", Toast.LENGTH_SHORT).show();
                     else if (insertResult == -2)
-                        Toast.makeText(context, "Event already exists", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddEvent.this, "Event already exists", Toast.LENGTH_SHORT).show();
                     else
-                        Toast.makeText(context, "Event successfully added", Toast.LENGTH_SHORT).show();
-                    addEventDialog.dismiss();
+                        Toast.makeText(AddEvent.this, "Event successfully added", Toast.LENGTH_SHORT).show();
                 }
                 if( repeat.isChecked()) {
                     repetition_type.setEnabled(false);
@@ -528,7 +530,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
                         if (repetitionType.equalsIgnoreCase("Monthly")) {
                             Calendar newEventStart = addedEvent.getEventStart();
                             Calendar newEventEnd = addedEvent.getEventEnd();
-                            DBHelper dbHelper = new DBHelper(context,DBHelper.DB_NAME,null);
+                            DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
                             for (int i = 0; i< number;i++) {
                                 newEventStart.add(Calendar.MONTH, 1);
                                 newEventEnd.add(Calendar.MONTH, 1);
@@ -546,7 +548,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
                         else if (repetitionType.equalsIgnoreCase("Daily")) {
                             Calendar newEventStart = addedEvent.getEventStart();
                             Calendar newEventEnd = addedEvent.getEventEnd();
-                            DBHelper dbHelper = new DBHelper(context,DBHelper.DB_NAME,null);
+                            DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
                             Log.d(TAG, "onClick: database helper intialized");
                             for (int i = 0; i< number;i++) {
                                 newEventStart.add(Calendar.DAY_OF_MONTH, 1);
@@ -565,7 +567,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
                         else if (repetitionType.equalsIgnoreCase("Annually")) {
                             Calendar newEventStart = addedEvent.getEventStart();
                             Calendar newEventEnd = addedEvent.getEventEnd();
-                            DBHelper dbHelper = new DBHelper(context,DBHelper.DB_NAME,null);
+                            DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
                             for (int i = 0; i< number;i++) {
                                 newEventStart.add(Calendar.YEAR, 7);
                                 newEventEnd.add(Calendar.YEAR, 7);
@@ -583,7 +585,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
                         else if (repetitionType.equalsIgnoreCase("Weekly")) {
                             Calendar newEventStart = addedEvent.getEventStart();
                             Calendar newEventEnd = addedEvent.getEventEnd();
-                            DBHelper dbHelper = new DBHelper(context,DBHelper.DB_NAME,null);
+                            DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
                             for (int i = 0; i< number;i++) {
                                 newEventStart.add(Calendar.DAY_OF_MONTH,7);
                                 newEventEnd.add(Calendar.DAY_OF_MONTH,7);
@@ -603,14 +605,14 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
             }
         });
 
-        addEventPopupView.addView(commonItemsView);
+        linearLayout.addView(commonItemsView);
     }
 
     /**
      * Tracks event id
      */
     public void saveData() {
-        SharedPreferences eventIDPref = context.getSharedPreferences(EVENT_ID_PREF, MODE_PRIVATE);
+        SharedPreferences eventIDPref = getSharedPreferences(EVENT_ID_PREF, MODE_PRIVATE);
         SharedPreferences.Editor editor = eventIDPref.edit();
         editor.putLong(EVENT_ID_VALUE, eventID + 1);
     }
@@ -619,7 +621,7 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
      * Tracks event id
      */
     public void loadData() {
-        SharedPreferences eventIDPref = context.getSharedPreferences(EVENT_ID_PREF, MODE_PRIVATE);
+        SharedPreferences eventIDPref = getSharedPreferences(EVENT_ID_PREF, MODE_PRIVATE);
         eventID = eventIDPref.getLong(EVENT_ID_VALUE, 1); // for testing purposes
     }
 
@@ -684,4 +686,5 @@ public class AddEventDialog extends AppCompatActivity implements AdapterView.OnI
             text.setTextSize(16);
         }
     }*/
+
 }

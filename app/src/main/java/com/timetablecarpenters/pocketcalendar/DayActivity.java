@@ -2,30 +2,19 @@ package com.timetablecarpenters.pocketcalendar;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 
 import androidx.core.content.res.ResourcesCompat;
@@ -34,7 +23,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Map;
 
 
 public class DayActivity extends BaseActivity  {
@@ -131,13 +119,7 @@ public class DayActivity extends BaseActivity  {
         initiateRelativeLayouts();
 
         FloatingActionButton fab = findViewById(R.id.add_event_button);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddEventDialog dialog = new AddEventDialog(DayActivity.this);
-
-            }
-        });
+        fab.setOnClickListener(new DayActivity.ViewChangeClickListener());
     }
 
     /**
@@ -567,5 +549,25 @@ public class DayActivity extends BaseActivity  {
 
         // For 11th month and if anything goes wrong
         return "Dec";
+    }
+
+    public class ViewChangeClickListener implements View.OnClickListener {
+        /**
+         * when clicked creates an intent of the desired activity and starts the activity
+         *
+         * @param v
+         */
+        @Override
+        public void onClick(View v) {
+            Intent intent;
+            switch (v.getId()) {
+                case R.id.add_event_button:
+                    Log.d(TAG, "onClick: oldu");
+                    intent = new Intent(DayActivity.this, AddEvent.class);
+                    intent.putExtra(AddEvent.DATE_KEY, thisDay);
+                    startActivity(intent);
+                    break;
+            }
+        }
     }
 }

@@ -19,7 +19,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.PocketCalendar">
-        <activity android:name=".EventAdd"></activity>
+        <activity android:name=".AddEvent"></activity>
         <activity
             android:name=".CustomizableScreen"
             android:screenOrientation="portrait" />
