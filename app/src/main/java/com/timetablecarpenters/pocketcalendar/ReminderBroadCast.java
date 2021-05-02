@@ -12,8 +12,8 @@ public class ReminderBroadCast extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel")
                 .setSmallIcon(R.drawable.ic_baseline_message_24)
-                .setContentTitle("komsuu")
-                .setContentText("sinyal veriyom alyon mu")
+                .setContentTitle("You have an upcoming event!!")
+                .setContentText("Click on the message to view more")
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
         NotificationManagerCompat notificationManager =  NotificationManagerCompat.from( context);
         notificationManager.notify(200,builder.build());

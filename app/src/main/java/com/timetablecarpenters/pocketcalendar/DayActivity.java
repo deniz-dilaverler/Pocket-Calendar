@@ -601,12 +601,43 @@ public class DayActivity extends BaseActivity  {
                     addEventDialog.dismiss();
                     startActivity(intent);
                 }
-                    Intent intent = new Intent(DayActivity.this,ReminderBroadCast.class);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(DayActivity.this,0,intent,0);
+                if ( notification.isChecked()) {
+                    String notificationSpinner = notification_spinner.getSelectedItem().toString();
+                    Intent intent = new Intent(DayActivity.this, ReminderBroadCast.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(DayActivity.this, 0, intent, 0);
                     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                    long timeAtButtonClick = System.currentTimeMillis();
-                    long tenSecondMillis = 1000*10;
-                    alarmManager.set(AlarmManager.RTC_WAKEUP,timeAtButtonClick+tenSecondMillis,pendingIntent);
+                    long dueTimeInMs = addedEvent.getEventStart().getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                    long differenceToDue;
+                    if( notificationSpinner.equalsIgnoreCase("5 minutes prior"))
+                    {
+                        differenceToDue = 5 * 60 * 1000;
+                    }
+                    else if( notificationSpinner.equalsIgnoreCase("10 minutes prior"))
+                    {
+                        differenceToDue = 10 * 60 * 1000;
+                    }
+                    else if( notificationSpinner.equalsIgnoreCase("30 minutes prior"))
+                    {
+                        differenceToDue = 30 * 60 * 1000;
+                    }
+                    else if( notificationSpinner.equalsIgnoreCase("1 hour prior"))
+                    {
+                        differenceToDue = 60 * 60 * 1000;
+                    }
+                    else if( notificationSpinner.equalsIgnoreCase("6 hours prior"))
+                    {
+                        differenceToDue = 6* 60 * 60 * 1000;
+                    }
+                    else
+                    {
+                        differenceToDue = 12 * 60 * 60 * 1000;
+                    }
+                    Log.d(TAG, "dueTimeInMs - differenceToDue " + (dueTimeInMs - differenceToDue) );
+                    Log.d(TAG, "dueTimeInMs - differenceToDue " + (dueTimeInMs + "-" + differenceToDue) );
+                    Log.d(TAG, "dueTimeInMs - differenceToDue " + addedEvent.getEventStart().toString() );
+
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, dueTimeInMs - differenceToDue, pendingIntent);
+                }
                 if( repeat.isChecked()) {
                     repetition_type.setEnabled(false);
                     number_of_repetitions.setEnabled(false);
@@ -1238,5 +1269,27 @@ public class DayActivity extends BaseActivity  {
             }
 >>>>>>> eventAddActivity
         }
+    }
+    private long compareDates(Calendar calendar1, Calendar calendar2){
+        long result;
+        result = 0;
+        long yearDifferenceInMs = 0;
+        long monthDifferenceInMs = 0;
+        long dayDifferenceInMs = 0;
+        long hourDifferenceInMs = 0;
+        long minuteDifferenceInMs =0;
+        long secondDifferenceInMs = 0;
+
+        secondDifferenceInMs = calendar1.get(Calendar.SECOND) - calendar2.get(Calendar.SECOND);
+        minuteDifferenceInMs = (calendar1.get(Calendar.MINUTE) - calendar2.get(Calendar.MINUTE)) * 60;
+        hourDifferenceInMs = (calendar1.get(Calendar.HOUR_OF_DAY) - calendar2.get(Calendar.HOUR_OF_DAY)) * 60 * 60;
+        dayDifferenceInMs = (calendar1.get(Calendar.DAY_OF_MONTH) - calendar2.get(Calendar.DAY_OF_MONTH))* 60 * 60 * 24;
+        monthDifferenceInMs = (calendar1.get(Calendar.MONTH) - calendar2.get(Calendar.MONTH))* 60 * 60 * 24 * 30;
+        yearDifferenceInMs = (calendar1.get(Calendar.YEAR) - calendar2.get(Calendar.YEAR))* 60 * 60 * 24 * 12 * 30;
+        result = secondDifferenceInMs + minuteDifferenceInMs + hourDifferenceInMs + dayDifferenceInMs
+                + monthDifferenceInMs + yearDifferenceInMs;
+
+        return result * 1000;
+
     }
 }
