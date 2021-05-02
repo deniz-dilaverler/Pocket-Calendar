@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CustomizableScreen">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/customize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Customize"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <TextView
+        android:id="@+id/backgroundColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Background color:"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/customize" />
+
+    <Button
+        android:id="@+id/buttonWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="White"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/backgroundColor" />
+
+    <Button
+        android:id="@+id/buttonGreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Green"
+        app:layout_constraintBaseline_toBaselineOf="@+id/buttonWhite"
+        app:layout_constraintStart_toEndOf="@+id/buttonWhite" />
+
+    <Button
+        android:id="@+id/buttonPink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Pink"
+        app:layout_constraintBaseline_toBaselineOf="@+id/buttonGreen"
+        app:layout_constraintStart_toEndOf="@+id/buttonGreen" />
+
+    <Button
+        android:id="@+id/buttonPurple"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Purple"
+        app:layout_constraintBaseline_toBaselineOf="@+id/buttonPink"
+        app:layout_constraintStart_toEndOf="@+id/buttonPink" />
+
+    <Button
+        android:id="@+id/buttonBlack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Black"
+        app:layout_constraintStart_toStartOf="@+id/buttonWhite"
+        app:layout_constraintTop_toBottomOf="@+id/buttonWhite" />
+
+    <Button
+        android:id="@+id/buttonRed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Red"
+        app:layout_constraintBaseline_toBaselineOf="@+id/buttonBlack"
+        app:layout_constraintStart_toEndOf="@+id/buttonBlack" />
+
+    <Button
+        android:id="@+id/buttonBlue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Blue"
+        app:layout_constraintBaseline_toBaselineOf="@+id/buttonRed"
+        app:layout_constraintStart_toEndOf="@+id/buttonRed" />
+
+    <Button
+        android:id="@+id/buttonYellow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Yellow"
+        app:layout_constraintBaseline_toBaselineOf="@+id/buttonBlue"
+        app:layout_constraintStart_toEndOf="@+id/buttonBlue" />
+</androidx.constraintlayout.widget.ConstraintLayout>
