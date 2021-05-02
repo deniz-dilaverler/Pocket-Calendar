@@ -31,6 +31,11 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
+/**
+ * Shows add event view
+ * @author Elifsena Öz
+ */
+
 public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     public static final String DATE_KEY = "Date";
@@ -49,7 +54,7 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private Button[] colour_buttons;
     private CalendarEvent addedEvent;
-    private int startHour, startMinute, endHour, endMinute;
+    private int startHour, startMinute, endHour, endMinute, eventTypePosition;
     private Calendar eventDate, thisDay;
     private long eventID;
     private Button locationSelect;
@@ -57,6 +62,7 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
     LayoutInflater layoutInflater;
     private View addEventView;
     private ArrayAdapter<String> eventTypesAdapter;
+    private boolean oldEvent = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +83,11 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
             try {
                 addedEvent = (CalendarEvent) extras.get(MapActivity.EVENT_KEY);
                 Log.d(TAG, "onCreate: event called back!");
-                setAddEventView();
+                try {
+                    setAddEventView();
+                } catch (Exception e) {
+                    Log.d(TAG, "onCreate: event unsuccessful " + e);
+                }
             } catch (Exception e) {
                 Log.d(TAG, "onCreate: no event came out of intent " + e);
             }
@@ -86,6 +96,9 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
         addEvent();
     }
 
+    /**
+     * Creates initial view
+     */
     public void addEvent() {
 
         addEventView = (View) layoutInflater.inflate(R.layout.activity_event_add, null);
@@ -128,7 +141,6 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
             }
         });
         linearLayout.addView(nextButtonView);
-        Log.d(TAG, "addEvent: successful");
     }
 
     /**
@@ -566,8 +578,11 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (parent.getId() == R.id.event_type_spinner)
-            addedEvent.setType(parent.getItemAtPosition(position).toString());
+        if (parent.getId() == R.id.event_type_spinner) {
+            eventTypePosition = position;
+            if (addedEvent != null)
+                addedEvent.setType(parent.getItemAtPosition(position).toString());
+        }
         else if (parent.getId() == R.id.repetition_type) {
             repetitionType = parent.getItemAtPosition(position).toString();
         }
@@ -715,10 +730,12 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
      */
     public void setAddEventView() {
         Log.d(TAG, "setAddEventView: nonono");
-        event_type_spinner.setSelection(eventTypesAdapter.getPosition(addedEvent.getType()));
+        event_type_spinner.setSelection(eventTypePosition);
         event_name.setText(addedEvent.getName());
         next.performClick();
-        event_date.setText(formattedMonth(addedEvent.getMonth()) + " " + addedEvent.getDay() + " " + addedEvent.getYear());
+        event_date.setText(formattedMonth(addedEvent.getEventStart().get(Calendar.MONTH))
+                            + " " + addedEvent.getEventStart().get(Calendar.DAY_OF_MONTH)
+                            + " " + addedEvent.getEventStart().get(Calendar.YEAR));
         if (addedEvent.getType().equals("Assignment"))
             event_due_time.setText(addedEvent.getEventStartTime());
         else {
@@ -728,6 +745,17 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
         notes.setText(addedEvent.getNotes());
     }
 
+    private int ConvertIntoNumeric(String xVal)
+    {
+        try
+        {
+            return Integer.parseInt(xVal);
+        }
+        catch(Exception ex)
+        {
+            return 0;
+        }
+    }
 
     /**
      * Edits the font sizes of textViews according to settings
@@ -773,16 +801,5 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
             text.setTextSize(16);
         }
     }*/
-    private int ConvertIntoNumeric(String xVal)
-    {
-        try
-        {
-            return Integer.parseInt(xVal);
-        }
-        catch(Exception ex)
-        {
-            return 0;
-        }
-    }
 
 }
