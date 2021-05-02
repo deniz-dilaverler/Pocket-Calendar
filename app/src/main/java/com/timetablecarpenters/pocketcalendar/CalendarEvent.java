@@ -221,6 +221,9 @@ public class CalendarEvent implements Parcelable {
     public void setColor(int c) {
         color = c;
     }
+    public int getColor() {
+        return this.color;
+    }
     public boolean equals2( CalendarEvent anEvent) {
         if ( anEvent.getName().equals( this.getName())) {
             return true;
@@ -232,42 +235,62 @@ public class CalendarEvent implements Parcelable {
     public void repeatMonthly(int times,Context context){
         Calendar newEventStart = eventStart;
         Calendar newEventEnd = eventEnd;
-        DBHelper dbHelper = new DBHelper(context,"helper",null);
+        DBHelper dbHelper = new DBHelper(context,DBHelper.DB_NAME,null);
         for (int i = 0; i< times;i++) {
             newEventStart.add(Calendar.MONTH,1);
             newEventEnd.add(Calendar.MONTH,1);
-            dbHelper.insertEvent( new CalendarEvent(newEventStart,newEventEnd, this.name,this.id, this.type));
+            CalendarEvent newEvent = new CalendarEvent(newEventStart,newEventEnd, this.name,this.id + i*1000, this.type);
+            newEvent.setColor(this.color);
+            newEvent.setLocation(this.location);
+            newEvent.setNotes(this.notes);
+            newEvent.setNotifTime(this.notifTime);
+            dbHelper.insertEvent( newEvent);
         }
     }
     public void repeatWeekly(int times,Context context){
         Calendar newEventStart = eventStart;
         Calendar newEventEnd = eventEnd;
-        DBHelper dbHelper = new DBHelper(context,"helper",null);
+        DBHelper dbHelper = new DBHelper(context,DBHelper.DB_NAME,null);
         for (int i = 0; i< times;i++) {
             newEventStart.add(Calendar.DAY_OF_MONTH,7);
             newEventEnd.add(Calendar.DAY_OF_MONTH,7);
-            dbHelper.insertEvent( new CalendarEvent(newEventStart,newEventEnd, this.name,this.id, this.type));
+            CalendarEvent newEvent = new CalendarEvent(newEventStart,newEventEnd, this.name,this.id + i*1000, this.type);
+            newEvent.setColor(this.color);
+            newEvent.setLocation(this.location);
+            newEvent.setNotes(this.notes);
+            newEvent.setNotifTime(this.notifTime);
+            dbHelper.insertEvent( newEvent);
         }
 
     }
     public void repeatDaily(int times, Context context){
         Calendar newEventStart = eventStart;
         Calendar newEventEnd = eventEnd;
-        DBHelper dbHelper = new DBHelper(context,"helper",null);
+        DBHelper dbHelper = new DBHelper(context,DBHelper.DB_NAME,null);
         for (int i = 0; i< times;i++) {
             newEventStart.add(Calendar.DAY_OF_MONTH,1);
             newEventEnd.add(Calendar.DAY_OF_MONTH,1);
-            dbHelper.insertEvent( new CalendarEvent(newEventStart,newEventEnd, this.name,this.id, this.type));
+            CalendarEvent newEvent = new CalendarEvent(newEventStart,newEventEnd, this.name,this.id + i*1000, this.type);
+            newEvent.setColor(this.color);
+            newEvent.setLocation(this.location);
+            newEvent.setNotes(this.notes);
+            newEvent.setNotifTime(this.notifTime);
+            dbHelper.insertEvent( newEvent);
         }
     }
     public void repeatAnnually(int times,Context context){
         Calendar newEventStart = eventStart;
         Calendar newEventEnd = eventEnd;
-        DBHelper dbHelper = new DBHelper(context,"helper",null);
+        DBHelper dbHelper = new DBHelper(context,DBHelper.DB_NAME,null);
         for (int i = 0; i< times;i++) {
             newEventStart.add(Calendar.YEAR,1);
             newEventEnd.add(Calendar.YEAR,1);
-            dbHelper.insertEvent( new CalendarEvent(newEventStart,newEventEnd, this.name,this.id, this.type));
+            CalendarEvent newEvent = new CalendarEvent(newEventStart,newEventEnd, this.name,this.id + i*1000, this.type);
+            newEvent.setColor(this.color);
+            newEvent.setLocation(this.location);
+            newEvent.setNotes(this.notes);
+            newEvent.setNotifTime(this.notifTime);
+            dbHelper.insertEvent( newEvent);
         }
     }
 
