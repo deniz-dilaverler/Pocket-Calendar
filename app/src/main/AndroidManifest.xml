@@ -51,6 +51,11 @@
 
         <activity
             android:screenOrientation="portrait"
+            android:name=".CustomizableScreen2"
+            android:label="Customise"
+            android:theme="@style/Theme.PocketCalendar.NoActionBar" />
+        <activity
+            android:screenOrientation="portrait"
             android:name=".SettingsActivity"
             android:label="Settings"
             android:theme="@style/Theme.PocketCalendar.NoActionBar" />
