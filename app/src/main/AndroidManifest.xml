@@ -19,10 +19,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.PocketCalendar">
-<<<<<<< HEAD
-=======
-        <activity android:name=".AddEvent"></activity>
->>>>>>> eventAddActivity
+
         <activity
             android:name=".CustomizableScreen"
             android:screenOrientation="portrait" />
@@ -59,14 +56,12 @@
             android:theme="@style/Theme.PocketCalendar.NoActionBar"
             android:label="EventView"/>
         <activity
-<<<<<<< HEAD
+
             android:screenOrientation="portrait"
             android:name=".CustomizableScreen2"
             android:label="Customise"
             android:theme="@style/Theme.PocketCalendar.NoActionBar" />
         <activity
-=======
->>>>>>> eventAddActivity
             android:name=".SettingsActivity"
             android:label="Settings"
             android:screenOrientation="portrait"

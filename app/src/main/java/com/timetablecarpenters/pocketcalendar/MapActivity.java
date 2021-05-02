@@ -204,23 +204,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 event.setLocation(placeSearched.getLatLng());
                 Class returnActivity;
                 // Todo: if there are multiple Activities to possibly return add an if statement
-<<<<<<< HEAD
 
-                   // returnActivity = EventAdd.class;
-               /* Intent intent = new Intent(MapActivity.this, returnActivity);
-=======
+
                 if (previousActivityKey.equals(AddEvent.ADD_ACTIVITY_NAME))
                     returnActivity = AddEvent.class;
-                // Todo: edit event intent else if ()
+                // Todo: edit event intent else if (Edit event)
                 else
                     returnActivity = MonthActivity.class;
 
                 Intent intent = new Intent(MapActivity.this, returnActivity);
->>>>>>> eventAddActivity
                 intent.putExtra(EVENT_KEY, event);
                 Log.d(TAG, "onClick: event start: " + event.eventStart + " event end: " + event.eventEnd);
                 startActivity(intent);
-*/
+
             }
         });
 

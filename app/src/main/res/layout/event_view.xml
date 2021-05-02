@@ -100,7 +100,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
-<<<<<<< HEAD
+
     <fragment
         android:id="@+id/event_map"
         android:name="com.timetablecarpenters.pocketcalendar.MapFragment"
@@ -111,8 +111,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
-=======
->>>>>>> eventAddActivity
+
     <Button
         android:id="@+id/button_delete"
         android:layout_width="wrap_content"
@@ -144,7 +143,6 @@
         app:layout_constraintTop_toBottomOf="@+id/map_container"
         tools:layout_editor_absoluteX="0dp" />
 
-<<<<<<< HEAD
     <TextView
         android:id="@+id/notes_contents"
         android:layout_width="274dp"
@@ -178,7 +176,7 @@
         app:layout_constraintHorizontal_bias="0.38"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_location" />
-=======
+
     <FrameLayout
         android:id="@+id/map_container"
         android:layout_width="200dp"
@@ -189,5 +187,5 @@
         app:layout_constraintTop_toBottomOf="@+id/divider3">
 
     </FrameLayout>
->>>>>>> eventAddActivity
+
 </androidx.constraintlayout.widget.ConstraintLayout>

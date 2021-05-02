@@ -1184,7 +1184,6 @@ public class DayActivity extends BaseActivity  {
             channel.setDescription("simple channel");
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
-=======
 
 
     /**
