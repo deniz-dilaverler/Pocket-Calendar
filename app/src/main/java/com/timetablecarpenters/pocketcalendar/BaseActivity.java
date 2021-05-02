@@ -235,31 +235,7 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         }
         //Toast.makeText(BaseActivity.this,"is selected",Toast.LENGTH_LONG).show();
     }
-
-    /**
-     * After the user pressed the back
-     * Shows the dialog that asks the user
-     * is sure or not
-     */
-    public void onBackPressed() {
-        // Here you want to show the user a dialog box
-        new AlertDialog.Builder(BaseActivity.this)
-                .setTitle("Exiting the App")
-                .setMessage("Are you sure?")
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        // The user wants to leave - so dismiss the dialog and exit
-                        finish();
-                        dialog.dismiss();
-                    }
-                }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // The user is not sure, so you can exit or just stay
-                dialog.dismiss();
-            }
-        }).show();
-    }
-
+    
     @Override
     public void onRestart() {
         super.onRestart();
