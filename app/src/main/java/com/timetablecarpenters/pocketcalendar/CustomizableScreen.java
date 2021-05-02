@@ -27,7 +27,8 @@ public class CustomizableScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customise);
-        
+        setBackgroundAndTextColor( findViewById( ids[0]));
+
         for ( int i : ids) {
             createClickListener( findViewById( i));
         }
