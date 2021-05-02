@@ -106,7 +106,7 @@
                 android:textAlignment="inherit" />
 
             <TextView
-                android:id="@+id/textView13y"
+                android:id="@+id/tuesday"
                 android:layout_width="4dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

@@ -182,6 +182,14 @@ public class MonthActivity extends BaseActivity {
         dayInWeek[6] = aWeek.findViewById(R.id.sunday_box);
         cal.add( Calendar.DATE,1);
         dayCreate( dayInWeek[6], cal, dayCount);
+
+        ( ( TextView)findViewById( R.id.monday)).setTextColor( getBackGColor());
+        ( ( TextView)findViewById( R.id.tuesday)).setTextColor( getBackGColor());
+        ( ( TextView)findViewById( R.id.wednesday)).setTextColor( getBackGColor());
+        ( ( TextView)findViewById( R.id.thursday)).setTextColor( getBackGColor());
+        ( ( TextView)findViewById( R.id.friday)).setTextColor( getBackGColor());
+        ( ( TextView)findViewById( R.id.saturday)).setTextColor( getBackGColor());
+        ( ( TextView)findViewById( R.id.sunday)).setTextColor( getBackGColor());
     }
     /**
      * Sets the text colors to a specific value (For testing purposes only)
