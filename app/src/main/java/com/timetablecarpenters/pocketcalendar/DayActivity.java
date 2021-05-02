@@ -581,13 +581,14 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                     repetition_type.setEnabled(false);
                     number_of_repetitions.setEnabled(false);
                     if (number_of_repetitions != null && repetitionType != null) {
-                        int times = ConvertIntoNumeric(number_of_repetitions.toString());
+                        int number = Integer.parseInt(number_of_repetitions.getText().toString());
+                        Log.d(TAG, "onClick: repetition number " + number );
 
                         if (repetitionType.equalsIgnoreCase("Monthly")) {
                             Calendar newEventStart = addedEvent.getEventStart();
                             Calendar newEventEnd = addedEvent.getEventEnd();
                             DBHelper dbHelper = new DBHelper(DayActivity.this,DBHelper.DB_NAME,null);
-                            for (int i = 0; i< times;i++) {
+                            for (int i = 0; i< number;i++) {
                                 newEventStart.add(Calendar.MONTH, 1);
                                 newEventEnd.add(Calendar.MONTH, 1);
                                 saveData();
@@ -605,7 +606,8 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                             Calendar newEventStart = addedEvent.getEventStart();
                             Calendar newEventEnd = addedEvent.getEventEnd();
                             DBHelper dbHelper = new DBHelper(DayActivity.this,DBHelper.DB_NAME,null);
-                            for (int i = 0; i< times;i++) {
+                            Log.d(TAG, "onClick: database helper intialized");
+                            for (int i = 0; i< number;i++) {
                                 newEventStart.add(Calendar.DAY_OF_MONTH, 1);
                                 newEventEnd.add(Calendar.DAY_OF_MONTH, 1);
                                 saveData();
@@ -623,7 +625,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                             Calendar newEventStart = addedEvent.getEventStart();
                             Calendar newEventEnd = addedEvent.getEventEnd();
                             DBHelper dbHelper = new DBHelper(DayActivity.this,DBHelper.DB_NAME,null);
-                            for (int i = 0; i< times;i++) {
+                            for (int i = 0; i< number;i++) {
                                 newEventStart.add(Calendar.YEAR, 7);
                                 newEventEnd.add(Calendar.YEAR, 7);
                                 saveData();
@@ -641,7 +643,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
                             Calendar newEventStart = addedEvent.getEventStart();
                             Calendar newEventEnd = addedEvent.getEventEnd();
                             DBHelper dbHelper = new DBHelper(DayActivity.this,DBHelper.DB_NAME,null);
-                            for (int i = 0; i< times;i++) {
+                            for (int i = 0; i< number;i++) {
                                 newEventStart.add(Calendar.DAY_OF_MONTH,7);
                                 newEventEnd.add(Calendar.DAY_OF_MONTH,7);
                                 saveData();
@@ -685,7 +687,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         if (parent.getId() == R.id.event_type_spinner)
             addedEvent.setType(parent.getItemAtPosition(position).toString());
         else if (parent.getId() == R.id.repetition_type) {
-            String repetitionType = parent.getItemAtPosition(position).toString();
+            repetitionType = parent.getItemAtPosition(position).toString();
         }
         if (parent.getId() == R.id.notifications_spinner)
             notifType = parent.getItemAtPosition(position).toString();
