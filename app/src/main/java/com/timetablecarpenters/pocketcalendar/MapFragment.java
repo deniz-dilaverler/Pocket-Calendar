@@ -108,5 +108,13 @@ public class MapFragment extends Fragment {
         return mapReady;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        MapFragment f = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
+        if (f != null)
+            getChildFragmentManager().beginTransaction().remove(f).commit();
+    }
+
 
 }
