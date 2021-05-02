@@ -348,14 +348,6 @@ public class DayActivity extends BaseActivity  {
                             startActivity(intent);
                         }
                     });
-
-                    textView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-
-                        }
-                    });
                 }
             }
         }

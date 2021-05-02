@@ -78,6 +78,8 @@ public class EventActivity extends BaseActivity {
         //set name and type text
         eventName.setText(event.getName());
         eventType.setText(event.getType());
+        eventName.setTextColor(event.getColor());
+        eventType.setTextColor(event.getColor());
         // set date text
         Calendar eventStart = event.getEventStart();
         String dateTextString = String.format("%d.%d.%d", eventStart.get(Calendar.DAY_OF_MONTH), eventStart.get(Calendar.MONTH ) + 1,  eventStart.get(Calendar.YEAR));

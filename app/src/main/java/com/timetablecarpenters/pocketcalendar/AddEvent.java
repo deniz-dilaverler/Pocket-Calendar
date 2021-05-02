@@ -528,12 +528,16 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
                     else
                         Toast.makeText(AddEvent.this, "Event successfully added", Toast.LENGTH_SHORT).show();
                 }
+
                 if ( notification.isChecked()) {
                     addNotificationToEvent();
                 }
                 if( repeat.isChecked()) {
                     repeatEvent();
                 }
+                Intent intent = new Intent(AddEvent.this, DayActivity.class);
+                intent.putExtra(DayActivity.INTENT_KEY , thisDay);
+                startActivity(intent);
             }
         });
 
