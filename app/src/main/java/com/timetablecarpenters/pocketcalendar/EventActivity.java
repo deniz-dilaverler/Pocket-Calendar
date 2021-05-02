@@ -16,7 +16,7 @@ import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
-public class EventActivity extends AppCompatActivity {
+public class EventActivity extends BaseActivity {
     public final static String EVENT_VIEW_INTENT_KEY ="get_event";
     private CalendarEvent event;
     @Override
