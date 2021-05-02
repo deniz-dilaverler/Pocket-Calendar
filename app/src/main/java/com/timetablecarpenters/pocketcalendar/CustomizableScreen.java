@@ -1,15 +1,14 @@
 package com.timetablecarpenters.pocketcalendar;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 /**
  * User can change background calors via customizable screen
@@ -19,33 +18,38 @@ import android.widget.RelativeLayout;
  */
 
 public class CustomizableScreen extends AppCompatActivity {
-    Button buttonWhite;
-    Button buttonBlack;
-    Button buttonPurple;
-    Button buttonGreen;
-    Button buttonRed;
-    Button buttonPink;
-    Button buttonBlue;
-    Button buttonYellow;
-    CoordinatorLayout monthLayout;
-    CoordinatorLayout weekLayout;
+    public static int backgroundColor;
+    public static int textColor;
+    public final int[] ids = {R.id.default1, R.id.default2,R.id.default3, R.id.default4,
+            R.id.default5, R.id.default6, R.id.default7};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customizable_screen);
-        buttonRed = findViewById(R.id.buttonRed);
+        setContentView(R.layout.customise);
+        
+        for ( int i : ids) {
+            createClickListener( findViewById( i));
+        }
+    }
 
-        monthLayout=  (CoordinatorLayout) findViewById(R.id.activity_month_id);
-        weekLayout = (CoordinatorLayout) findViewById(R.id.activity_week_id);
-
-
-        buttonRed.setOnClickListener(new View.OnClickListener() {
+    private void createClickListener( TextView colorText) {
+        colorText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                monthLayout.setBackgroundColor(Color.RED);
-                weekLayout.setBackgroundColor(Color.RED);
+                setBackgroundAndTextColor( colorText);
             }
         });
+    }
+
+    public static void setBackgroundAndTextColor( TextView input) {
+        if ( input.getBackground() instanceof ColorDrawable) {
+            ColorDrawable cd = (ColorDrawable) input.getBackground();
+            backgroundColor = cd.getColor();
+        }
+        else {
+            System.out.println( "AAAAAAAAAAAAAAAA------------AAAAAAAAAAA");
+        }
+        textColor = input.getCurrentTextColor();
     }
 }

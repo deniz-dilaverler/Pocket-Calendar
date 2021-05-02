@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import org.w3c.dom.Text;
@@ -44,7 +46,7 @@ public class MonthActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_month);
+        setContentView( R.layout.activity_month);
         Log.d(TAG, "onCreate: starts");
         super.onCreate(savedInstanceState);
         Bundle extras;
@@ -80,6 +82,10 @@ public class MonthActivity extends BaseActivity {
         insertEvents();
         pullEvents( database.getEventsInAnIntervalInArray( calendar1, calendar2));
         initiateWeeks();
+
+        View someView = findViewById( R.id.background);
+        View root = someView.getRootView();
+        root.setBackgroundColor( CustomizableScreen.backgroundColor);
     }
     /**
      * Reports the name of the month according to the number
@@ -189,7 +195,7 @@ public class MonthActivity extends BaseActivity {
      * @return int color value
      */
     private int getBackGColor() {
-        return ResourcesCompat.getColor(getResources(), R.color.month_activity_beckground_unusable, null);
+        return CustomizableScreen.backgroundColor;
     }
     /**
      * Activates each day in MonthView.
