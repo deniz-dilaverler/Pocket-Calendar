@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.res.ResourcesCompat;
 
 import org.w3c.dom.Text;
@@ -36,7 +38,6 @@ public class MonthActivity extends BaseActivity {
     private static final String TAG = "MonthActivity";
     Intent intent;
     private Context context;
-
     /**
      * this method works once a MonthActivity is created.
      * @param savedInstanceState

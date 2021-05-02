@@ -27,7 +27,7 @@ public class CustomizableScreen extends AppCompatActivity {
     Button buttonPink;
     Button buttonBlue;
     Button buttonYellow;
-    CoordinatorLayout monthLayout;
+
     CoordinatorLayout weekLayout;
 
     @Override
@@ -36,15 +36,14 @@ public class CustomizableScreen extends AppCompatActivity {
         setContentView(R.layout.activity_customizable_screen);
         buttonRed = findViewById(R.id.buttonRed);
 
-        monthLayout=  (CoordinatorLayout) findViewById(R.id.activity_month_id);
+
         weekLayout = (CoordinatorLayout) findViewById(R.id.activity_week_id);
 
 
         buttonRed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                monthLayout.setBackgroundColor(Color.RED);
-                weekLayout.setBackgroundColor(Color.RED);
+                //weekLayout.setBackgroundColor(Color.RED);
             }
         });
     }
