@@ -18,6 +18,8 @@ import java.util.Calendar;
 
 /**
  * This activity shows the user information about their event
+ * @author Deniz Mert Dilaverler
+ * @version 03.05.2021
  */
 public class EventActivity extends BaseActivity {
     public final static String EVENT_VIEW_INTENT_KEY ="get_event";
@@ -64,6 +66,7 @@ public class EventActivity extends BaseActivity {
 
                 Intent intent = new Intent(EventActivity.this, DayActivity.class);
                 intent.putExtra(DayActivity.INTENT_KEY, event.eventStart);
+                Toast.makeText(EventActivity.this, "Event Deleted", Toast.LENGTH_SHORT).show();
                 startActivity(intent);
             }
         });
