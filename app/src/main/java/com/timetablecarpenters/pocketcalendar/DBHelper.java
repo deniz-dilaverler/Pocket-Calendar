@@ -23,7 +23,7 @@ import java.util.Calendar;
  * @author  Deniz Mert Dilaverler
  */
 public class DBHelper extends SQLiteOpenHelper {
-    public static final String DB_NAME = "events.db";
+    public static String DB_NAME = "events.db";
     private static final String TAG = "DBHelper";
 
     public static final String EVENTS_TABLE = "events_table";

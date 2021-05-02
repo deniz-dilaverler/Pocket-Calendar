@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class UpComingEventsAdapter extends CursorAdapter {
     private static final String TAG = "UpComingEventsAdapter";
-    public final static int MAX_DAYS = 14;
-    public Calendar today;
+    final static int MAX_DAYS = 14;
+    Calendar today;
 
     /**
      * Today's date is saved for time comparrasant.
