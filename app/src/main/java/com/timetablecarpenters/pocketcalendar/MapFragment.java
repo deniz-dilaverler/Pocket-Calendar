@@ -26,7 +26,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 public class MapFragment extends Fragment {
     private static final String TAG = "MapForView";
-    
+
+    private static final float INITIAL_ZOOM = 2f;
+    private static final LatLng INITIAL_LOCATION = new LatLng(54.54, 25.19);
     private static final float ZOOM = 13f;
     protected boolean mapReady = false;
     protected GoogleMap map;
@@ -50,8 +52,9 @@ public class MapFragment extends Fragment {
             googleMap.getUiSettings().setScrollGesturesEnabled(false);
             
             map = googleMap;
-
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_LOCATION, INITIAL_ZOOM));
             mapReady = true;
+
         }
     };
 

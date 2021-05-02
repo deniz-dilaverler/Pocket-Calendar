@@ -213,6 +213,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     returnActivity = MonthActivity.class;
 
                 Intent intent = new Intent(MapActivity.this, returnActivity);
+                Log.d(TAG, "onClick: event to return:  " + event.getLocation() + "   " + event.getName());
                 intent.putExtra(EVENT_KEY, event);
                 Log.d(TAG, "onClick: event start: " + event.eventStart + " event end: " + event.eventEnd);
                 startActivity(intent);
