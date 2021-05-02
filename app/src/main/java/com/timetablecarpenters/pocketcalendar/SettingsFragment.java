@@ -27,7 +27,6 @@ public class SettingsFragment extends PreferenceFragment {
     public static final String PARAGRAPH_FONT_SIZE = "Paragraph_font_size";
 
     public static final String RESET_BUTTON = "resetButton";
-    public static final String SMALL = "Small";
     public static final String MEDIUM = "Medium";
     public static final String LARGE = "Large";
     public DBHelper dbHelper;
@@ -46,14 +45,14 @@ public class SettingsFragment extends PreferenceFragment {
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    Toast.makeText(getContext(),"Calendar is reset",Toast.LENGTH_LONG).show();
                     dbHelper = new DBHelper(getContext(),DBHelper.DB_NAME, null);
                     dbHelper.resetDb(null);
-                    ListPreference inText =(ListPreference) findPreference("In-text font size");
-                    ListPreference paragraph =(ListPreference) findPreference("Paragraph_font_size");
+                    ListPreference inText = (ListPreference) findPreference(IN_TEXT_FONT_SIZE);
+                    ListPreference paragraph = (ListPreference) findPreference(PARAGRAPH_FONT_SIZE);
                     inText.setValue(MEDIUM);
                     paragraph.setValue(LARGE);
-
-                    Toast.makeText(getContext(),"Calendar is reset",Toast.LENGTH_LONG).show();
+                    
                     return true;
                 }
 

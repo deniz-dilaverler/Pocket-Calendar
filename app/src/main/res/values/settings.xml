@@ -12,12 +12,6 @@
         <item>Large</item>
     </string-array>
 
-    <string-array name="notification_sounds">
-        <item>Main</item>
-        <item>Default</item>
-        <item>None</item>
-    </string-array>
-
     <string name="default1">Medium</string>
     <string name="default2">Large</string>
     <string name="default3">Main</string>
