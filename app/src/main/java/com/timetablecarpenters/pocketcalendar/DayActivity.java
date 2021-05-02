@@ -137,6 +137,12 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
         initiateRelativeLayouts();
         createNotificationChannel();
 
+        View someView = findViewById( R.id.day_back_color1);
+        someView.setBackgroundColor( CustomizableScreen2.backgroundColor);
+        someView = findViewById( R.id.day_back_color2);
+        someView.setBackgroundColor( CustomizableScreen2.backgroundColor);
+
+
         FloatingActionButton fab = findViewById(R.id.add_event_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -729,7 +735,40 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
 
 
 
-
+    /**
+     * Sets the text colors to a specific value (For testing purposes only)
+     * @author Alperen
+     * @return int color value
+     */
+    private int getBackGColor() {
+        if (CustomizableScreen2.textColor != 0) {
+            return CustomizableScreen2.textColor;
+        }
+        else {
+            CustomizableScreen2.initiate();
+            return CustomizableScreen2.textColor;
+        }
+    }/*
+    private int getButtonColor() {
+        if (CustomizableScreen2.buttonBackgroundColor != 0) {
+            return CustomizableScreen2.buttonBackgroundColor;
+        }
+        else {
+            CustomizableScreen2.initiate();
+            return CustomizableScreen2.buttonBackgroundColor;
+        }
+    }*/
+    private void setOtherTexts() {
+        int color = getBackGColor();
+        /*
+        ( ( Button)findViewById( R.id.daily_button)).setTextColor( color);
+        ( ( Button)findViewById( R.id.daily_button)).setBackgroundColor( getButtonColor());
+        ( ( Button)findViewById( R.id.weekly_button)).setTextColor( color);
+        ( ( Button)findViewById( R.id.weekly_button)).setBackgroundColor( getButtonColor());
+        ( ( Button)findViewById( R.id.monthly_button)).setTextColor( color);
+        ( ( Button)findViewById( R.id.monthly_button)).setBackgroundColor( getButtonColor());*/
+        ( ( TextView)findViewById( R.id.dateText)).setTextColor( color);
+    }
     /**
      * gets today's events and puts them all in an array as events property
      * @author Alperen Utku Yalçın
@@ -752,9 +791,6 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             }
         }
         orderedEventEnds = events;
-    }
-    private int getBackGColor() {
-        return ResourcesCompat.getColor(getResources(), R.color.month_activity_beckground_unusable, null);
     }
 
     private int clockToInt( Calendar cal) {

@@ -447,15 +447,14 @@ public class MonthActivity extends BaseActivity {
     }
     private void setOtherTexts() {
         int color = getBackGColor();
+        /*
         ( ( Button)findViewById( R.id.daily_button)).setTextColor( color);
         ( ( Button)findViewById( R.id.daily_button)).setBackgroundColor( getButtonColor());
         ( ( Button)findViewById( R.id.weekly_button)).setTextColor( color);
         ( ( Button)findViewById( R.id.weekly_button)).setBackgroundColor( getButtonColor());
         ( ( Button)findViewById( R.id.monthly_button)).setTextColor( color);
-        ( ( Button)findViewById( R.id.monthly_button)).setBackgroundColor( getButtonColor());
+        ( ( Button)findViewById( R.id.monthly_button)).setBackgroundColor( getButtonColor());*/
         ( ( TextView)findViewById( R.id.dateText)).setTextColor( color);
-
-
     }
     /**
      * TO CREATE EVENTS ----  TEST ONLY Method.

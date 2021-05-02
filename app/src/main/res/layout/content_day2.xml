@@ -6,6 +6,18 @@
     android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+    <RelativeLayout
+        android:id="@+id/day_back_color2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </RelativeLayout>
+
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
@@ -172,7 +184,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_weight="0"
-                android:text="24:00" />
+                android:text="24:00"
+                android:textSize="10sp" />
 
         </LinearLayout>
     </ScrollView>
