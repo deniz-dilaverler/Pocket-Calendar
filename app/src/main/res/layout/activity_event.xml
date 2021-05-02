@@ -22,9 +22,12 @@
             app:popupTheme="@style/Theme.PocketCalendar.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
     <include
         android:id="@+id/event_view_content"
         layout="@layout/event_view"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
