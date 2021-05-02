@@ -2,12 +2,17 @@ package com.timetablecarpenters.pocketcalendar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,6 +63,8 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_add);
         layoutInflater = getLayoutInflater();
+
+        createNotificationChannel();
 
         Bundle extras = getIntent().getExtras();
         if ( extras != null) {
@@ -521,6 +528,43 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
                     else
                         Toast.makeText(AddEvent.this, "Event successfully added", Toast.LENGTH_SHORT).show();
                 }
+                if ( notification.isChecked()) {
+                    String notificationSpinner = notification_spinner.getSelectedItem().toString();
+                    Intent intent = new Intent(AddEvent.this, ReminderBroadCast.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(AddEvent.this, 0, intent, 0);
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                    long dueTimeInMs = addedEvent.getEventStart().getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                    long differenceToDue;
+                    if( notificationSpinner.equalsIgnoreCase("5 minutes prior"))
+                    {
+                        differenceToDue = 5 * 60 * 1000;
+                    }
+                    else if( notificationSpinner.equalsIgnoreCase("10 minutes prior"))
+                    {
+                        differenceToDue = 10 * 60 * 1000;
+                    }
+                    else if( notificationSpinner.equalsIgnoreCase("30 minutes prior"))
+                    {
+                        differenceToDue = 30 * 60 * 1000;
+                    }
+                    else if( notificationSpinner.equalsIgnoreCase("1 hour prior"))
+                    {
+                        differenceToDue = 60 * 60 * 1000;
+                    }
+                    else if( notificationSpinner.equalsIgnoreCase("6 hours prior"))
+                    {
+                        differenceToDue = 6* 60 * 60 * 1000;
+                    }
+                    else
+                    {
+                        differenceToDue = 12 * 60 * 60 * 1000;
+                    }
+                    Log.d(TAG, "dueTimeInMs - differenceToDue " + (dueTimeInMs - differenceToDue) );
+                    Log.d(TAG, "dueTimeInMs - differenceToDue " + (dueTimeInMs + "-" + differenceToDue) );
+                    Log.d(TAG, "dueTimeInMs - differenceToDue " + addedEvent.getEventStart().toString() );
+
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, dueTimeInMs - differenceToDue, pendingIntent);
+                }
                 if( repeat.isChecked()) {
                     repetition_type.setEnabled(false);
                     number_of_repetitions.setEnabled(false);
@@ -642,6 +686,15 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
 
     }
 
+    public void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("channel", "channel1", NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("simple channel");
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
 
     /**
      * Edits the font sizes of textViews according to settings
@@ -687,5 +740,6 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
             text.setTextSize(16);
         }
     }*/
+
 
 }
