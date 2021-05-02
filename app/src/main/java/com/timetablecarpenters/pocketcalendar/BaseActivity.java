@@ -31,8 +31,8 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
     public static final String SMALL = "Small";
     public static final String MEDIUM = "Medium";
     public static final String LARGE = "Large";
-    protected static final String[] MONTH_NAMES = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-    protected static final String[] DATE_NAMES = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+    protected static final String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+    protected static final String[] dateNames = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     protected static float x1, x2, y1, y2;
     protected static final float MIN_DISTANCE = 100;
     protected  GestureDetector gestureDetector;
@@ -263,12 +263,6 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         }).show();
     }
 
-    @Override
-    public void onRestart() {
-        super.onRestart();
-        //When BACK BUTTON is pressed, the activity on the stack is restarted
-        create();
-    }
 
     /**
      * Override to add functionality
@@ -315,4 +309,10 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         return false;
     }
 
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        //When BACK BUTTON is pressed, the activity on the stack is restarted
+        create();
+    }
 }
