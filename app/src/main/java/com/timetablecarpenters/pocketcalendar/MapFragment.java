@@ -108,5 +108,8 @@ public class MapFragment extends Fragment {
         return mapReady;
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 }

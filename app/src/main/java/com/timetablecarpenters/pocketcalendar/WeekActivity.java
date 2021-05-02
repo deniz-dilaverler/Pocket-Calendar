@@ -87,7 +87,6 @@ public class WeekActivity extends BaseActivity {
                     public boolean onTouch(View v, MotionEvent event) {
                         return onTouchEvent(event);
                     }
-
                 });
             }
             day.add(Calendar.DATE, 1);

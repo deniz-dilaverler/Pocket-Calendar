@@ -9,7 +9,7 @@
         android:id="@+id/divider3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="80dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/event_notes"
         tools:layout_editor_absoluteX="0dp" />
@@ -54,8 +54,9 @@
         android:text="00:00 - 00:00"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_type" />
+        app:layout_constraintTop_toBottomOf="@+id/date_text_view" />
 
     <TextView
         android:id="@+id/event_notifications"
@@ -63,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Notifications: 5 minutes prior"
+        android:text="Notifications: "
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
@@ -92,7 +93,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="28dp"
         android:text="Location:"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -101,38 +102,34 @@
     <fragment
         android:id="@+id/event_map"
         android:name="com.timetablecarpenters.pocketcalendar.MapFragment"
-        android:layout_width="210dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="274dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="16dp"
         android:text="DELETE"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintEnd_toStartOf="@+id/button_edit"
         app:layout_constraintTop_toBottomOf="@+id/divider4"
-        app:layout_constraintVertical_bias="0.497" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/button_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
         android:text="EDIT"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider4"
-        app:layout_constraintVertical_bias="0.497" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/button_delete"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <View
         android:id="@+id/divider4"
@@ -142,4 +139,37 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/event_map"
         tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/notes_contents"
+        android:layout_width="274dp"
+        android:layout_height="97dp"
+        app:layout_constraintEnd_toEndOf="@+id/event_map"
+        app:layout_constraintStart_toStartOf="@+id/event_map"
+        app:layout_constraintTop_toTopOf="@+id/event_notes" />
+
+    <TextView
+        android:id="@+id/date_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="177dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_type" />
+
+    <Button
+        android:id="@+id/to_maps_button"
+        android:layout_width="109dp"
+        android:layout_height="89dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="8dp"
+        android:text="Show in Google Maps"
+        app:layout_constraintEnd_toStartOf="@+id/event_map"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_location" />
 </androidx.constraintlayout.widget.ConstraintLayout>

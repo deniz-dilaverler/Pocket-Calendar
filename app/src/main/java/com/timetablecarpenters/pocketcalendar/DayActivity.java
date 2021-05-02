@@ -42,8 +42,10 @@ import java.util.Calendar;
 
 public class DayActivity extends BaseActivity implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "DayActivity";
+    public static final String EVENT_KEY = "event";
     public static final String EVENT_ID_PREF = "eventID";
     public static final String EVENT_ID_VALUE = "value";
+
     private AlertDialog.Builder addEventBuilder, eventBuilder;
     private AlertDialog addEventDialog, eventDialog;
     private Spinner event_type_spinner, notification_spinner;
@@ -73,7 +75,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
     private boolean[] isEventStart; //if false, event is for the ending, not starting
     private DBHelper database;
     private Calendar thisDay;
-    private final static String INTENT_KEY = "today_date";
+    public final static String INTENT_KEY = "today_date";
     public final static String MAPS_INTENT_KEY = "map_intent";
     public final static String ACTIVITY_NAME = "day_activity";
 
@@ -96,6 +98,7 @@ public class DayActivity extends BaseActivity implements AdapterView.OnItemSelec
             }
             try {
                 addedEvent = (CalendarEvent) extras.get(MapActivity.EVENT_KEY);
+                thisDay = addedEvent.getEventStart();
                 Log.d(TAG, "onCreate: event called back!");
             } catch (Exception e) {
                 Log.d(TAG, "onCreate: no event came out of intent " + e);

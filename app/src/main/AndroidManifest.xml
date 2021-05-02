@@ -19,7 +19,10 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.PocketCalendar">
-        <activity android:name=".CustomizableScreen" android:screenOrientation="portrait"/>
+        <activity android:name=".EventActivity"></activity>
+        <activity
+            android:name=".CustomizableScreen"
+            android:screenOrientation="portrait" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -55,30 +58,30 @@
             android:label="Customise"
             android:theme="@style/Theme.PocketCalendar.NoActionBar" />
         <activity
-            android:screenOrientation="portrait"
             android:name=".SettingsActivity"
             android:label="Settings"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.PocketCalendar.NoActionBar" />
         <activity
             android:name=".UpcomingEvents"
             android:label="Upcoming Events"
-            android:theme="@style/Theme.PocketCalendar.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.PocketCalendar.NoActionBar" />
         <activity
             android:name=".DayActivity"
             android:label="Daily View"
-            android:theme="@style/Theme.PocketCalendar.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.PocketCalendar.NoActionBar" />
         <activity
             android:name=".WeekActivity"
             android:label="Weekly View"
-            android:theme="@style/Theme.PocketCalendar.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.PocketCalendar.NoActionBar" />
         <activity
             android:name=".MonthActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.PocketCalendar.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.PocketCalendar.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
