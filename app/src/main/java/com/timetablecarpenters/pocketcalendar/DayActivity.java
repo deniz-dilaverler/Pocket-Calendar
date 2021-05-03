@@ -84,9 +84,9 @@ public class DayActivity extends BaseActivity  {
         initiateRelativeLayouts();
 
         View someView = findViewById( R.id.day_back_color1);
-        someView.setBackgroundColor( CustomizableScreen2.backgroundColor);
+        someView.setBackgroundColor( CustomizableScreen.backgroundColor);
         someView = findViewById( R.id.day_back_color2);
-        someView.setBackgroundColor( CustomizableScreen2.getButtonColor());
+        someView.setBackgroundColor( CustomizableScreen.getButtonColor());
         setOtherTexts();
 
         editInTextFont( findViewById( R.id.textView8));
@@ -97,7 +97,7 @@ public class DayActivity extends BaseActivity  {
     }
 
     private void setOtherTexts() {
-        int color = CustomizableScreen2.getBackGColor();
+        int color = CustomizableScreen.getBackGColor();
         ((TextView) findViewById(R.id.dateText)).setTextColor(color);
     }
 
@@ -282,7 +282,7 @@ public class DayActivity extends BaseActivity  {
         editInTextFont(text);
         RelativeLayout layout = view.findViewById( R.id.rl1);
         text.setText( hourConvert( hour));
-        text.setTextColor( CustomizableScreen2.getBackGColor());
+        text.setTextColor( CustomizableScreen.getBackGColor());
 
         View recent = layout;
         // i is a global variable so that the clickListener can see the value
@@ -351,7 +351,7 @@ public class DayActivity extends BaseActivity  {
             createTextView( views[i], i);
         }
         TextView txt = findViewById( R.id.textView8);
-        txt.setTextColor( CustomizableScreen2.getBackGColor());
+        txt.setTextColor( CustomizableScreen.getBackGColor());
     }
 
     /**
