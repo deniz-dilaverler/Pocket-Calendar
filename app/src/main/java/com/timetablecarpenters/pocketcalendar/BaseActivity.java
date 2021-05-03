@@ -3,6 +3,7 @@ package com.timetablecarpenters.pocketcalendar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -45,6 +46,8 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         create();
+        CustomizableScreen.recordedValues = PreferenceManager.getDefaultSharedPreferences( this);
+        CustomizableScreen.editValues = CustomizableScreen.recordedValues.edit();
     }
     /**
      * Does the events that took place at the beginning

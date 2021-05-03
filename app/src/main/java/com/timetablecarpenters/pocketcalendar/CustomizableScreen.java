@@ -1,8 +1,10 @@
 package com.timetablecarpenters.pocketcalendar;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 
 public class CustomizableScreen extends AppCompatActivity {
+    public static SharedPreferences recordedValues;
+    public static SharedPreferences.Editor editValues;
     private static final String TAG = "CustomiseSettings";
     public static int backgroundColor;
     public static int buttonBackgroundColor;
@@ -33,7 +37,11 @@ public class CustomizableScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView( R.layout.customise);
 
-        initiate();
+        recordedValues = PreferenceManager.getDefaultSharedPreferences( this);
+        editValues = recordedValues.edit();
+
+        checkSharedPreferences();
+        apply();
         for ( int i : ids) {
             createClickListener( findViewById( i));
         }
@@ -43,12 +51,21 @@ public class CustomizableScreen extends AppCompatActivity {
                 apply();
                 Toast.makeText(CustomizableScreen.this, "Color has been applied",
                         Toast.LENGTH_SHORT).show();
+
+                editValues.putInt( "Background_value", backgroundColor);
+                editValues.putInt( "Text_color_value", textColor);
+                editValues.putInt( "Button_color_value", buttonBackgroundColor);
+                editValues.apply();
             }
         });
     }
-    public static void initiate() {
-
-        if ( backgroundColor == 0 && textColor == 0) {
+    public static void checkSharedPreferences() {
+        if ( recordedValues != null) {
+            backgroundColorUnapplied = recordedValues.getInt( "Background_value", Color.WHITE);
+            textColorUnapplied = recordedValues.getInt( "Text_color_value", Color.BLACK);
+            buttonBackgroundColorUn = recordedValues.getInt( "Button_color_value", Color.LTGRAY);
+        }
+        else {
             backgroundColorUnapplied = Color.WHITE;
             textColorUnapplied = Color.BLACK;
             buttonBackgroundColorUn = Color.LTGRAY;
@@ -62,13 +79,8 @@ public class CustomizableScreen extends AppCompatActivity {
      * @return int color value
      */
     public static int getBackGColor() {
-        if (CustomizableScreen.textColor != 0) {
-            return CustomizableScreen.textColor;
-        }
-        else {
-            CustomizableScreen.initiate();
-            return CustomizableScreen.textColor;
-        }
+        checkSharedPreferences();
+        return textColor;
     }
     /**
      * Sets the text colors to a specific value (For testing purposes only)
@@ -80,7 +92,7 @@ public class CustomizableScreen extends AppCompatActivity {
             return buttonBackgroundColor;
         }
         else {
-            initiate();
+            checkSharedPreferences();
             return buttonBackgroundColor;
         }
     }
