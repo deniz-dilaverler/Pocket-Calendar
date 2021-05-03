@@ -47,7 +47,6 @@ public class EventActivity extends BaseActivity {
         TextView eventType = content.findViewById(R.id.event_type);
         TextView notificationText = content.findViewById(R.id.event_notifications);
         TextView noteContents = content.findViewById(R.id.notes_contents);
-        MapFragment mapFragment =  (MapFragment) (getSupportFragmentManager().findFragmentById(R.id.event_map));
         Button buttonDelete = (Button) content.findViewById(R.id.button_delete);
         Button buttonEdit = (Button) content.findViewById(R.id.button_edit);
         Button buttonOpenMaps = (Button) content.findViewById(R.id.to_maps_button);
@@ -103,10 +102,9 @@ public class EventActivity extends BaseActivity {
             notificationText.setText("Notifications: " + notifTime);
         }
         // set mapview
-        LatLng location = event.getLocation();
-        if (location != null) {
-            mapFragment.moveToLocation(location);
-        }
+        MapFragment mapFragment = new MapFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.event_map, mapFragment).commit();
+        mapFragment.addEvent(event);
 
         buttonOpenMaps.setOnClickListener(new View.OnClickListener() {
             @Override
