@@ -91,6 +91,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                 }
             } catch (Exception e) {
                 Log.d(TAG, "onCreate: no event came out of intent " + e);
+                e.printStackTrace();
             }
         }
 
@@ -315,6 +316,9 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
      * @return Month Day Year (ex. May 1 2021)
      */
     private String getTodaysDate() {
+        if (thisDay == null) {
+            thisDay = Calendar.getInstance();
+        }
         final int day = thisDay.get(Calendar.DAY_OF_MONTH);
         final int month = thisDay.get(Calendar.MONTH);
         final int year = thisDay.get(Calendar.YEAR);
@@ -580,7 +584,6 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getId() == R.id.event_type_spinner) {
-            eventTypePosition = position;
             if (addedEvent != null)
                 addedEvent.setType(parent.getItemAtPosition(position).toString());
         }
@@ -731,19 +734,22 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
      */
     public void setAddEventView() {
         Log.d(TAG, "setAddEventView: nonono");
-        event_type_spinner.setSelection(eventTypePosition);
+        event_type_spinner.setSelection(eventTypesAdapter.getPosition(addedEvent.getType()));
         event_name.setText(addedEvent.getName());
         next.performClick();
-        event_date.setText(formattedMonth(addedEvent.getEventStart().get(Calendar.MONTH))
-                            + " " + addedEvent.getEventStart().get(Calendar.DAY_OF_MONTH)
-                            + " " + addedEvent.getEventStart().get(Calendar.YEAR));
-        if (addedEvent.getType().equals("Assignment"))
+        if (addedEvent.getEventStart() != null) {
+            event_date.setText(formattedMonth(addedEvent.getEventStart().get(Calendar.MONTH))
+                    + " " + addedEvent.getEventStart().get(Calendar.DAY_OF_MONTH)
+                    + " " + addedEvent.getEventStart().get(Calendar.YEAR));
+        }
+        if (addedEvent.getType().equals("Assignment") && addedEvent.getEventStartTime() != null)
             event_due_time.setText(addedEvent.getEventStartTime());
-        else {
+        else if (addedEvent.getEventStartTime() != null && addedEvent.getEventEndTime() != null) {
             event_start.setText(addedEvent.getEventStartTime());
             event_end.setText(addedEvent.getEventEndTime());
         }
-        notes.setText(addedEvent.getNotes());
+        if (addedEvent.getNotes() != null)
+            notes.setText(addedEvent.getNotes());
     }
 
     private int ConvertIntoNumeric(String xVal)
