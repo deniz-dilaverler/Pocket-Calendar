@@ -41,6 +41,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
     public static final String DATE_KEY = "Date";
     public static final String EDIT_EVENT_KEY = "edit_event";
     public static final String ADD_ACTIVITY_NAME = "add_activity";
+    public static final String EDIT_ACTIVITY_NAME = "edit_activity";
     public static final String TAG = "AddEventActivity";
     public static final String EVENT_ID_PREF = "eventID";
     public static final String EVENT_ID_VALUE = "value";
@@ -519,7 +520,10 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                     }
                     Intent intent = new Intent(AddEvent.this, MapActivity.class);
                     intent.putExtra(MapActivity.EVENT_KEY, addedEvent);
-                    intent.putExtra(MapActivity.INTENT_ID_KEY, ADD_ACTIVITY_NAME);
+                    if (isEditView)
+                        intent.putExtra(MapActivity.EVENT_KEY, EDIT_ACTIVITY_NAME);
+                    else
+                        intent.putExtra(MapActivity.INTENT_ID_KEY, ADD_ACTIVITY_NAME);
                     startActivity(intent);
                 }
             });

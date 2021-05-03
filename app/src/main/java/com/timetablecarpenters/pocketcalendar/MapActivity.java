@@ -206,16 +206,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 Class returnActivity;
                 // Todo: if there are multiple Activities to possibly return add an if statement
 
-
+                String key = EVENT_KEY;
                 if (previousActivityKey.equals(AddEvent.ADD_ACTIVITY_NAME))
                     returnActivity = AddEvent.class;
-                // Todo: edit event intent else if (Edit event)
+                else if(previousActivityKey.equalsIgnoreCase((AddEvent.EDIT_ACTIVITY_NAME))) {
+                    returnActivity = AddEvent.class;
+                    key = AddEvent.EDIT_EVENT_KEY;
+                }
                 else
                     returnActivity = MonthActivity.class;
 
+
                 Intent intent = new Intent(MapActivity.this, returnActivity);
                 Log.d(TAG, "onClick: event to return:  " + event.getLocation() + "   " + event.getName());
-                intent.putExtra(EVENT_KEY, event);
+                intent.putExtra(key, event);
                 Log.d(TAG, "onClick: event start: " + event.eventStart + " event end: " + event.eventEnd);
                 startActivity(intent);
 
