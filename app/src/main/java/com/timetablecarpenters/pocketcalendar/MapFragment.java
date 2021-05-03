@@ -55,6 +55,7 @@ public class MapFragment extends Fragment {
             googleMap.getUiSettings().setScrollGesturesEnabled(false);
             
             map = googleMap;
+            // move to initial coordinates
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_LOCATION, INITIAL_ZOOM));
             mapReady = true;
 
