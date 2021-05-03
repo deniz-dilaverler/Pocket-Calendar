@@ -476,7 +476,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         }
 
         notes = (EditText) commonItemsView.findViewById(R.id.add_notes);
-        // editParagraphFont(notes);
+        editParagraphFont(notes);
 
 
         // initialize Location editing UI elements
@@ -493,6 +493,9 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
             locationSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (notes.getText() !=  null) {
+                        addedEvent.setNotes(notes.getText().toString());
+                    }
                     Intent intent = new Intent(AddEvent.this, MapActivity.class);
                     intent.putExtra(MapActivity.EVENT_KEY, addedEvent);
                     intent.putExtra(MapActivity.INTENT_ID_KEY, ADD_ACTIVITY_NAME);
@@ -733,11 +736,12 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
      * Sets options for the current event
      */
     public void setAddEventView() {
-        Log.d(TAG, "setAddEventView: nonono");
+        Log.d(TAG, "setAddEventView: setting the view");
         event_type_spinner.setSelection(eventTypesAdapter.getPosition(addedEvent.getType()));
         event_name.setText(addedEvent.getName());
         next.performClick();
         if (addedEvent.getEventStart() != null) {
+            Log.d(TAG, "setAddEventView: event start " + addedEvent.getEventStart());
             event_date.setText(formattedMonth(addedEvent.getEventStart().get(Calendar.MONTH))
                     + " " + addedEvent.getEventStart().get(Calendar.DAY_OF_MONTH)
                     + " " + addedEvent.getEventStart().get(Calendar.YEAR));
@@ -745,10 +749,12 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         if (addedEvent.getType().equals("Assignment") && addedEvent.getEventStartTime() != null)
             event_due_time.setText(addedEvent.getEventStartTime());
         else if (addedEvent.getEventStartTime() != null && addedEvent.getEventEndTime() != null) {
-            event_start.setText(addedEvent.getEventStartTime());
-            event_end.setText(addedEvent.getEventEndTime());
+            event_start.setText("Start: " + addedEvent.getEventStartTime());
+            event_end.setText("End: " + addedEvent.getEventEndTime());
         }
+        Log.d(TAG, "onClick: notes" + addedEvent.getNotes());
         if (addedEvent.getNotes() != null)
+            Log.d(TAG, "setAddEventView: event notes " + addedEvent.getNotes());
             notes.setText(addedEvent.getNotes());
     }
 
