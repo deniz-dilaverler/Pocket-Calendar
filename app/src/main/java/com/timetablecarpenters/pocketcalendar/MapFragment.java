@@ -55,6 +55,7 @@ public class MapFragment extends Fragment {
             googleMap.getUiSettings().setScrollGesturesEnabled(false);
             
             map = googleMap;
+            // move to initial coordinates
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_LOCATION, INITIAL_ZOOM));
             mapReady = true;
 
@@ -126,6 +127,12 @@ public class MapFragment extends Fragment {
         super.onDestroyView();
     }
 
+    /**
+     * adds an event to the fragment where its location will be shown when the map is set
+     * this method should be called right after the initialization of the fragment, otherwise it
+     * won't be shown on the map
+     * @param event
+     */
     public void addEvent(CalendarEvent event) {
         this.event = event;
     }

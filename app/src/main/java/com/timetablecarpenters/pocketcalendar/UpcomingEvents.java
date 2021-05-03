@@ -26,7 +26,6 @@ public class UpcomingEvents extends BaseActivity {
         Log.d(TAG, "onCreate: Startsss");
         setContentView(R.layout.activity_upcoming_events);
         super.onCreate(savedInstanceState);
-        //toolbar.setTitle("Upcoming");
         Cursor cursor;
         DBHelper dbHelper;
         today = Calendar.getInstance();
