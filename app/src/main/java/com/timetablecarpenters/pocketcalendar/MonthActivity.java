@@ -73,7 +73,6 @@ public class MonthActivity extends BaseActivity {
         calendar2.set(Calendar.HOUR_OF_DAY, calendar2.getActualMaximum( Calendar.HOUR_OF_DAY));
         calendar2.set(Calendar.MINUTE, calendar2.getActualMaximum( Calendar.MINUTE));
 
-        insertEvents();
         pullEvents( database.getEventsInAnIntervalInArray( calendar1, calendar2));
         initiateWeeks();
 
@@ -463,104 +462,5 @@ public class MonthActivity extends BaseActivity {
         ( ( Button)findViewById( R.id.monthly_button)).setTextColor( color);
         ( ( Button)findViewById( R.id.monthly_button)).setBackgroundColor( getButtonColor());*/
         ( ( TextView)findViewById( R.id.dateText)).setTextColor( color);
-    }
-    /**
-     * TO CREATE EVENTS ----  TEST ONLY Method.
-     * insets some sample events to database.
-     */
-    private void insertEvents() {
-        Calendar calendar3 = Calendar.getInstance();
-        Calendar calendar4 = Calendar.getInstance();
-        calendar3.set( Calendar.MONTH, 3);
-        calendar3.set( Calendar.YEAR, 2021);
-        calendar3.set( Calendar.DATE, 20);
-        calendar4.set( Calendar.MONTH, calendar3.get( Calendar.MONTH));
-        calendar4.set( Calendar.YEAR, calendar3.get( Calendar.YEAR));
-        calendar4.set( Calendar.DATE, calendar3.get( Calendar.DATE));
-        calendar3.set( Calendar.HOUR_OF_DAY , 10);
-        calendar3.set( Calendar.MINUTE , 30);
-        calendar4.set( Calendar.HOUR_OF_DAY , 13);
-        calendar4.set( Calendar.MINUTE , 33);
-        CalendarEvent cal1 = new CalendarEvent( calendar3, calendar4, "You Have A Meeting" + calendar3.get( Calendar.MINUTE), 10, "Meeting");
-        cal1.setColor( Color.RED);
-        database.insertEvent( cal1);
-
-        Calendar calendar = Calendar.getInstance();
-        Calendar calendar2 = Calendar.getInstance();
-        calendar.set( Calendar.MONTH, 3);
-        calendar.set( Calendar.YEAR, 2021);
-        calendar.set( Calendar.DATE, 20);
-        calendar2.set( Calendar.MONTH, calendar.get( Calendar.MONTH));
-        calendar2.set( Calendar.YEAR, calendar.get( Calendar.YEAR));
-        calendar2.set( Calendar.DATE, calendar.get( Calendar.DATE));
-        calendar.set( Calendar.HOUR_OF_DAY , 0);
-        calendar.set( Calendar.MINUTE , 1);
-        calendar2.set( Calendar.HOUR_OF_DAY , 2);
-        calendar2.set( Calendar.MINUTE , 3);
-        CalendarEvent cal2=  new CalendarEvent( calendar, calendar2, "You Have A Meeting"+ calendar.get( Calendar.MINUTE), 11, "Meeting");
-        cal2.setColor( Color.BLUE);
-        database.insertEvent( cal2);
-
-        Calendar calendar5 = Calendar.getInstance();
-        Calendar calendar6 = Calendar.getInstance();;
-        calendar5.set( Calendar.MONTH, 3);
-        calendar5.set( Calendar.YEAR, 2021);
-        calendar5.set( Calendar.DATE, 22);
-        calendar6.set( Calendar.MONTH, calendar5.get( Calendar.MONTH));
-        calendar6.set( Calendar.YEAR, calendar5.get( Calendar.YEAR));
-        calendar6.set( Calendar.DATE, calendar5.get( Calendar.DATE));
-        calendar5.set( Calendar.HOUR_OF_DAY , 2);
-        calendar5.set( Calendar.MINUTE , 1);
-        calendar6.set( Calendar.HOUR_OF_DAY , 2);
-        calendar6.set( Calendar.MINUTE , 3);
-        CalendarEvent cal3 =  new CalendarEvent( calendar5, calendar6, "Bruh", 12, "Meeting");
-        cal3.setColor( Color.DKGRAY);
-        database.insertEvent( cal3);
-
-        Calendar calendar7 = Calendar.getInstance();
-        Calendar calendar8 = Calendar.getInstance();
-        calendar7.set( Calendar.MONTH, 3);
-        calendar7.set( Calendar.YEAR, 2021);
-        calendar7.set( Calendar.DATE, 23);
-        calendar8.set( Calendar.MONTH, calendar7.get( Calendar.MONTH));
-        calendar8.set( Calendar.YEAR, calendar7.get( Calendar.YEAR));
-        calendar8.set( Calendar.DATE, calendar7.get( Calendar.DATE));
-        calendar7.set( Calendar.HOUR_OF_DAY , 0);
-        calendar7.set( Calendar.MINUTE , 1);
-        calendar8.set( Calendar.HOUR_OF_DAY , 0);
-        calendar8.set( Calendar.MINUTE , 3);
-        CalendarEvent cal4 =  new CalendarEvent( calendar7, calendar8, "You Have A Meeting Too", 13, "Meeting");
-        cal4.setColor( Color.GREEN);
-        database.insertEvent( cal4);
-
-        Calendar calendar9 = Calendar.getInstance();
-        Calendar calendar10 = Calendar.getInstance();
-        calendar9.set( Calendar.HOUR_OF_DAY , 11);
-        calendar9.set( Calendar.MINUTE , 10);
-        calendar10.set( Calendar.HOUR_OF_DAY , 11);
-        calendar10.set( Calendar.MINUTE , 20);
-        CalendarEvent cal5 =  new CalendarEvent( calendar9, calendar10, "You Have A Meeting Too" + calendar9.get( Calendar.MINUTE), 14, "Meeting");
-        cal5.setColor( Color.BLUE);
-        database.insertEvent( cal5);
-
-        Calendar calendar11 = Calendar.getInstance();
-        Calendar calendar12 = Calendar.getInstance();
-        calendar11.set( Calendar.HOUR_OF_DAY , 20);
-        calendar11.set( Calendar.MINUTE , 1);
-        calendar12.set( Calendar.HOUR_OF_DAY , 21);
-        calendar12.set( Calendar.MINUTE , 50);
-        CalendarEvent cal6 =  new CalendarEvent( calendar11, calendar12, "Meet with friends", 15, "Meeting");
-        cal6.setColor( Color.MAGENTA);
-        database.insertEvent( cal6);
-
-        Calendar calendar13 = Calendar.getInstance();
-        Calendar calendar14 = Calendar.getInstance();
-        calendar13.set( Calendar.HOUR_OF_DAY , 18);
-        calendar13.set( Calendar.MINUTE , 10);
-        calendar14.set( Calendar.HOUR_OF_DAY , 18);
-        calendar14.set( Calendar.MINUTE , 20);
-        CalendarEvent cal7 =  new CalendarEvent( calendar13, calendar14, "Have a cup of cofee" + calendar9.get( Calendar.MINUTE), 16, "Meeting");
-        cal7.setColor( Color.CYAN);
-        database.insertEvent( cal7);
     }
 }

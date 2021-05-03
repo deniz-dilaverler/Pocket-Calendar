@@ -31,7 +31,7 @@ public class MapFragment extends Fragment {
 
     private static final float INITIAL_ZOOM = 2f;
     private static final LatLng INITIAL_LOCATION = new LatLng(54.54, 25.19);
-    private static final float ZOOM = 13f;
+    private static final float ZOOM = 11f;
     protected boolean mapReady = false;
     protected GoogleMap map;
     CalendarEvent event;

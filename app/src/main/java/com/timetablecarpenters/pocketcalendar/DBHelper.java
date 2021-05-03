@@ -142,6 +142,7 @@ public class DBHelper extends SQLiteOpenHelper {
             if (location != null) {
                 cv.put(LATITUDE, location.latitude);
                 cv.put(LONGITUDE, location.longitude);
+                Log.d(TAG, "insertEvent: has location");
             } else {
                 cv.putNull(LONGITUDE);
                 cv.putNull(LATITUDE);
@@ -274,7 +275,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 int color;
                 String notifTime;
                 CalendarEvent eventToAdd;
-                //TODO: add code for setting the notifTime and Location
+                //TODO: add code for setting the notifTime
                 Calendar eventStart = Calendar.getInstance();
                 eventStart.set(Calendar.YEAR, cursor.getInt(cursor.getColumnIndex(DBHelper.YEAR)));
                 eventStart.set(Calendar.MONTH, cursor.getInt(cursor.getColumnIndex(DBHelper.MONTH)));
@@ -318,6 +319,14 @@ public class DBHelper extends SQLiteOpenHelper {
                eventToAdd.setNotes(notes);
                if (!cursor.isNull(cursor.getColumnIndex(COLOR)))
                    eventToAdd.setColor(cursor.getInt(cursor.getColumnIndex(COLOR)));
+
+               // set location
+                try {
+                    eventToAdd.setLocation(new LatLng(cursor.getDouble(cursor.getColumnIndex(DBHelper.LATITUDE)),
+                            cursor.getDouble(cursor.getColumnIndex(DBHelper.LONGITUDE))));
+                } catch (Exception e) {
+                    Log.e(TAG, "getEventsInAnIntervalInArray: ", e );
+                }
 
                events.add(eventToAdd);
 
