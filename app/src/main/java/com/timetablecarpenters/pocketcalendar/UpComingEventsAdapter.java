@@ -2,14 +2,19 @@ package com.timetablecarpenters.pocketcalendar;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+
+import androidx.constraintlayout.solver.state.State;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -65,6 +70,7 @@ public class UpComingEventsAdapter extends CursorAdapter {
         TextView remainingTimeText = cardViewContents.findViewById(R.id.remaining_text);
         TextView eventDescText =  cardViewContents.findViewById(R.id.event_desc_text);
         ProgressBar progressBar = cardViewContents.findViewById(R.id.progressBar);
+        RelativeLayout relativeLayout = cardViewContents.findViewById(R.id.upcoming_background);
 
         String startTime = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_START));
         String endTime = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_END));
@@ -77,6 +83,13 @@ public class UpComingEventsAdapter extends CursorAdapter {
 
         String dateTextString = String.format("%d.%d.%d", day, month + 1, year); //increment month by 1 because the db and the Calendar class stores month values starting from 0
         dateText.setText(dateTextString);
+
+        relativeLayout.setBackgroundColor( CustomizableScreen2.getButtonColor());
+        dateText.setTextColor( CustomizableScreen2.getBackGColor());
+        timeText.setTextColor( CustomizableScreen2.getBackGColor());
+        remainingTimeText.setTextColor( CustomizableScreen2.getBackGColor());
+        eventDescText.setTextColor( CustomizableScreen2.getBackGColor());
+        progressBar.setDrawingCacheBackgroundColor( CustomizableScreen2.getBackGColor());
 
         String timeTextString = startTime;
         if (startTime.equalsIgnoreCase(endTime))

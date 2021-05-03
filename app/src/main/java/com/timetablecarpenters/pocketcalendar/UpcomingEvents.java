@@ -33,12 +33,15 @@ public class UpcomingEvents extends BaseActivity {
         ListView eventsList = (ListView) findViewById(R.id.events_list);
         dbHelper = new DBHelper(this, DBHelper.DB_NAME, null);
 
+        findViewById( R.id.upcoming_back).setBackgroundColor( CustomizableScreen2.backgroundColor);
+        findViewById( R.id.events_list).setBackgroundColor( CustomizableScreen2.backgroundColor);
+
+
         Calendar maxDay = (Calendar) today.clone();
         maxDay.add(Calendar.DATE, TOTAL_DAYS);
         cursor = dbHelper.getEventsInAnInterval(today, maxDay);
 
         UpComingEventsAdapter adapter = new UpComingEventsAdapter(this, cursor, today);
-
         eventsList.setAdapter(adapter);
 
     }

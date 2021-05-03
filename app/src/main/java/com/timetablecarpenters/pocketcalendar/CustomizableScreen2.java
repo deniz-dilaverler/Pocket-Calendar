@@ -55,6 +55,35 @@ public class CustomizableScreen2 extends AppCompatActivity {
         }
         apply();
     }
+
+    /**
+     * Sets the text colors to a specific value (For testing purposes only)
+     * @author Alperen
+     * @return int color value
+     */
+    public static int getBackGColor() {
+        if (CustomizableScreen2.textColor != 0) {
+            return CustomizableScreen2.textColor;
+        }
+        else {
+            CustomizableScreen2.initiate();
+            return CustomizableScreen2.textColor;
+        }
+    }
+    /**
+     * Sets the text colors to a specific value (For testing purposes only)
+     * @author Alperen
+     * @return int color value
+     */
+    public static int getButtonColor() {
+        if ( buttonBackgroundColor != 0) {
+            return buttonBackgroundColor;
+        }
+        else {
+            initiate();
+            return buttonBackgroundColor;
+        }
+    }
     private void createClickListener( TextView colorText) {
         colorText.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -182,41 +182,13 @@ public class MonthActivity extends BaseActivity {
         cal.add( Calendar.DATE,1);
         dayCreate( dayInWeek[6], cal, dayCount);
 
-        ( ( TextView)findViewById( R.id.monday)).setTextColor( getBackGColor());
-        ( ( TextView)findViewById( R.id.tuesday)).setTextColor( getBackGColor());
-        ( ( TextView)findViewById( R.id.wednesday)).setTextColor( getBackGColor());
-        ( ( TextView)findViewById( R.id.thursday)).setTextColor( getBackGColor());
-        ( ( TextView)findViewById( R.id.friday)).setTextColor( getBackGColor());
-        ( ( TextView)findViewById( R.id.saturday)).setTextColor( getBackGColor());
-        ( ( TextView)findViewById( R.id.sunday)).setTextColor( getBackGColor());
-    }
-    /**
-     * Sets the text colors to a specific value (For testing purposes only)
-     * @author Alperen
-     * @return int color value
-     */
-    private int getBackGColor() {
-        if (CustomizableScreen2.textColor != 0) {
-            return CustomizableScreen2.textColor;
-        }
-        else {
-            CustomizableScreen2.initiate();
-            return CustomizableScreen2.textColor;
-        }
-    }
-    /**
-     * Sets the text colors to a specific value (For testing purposes only)
-     * @author Alperen
-     * @return int color value
-     */
-    private int getButtonColor() {
-        if (CustomizableScreen2.buttonBackgroundColor != 0) {
-            return CustomizableScreen2.buttonBackgroundColor;
-        }
-        else {
-            CustomizableScreen2.initiate();
-            return CustomizableScreen2.buttonBackgroundColor;
-        }
+        ( ( TextView)findViewById( R.id.monday)).setTextColor( CustomizableScreen2.getBackGColor());
+        ( ( TextView)findViewById( R.id.tuesday)).setTextColor( CustomizableScreen2.getBackGColor());
+        ( ( TextView)findViewById( R.id.wednesday)).setTextColor( CustomizableScreen2.getBackGColor());
+        ( ( TextView)findViewById( R.id.thursday)).setTextColor( CustomizableScreen2.getBackGColor());
+        ( ( TextView)findViewById( R.id.friday)).setTextColor( CustomizableScreen2.getBackGColor());
+        ( ( TextView)findViewById( R.id.saturday)).setTextColor( CustomizableScreen2.getBackGColor());
+        ( ( TextView)findViewById( R.id.sunday)).setTextColor( CustomizableScreen2.getBackGColor());
     }
     /**
      * Activates each day in MonthView.
@@ -239,7 +211,7 @@ public class MonthActivity extends BaseActivity {
 
         if (isSpareDay[dayCount]) {
             str = "";
-            backG.setBackgroundColor(getBackGColor());
+            backG.setBackgroundColor(CustomizableScreen2.getBackGColor());
             date.setText(str);
             LinearLayout rl = (LinearLayout) day.findViewById(R.id.linear_layout1);
             rl.removeAllViews();
@@ -247,9 +219,9 @@ public class MonthActivity extends BaseActivity {
             if (eventCountDays[dayCount] != null) {
                 addCircles(eventCountDays[dayCount], day);
             }
-            backG.setBackgroundColor( getButtonColor());
+            backG.setBackgroundColor( CustomizableScreen2.getButtonColor());
             date.setText(str);
-            date.setTextColor(getBackGColor());
+            date.setTextColor( CustomizableScreen2.getBackGColor());
             day.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -338,7 +310,7 @@ public class MonthActivity extends BaseActivity {
             rl2.addView( setView( c4, 3, events), 0);
             rl2.addView( setView( c5, 4, events), 1);
             TextView txt = viewPlus.findViewById( R.id.plus_sign);
-            txt.setTextColor( getBackGColor());
+            txt.setTextColor( CustomizableScreen2.getBackGColor());
             rl2.addView( viewPlus, 2);
         }
     }
@@ -453,7 +425,7 @@ public class MonthActivity extends BaseActivity {
         finish();
     }
     private void setOtherTexts() {
-        int color = getBackGColor();
+        int color = CustomizableScreen2.getBackGColor();
         /*
         ( ( Button)findViewById( R.id.daily_button)).setTextColor( color);
         ( ( Button)findViewById( R.id.daily_button)).setBackgroundColor( getButtonColor());

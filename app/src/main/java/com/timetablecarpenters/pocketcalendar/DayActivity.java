@@ -86,7 +86,7 @@ public class DayActivity extends BaseActivity  {
         View someView = findViewById( R.id.day_back_color1);
         someView.setBackgroundColor( CustomizableScreen2.backgroundColor);
         someView = findViewById( R.id.day_back_color2);
-        someView.setBackgroundColor( getButtonColor());
+        someView.setBackgroundColor( CustomizableScreen2.getButtonColor());
         setOtherTexts();
 
         editInTextFont( findViewById( R.id.textView8));
@@ -96,35 +96,8 @@ public class DayActivity extends BaseActivity  {
         fab.setOnClickListener(new DayActivity.ViewChangeClickListener());
     }
 
-    /**
-     * Sets the text colors to a specific value (For testing purposes only)
-     * @author Alperen
-     * @return int color value
-     */
-    private int getBackGColor() {
-        if (CustomizableScreen2.textColor != 0) {
-            return CustomizableScreen2.textColor;
-        } else {
-            CustomizableScreen2.initiate();
-            return CustomizableScreen2.textColor;
-        }
-    }
-    /**
-     * Sets the text colors to a specific value (For testing purposes only)
-     * @author Alperen
-     * @return int color value
-     */
-    private int getButtonColor() {
-        if (CustomizableScreen2.buttonBackgroundColor != 0) {
-            return CustomizableScreen2.buttonBackgroundColor;
-        }
-        else {
-            CustomizableScreen2.initiate();
-            return CustomizableScreen2.buttonBackgroundColor;
-        }
-    }
     private void setOtherTexts() {
-        int color = getBackGColor();
+        int color = CustomizableScreen2.getBackGColor();
         ((TextView) findViewById(R.id.dateText)).setTextColor(color);
     }
 
@@ -309,7 +282,7 @@ public class DayActivity extends BaseActivity  {
         editInTextFont(text);
         RelativeLayout layout = view.findViewById( R.id.rl1);
         text.setText( hourConvert( hour));
-        text.setTextColor( getBackGColor());
+        text.setTextColor( CustomizableScreen2.getBackGColor());
 
         View recent = layout;
         // i is a global variable so that the clickListener can see the value
@@ -365,38 +338,20 @@ public class DayActivity extends BaseActivity  {
      * @author Alperen Utku Yalçın
      */
     private void initiateRelativeLayouts( ) {
-        //todo
+        int[] hours = { R.id.hr0,  R.id.hr1, R.id.hr2, R.id.hr3, R.id.hr4, R.id.hr5, R.id.hr6, R.id.hr7,
+                R.id.hr8, R.id.hr9, R.id.hr10, R.id.hr11, R.id.hr12, R.id.hr13, R.id.hr14, R.id.hr15,
+                R.id.hr16, R.id.hr17, R.id.hr18, R.id.hr19, R.id.hr20, R.id.hr21, R.id.hr22, R.id.hr23,};
+
         EventChronologyCreate();
         View[] views = new View[24];
-        views[0] = findViewById( R.id.day_content).findViewById( R.id.hr0);
-        views[1] = findViewById( R.id.day_content).findViewById( R.id.hr1);
-        views[2] = findViewById( R.id.day_content).findViewById( R.id.hr2);
-        views[3] = findViewById( R.id.day_content).findViewById( R.id.hr3);
-        views[4] = findViewById( R.id.day_content).findViewById( R.id.hr4);
-        views[5] = findViewById( R.id.day_content).findViewById( R.id.hr5);
-        views[6] = findViewById( R.id.day_content).findViewById( R.id.hr6);
-        views[7] = findViewById( R.id.day_content).findViewById( R.id.hr7);
-        views[8] = findViewById( R.id.day_content).findViewById( R.id.hr8);
-        views[9] = findViewById( R.id.day_content).findViewById( R.id.hr9);
-        views[10] = findViewById( R.id.day_content).findViewById( R.id.hr10);
-        views[11] = findViewById( R.id.day_content).findViewById( R.id.hr11);
-        views[12] = findViewById( R.id.day_content).findViewById( R.id.hr12);
-        views[13] = findViewById( R.id.day_content).findViewById( R.id.hr13);
-        views[14] = findViewById( R.id.day_content).findViewById( R.id.hr14);
-        views[15] = findViewById( R.id.day_content).findViewById( R.id.hr15);
-        views[16] = findViewById( R.id.day_content).findViewById( R.id.hr16);
-        views[17] = findViewById( R.id.day_content).findViewById( R.id.hr17);
-        views[18] = findViewById( R.id.day_content).findViewById( R.id.hr18);
-        views[19] = findViewById( R.id.day_content).findViewById( R.id.hr19);
-        views[20] = findViewById( R.id.day_content).findViewById( R.id.hr20);
-        views[21] = findViewById( R.id.day_content).findViewById( R.id.hr21);
-        views[22] = findViewById( R.id.day_content).findViewById( R.id.hr22);
-        views[23] = findViewById( R.id.day_content).findViewById( R.id.hr23);
+        for (int i = 0; i < 24; i++) {
+            views[i] = findViewById( R.id.day_content).findViewById( hours[i]);
+        }
         for ( int i = 0; i < 24 ; i++) {
             createTextView( views[i], i);
         }
         TextView txt = findViewById( R.id.textView8);
-        txt.setTextColor( getBackGColor());
+        txt.setTextColor( CustomizableScreen2.getBackGColor());
     }
 
     /**

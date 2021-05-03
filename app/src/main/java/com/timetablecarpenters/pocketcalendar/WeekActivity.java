@@ -62,7 +62,7 @@ public class WeekActivity extends BaseActivity {
         last = (Calendar) first.clone();
         last.add(Calendar.DAY_OF_YEAR, 6);
 
-        ( ( TextView) findViewById( R.id.dateText)).setTextColor( getBackGColor());
+        ( ( TextView) findViewById( R.id.dateText)).setTextColor( CustomizableScreen2.getBackGColor());
         findViewById( R.id.back_week).setBackgroundColor( CustomizableScreen2.backgroundColor);
 
         dateText = (TextView) findViewById(R.id.dateText);
@@ -87,8 +87,8 @@ public class WeekActivity extends BaseActivity {
                 }
             });
             editInTextFont(weekDayName);
-            weekDayName.setTextColor( getBackGColor());
-            row.findViewById( R.id.events_of_day_list).setBackgroundColor( getButtonColor());
+            weekDayName.setTextColor( CustomizableScreen2.getBackGColor());
+            row.findViewById( R.id.events_of_day_list).setBackgroundColor( CustomizableScreen2.getButtonColor());
             Log.d(TAG, "onCreate: day = " + day.get(Calendar.YEAR)+ " " + day.get(Calendar.MONTH)+ " " + day.get(Calendar.DAY_OF_MONTH));
             cursor = dbHelper.getEventsInAnInterval(day, day);
             // check if there are any events on that day
@@ -106,35 +106,6 @@ public class WeekActivity extends BaseActivity {
             }
             day.add(Calendar.DATE, 1);
 
-        }
-    }
-
-    /**
-     * Sets the text colors to a specific value (For testing purposes only)
-     * @author Alperen
-     * @return int color value
-     */
-    private int getBackGColor() {
-        if (CustomizableScreen2.textColor != 0) {
-            return CustomizableScreen2.textColor;
-        }
-        else {
-            CustomizableScreen2.initiate();
-            return CustomizableScreen2.textColor;
-        }
-    }
-    /**
-     * Sets the text colors to a specific value (For testing purposes only)
-     * @author Alperen
-     * @return int color value
-     */
-    private int getButtonColor() {
-        if (CustomizableScreen2.buttonBackgroundColor != 0) {
-            return CustomizableScreen2.buttonBackgroundColor;
-        }
-        else {
-            CustomizableScreen2.initiate();
-            return CustomizableScreen2.buttonBackgroundColor;
         }
     }
 
