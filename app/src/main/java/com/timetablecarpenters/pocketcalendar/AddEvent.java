@@ -69,6 +69,8 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         Log.d(TAG, "onCreate: Starts");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_add);
+        ( ( TextView) findViewById( R.id.add_event)).setTextColor( CustomizableScreen2.getBackGColor());
+
         layoutInflater = getLayoutInflater();
 
         createNotificationChannel();

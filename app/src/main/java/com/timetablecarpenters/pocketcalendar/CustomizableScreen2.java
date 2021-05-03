@@ -44,9 +44,6 @@ public class CustomizableScreen2 extends AppCompatActivity {
         });
     }
     public static void initiate() {
-        backgroundColorUnapplied = 0;
-        textColorUnapplied = 0;
-        buttonBackgroundColorUn = 0;
 
         if ( backgroundColor == 0 && textColor == 0) {
             backgroundColorUnapplied = Color.WHITE;
