@@ -501,6 +501,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         // initialize Location editing UI elements
         MapFragment mapFragment = new MapFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.map_container, mapFragment).commit();
+        mapFragment.addEvent(addedEvent);
 
         locationSelect = (Button) commonItemsView.findViewById(R.id.open_map);
         // show the location on the map if the user has chosen one
@@ -866,5 +867,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
             text.setTextSize(16);
         }
     }
+
+
 
 }

@@ -18,6 +18,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Calendar;
+
 /**
  * Google Maps fragment that shows the passed location
  * doesn't allow user interaction, solely for location viewing.
@@ -32,6 +34,7 @@ public class MapFragment extends Fragment {
     private static final float ZOOM = 13f;
     protected boolean mapReady = false;
     protected GoogleMap map;
+    CalendarEvent event;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
   
@@ -55,8 +58,15 @@ public class MapFragment extends Fragment {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_LOCATION, INITIAL_ZOOM));
             mapReady = true;
 
+            if (event != null && event.location != null)
+                moveToLocation(event.getLocation());
+
+
         }
     };
+
+    public MapFragment() {
+    }
 
     /**
      * Creates the fragment
@@ -114,5 +124,9 @@ public class MapFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    public void addEvent(CalendarEvent event) {
+        this.event = event;
     }
 }
