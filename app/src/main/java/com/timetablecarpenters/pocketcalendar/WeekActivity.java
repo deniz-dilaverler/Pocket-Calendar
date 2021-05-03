@@ -12,8 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
-import androidx.core.content.res.ResourcesCompat;
-
 import java.util.Calendar;
 
 /**

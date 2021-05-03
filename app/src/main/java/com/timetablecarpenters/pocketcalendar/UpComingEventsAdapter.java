@@ -108,6 +108,7 @@ public class UpComingEventsAdapter extends CursorAdapter {
         eventDate.set(year, month, day, Integer.parseInt(endTime.substring(0, 2)), Integer.parseInt(endTime.substring(3)));
         int minuteDifference = (int) TimeUnit.MINUTES.convert(eventDate.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS);
         int minuteDifferenceEventEnd = (int) TimeUnit.MINUTES.convert(eventDateEnd.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS);
+
         //formats the "Time remaining" text according to how much time left until the event
         if (minuteDifference <= 0) {
             if (minuteDifferenceEventEnd > 0)

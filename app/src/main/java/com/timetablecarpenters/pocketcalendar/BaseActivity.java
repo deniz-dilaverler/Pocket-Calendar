@@ -1,6 +1,5 @@
 package com.timetablecarpenters.pocketcalendar;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,15 +11,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 /**
- * BaseActivity supplies the common functionalities like the menu and the toolbar for the other
+ * BaseActivity supplies the common functionality like the menu and the toolbar for the other
  * sub-class activities.
  * @author Deniz Mert Dilaverler
  * @version 17.04.21
@@ -56,6 +52,7 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
     public void create(){
         toolbar = findViewById(R.id.settingsToolbar);
         setSupportActionBar(toolbar);
+        // initializes buttons on the day, week, month views
         if (findViewById(R.id.monthly_button) != null) {
             Button monthlyButton = findViewById(R.id.monthly_button);
             Button weeklyButton = findViewById(R.id.weekly_button);
@@ -84,6 +81,7 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
         int id = item.getItemId();
 
         Intent intent = null;
+        //looking for toolbar menu button clicks to start new activities
         switch (id) {
             case R.id.to_calender:
                 intent = new Intent(this, MonthActivity.class);

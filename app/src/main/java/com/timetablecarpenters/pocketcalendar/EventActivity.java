@@ -1,20 +1,13 @@
 package com.timetablecarpenters.pocketcalendar;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.net.Uri;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.maps.model.LatLng;
-
-import org.w3c.dom.Text;
-
 import java.util.Calendar;
 
 /**
@@ -120,5 +113,15 @@ public class EventActivity extends BaseActivity {
                     break;
             }
         }
+    }
+
+    /**
+     * goes to the DayActivity when the back button is pressed
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, DayActivity.class);
+        intent.putExtra(DayActivity.INTENT_KEY, event.getEventStart());
+        startActivity(intent);
     }
 }

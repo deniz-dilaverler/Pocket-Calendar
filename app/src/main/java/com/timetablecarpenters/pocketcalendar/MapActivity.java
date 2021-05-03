@@ -102,6 +102,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         Bundle extras = getIntent().getExtras();
+        // check if event data has been passed to this activity
         if (extras != null) {
             try {
                 event = (CalendarEvent) extras.get(EVENT_KEY);
@@ -131,7 +132,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "onMapReady: map is ready");
         mMap = googleMap;
-
 
         if (mLocationPermissionsGranted) {
             getDeviceLocation();
@@ -244,8 +244,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             // Create a FetchPhotoRequest.
             final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                    .setMaxWidth(500) // Optional.
-                    .setMaxHeight(300) // Optional.
                     .build();
             placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
                 Bitmap bitmap = fetchPhotoResponse.getBitmap();

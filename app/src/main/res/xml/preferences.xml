@@ -7,7 +7,7 @@
         android:defaultValue="@string/default1"
         android:entries="@array/text_font_sizes"
         android:entryValues="@array/text_font_sizes"
-        android:key="In-text font size"/>
+        android:key="xyz"/>
     <PreferenceCategory
         android:contentDescription='"Select the fonts for texts and paragraphs"'
         android:title="Font Sizes">

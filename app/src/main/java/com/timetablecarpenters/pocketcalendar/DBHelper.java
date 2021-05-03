@@ -2,11 +2,9 @@ package com.timetablecarpenters.pocketcalendar;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -107,7 +105,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * adds the Data of an event object into the DB and returns the success status of the method as a long value
      * @param event
-     * @return row number if event is succesful, -1 if an error has occured, -2 if the event already exists
+     * @return row number if event is successfully executed, -1 if an error has occurred, -2 if the event already exists
      */
 
     public long insertEvent(CalendarEvent event) {
@@ -116,6 +114,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
         if (!checkIsDataAlreadyInDB(event)) {
+            // puts data in ContentValues to be added to the db, Values that can be null are put in by try and catch blocks
             cv.put(ID, event.getId());
             cv.put(YEAR, event.getYear());
             cv.put(MONTH, event.getMonth());
@@ -161,7 +160,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * checks wether the event is already in the db
+     * checks whether the event is already in the db
      * Date, name, event start and end are checked, and if there is an event in the db that correspond to these values
      * returns false
      * @param event
@@ -177,6 +176,7 @@ public class DBHelper extends SQLiteOpenHelper {
                                                                    + EVENT_START + " = ?" + " AND "
                                                                    + EVENT_END + " = ?" + " ;"
                 ;
+        //'?' fields are filled by the contents of the String[] array
         Cursor cursor = db.rawQuery(query, new String[] {event.getYear()+"", event.getMonth()+"", event.getDay()+"", event.getName(), event.getEventStartTime(), event.getEventEndTime() });
         if(cursor.getCount() <= 0){
             cursor.close();
@@ -190,7 +190,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * deletes the event with these values that match:
      * Date, name, event start and end
      * @param event
-     * @return Whether deletion was succesful or not
+     * @return Whether deletion was successful or not
      */
     public boolean deleteEvent(CalendarEvent event) {
         String sqlStatement = "DELETE FROM " + EVENTS_TABLE + " WHERE " + YEAR + " = " + event.getYear() + " AND "
@@ -221,14 +221,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if (to.getTime().getTime() - from.getTime().getTime() < 0)
             return null;
-        // if both are in the same month
+        // if both parameters are in the same month
         else if (from.get(Calendar.MONTH) == to.get(Calendar.MONTH)) {
             queryMiddle = YEAR + " =  " + to.get(Calendar.YEAR) + " AND "
                 + MONTH + " = " + to.get(Calendar.MONTH) + " AND "
                 + DAY + " BETWEEN "  + from.get(Calendar.DATE) + " AND " + to.get(Calendar.DATE);
             Log.d(TAG, "getEventsInAnInterval: On the same month");
         }
-        // if in consecutive months
+        // if parameters are in consecutive months
         else {
             queryMiddle = YEAR + " =  " + from.get(Calendar.YEAR) + " AND "
                     + MONTH + " = " + from.get(Calendar.MONTH) + " AND "
