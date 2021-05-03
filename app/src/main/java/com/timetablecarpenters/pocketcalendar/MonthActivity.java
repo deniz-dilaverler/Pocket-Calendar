@@ -18,16 +18,14 @@ import java.util.Calendar;
  * @version 1.0
  */
 public class MonthActivity extends BaseActivity {
+    private static final String INTENT_KEY = "today_date";
+    private static final String TAG = "MonthActivity";
     private View[] weeks, dayInWeek;
-    private CalendarEvent[][] eventsInDays;
     private Calendar today;
     private DBHelper database;
-    private final static String INTENT_KEY = "today_date";
-    private CalendarEvent defaultEvent;
     private CalendarEvent[][] eventCountDays;
     private boolean[] isSpareDay;
-    private static final String TAG = "MonthActivity";
-    Intent intent;
+    protected Intent intent;
     private Context context;
     /**
      * this method works once a MonthActivity is created.
@@ -55,7 +53,6 @@ public class MonthActivity extends BaseActivity {
         date.setText( today.get( Calendar.YEAR) + " " + formattedMonth( today.get(
                 Calendar.MONTH)));
         //Create two calendar instances to get the events in a such interval from the database.
-        eventsInDays = new CalendarEvent[42][];
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set( Calendar.MONTH, today.get( Calendar.MONTH));
         calendar1.set( Calendar.YEAR, today.get( Calendar.YEAR));
@@ -219,7 +216,6 @@ public class MonthActivity extends BaseActivity {
             date.setText(str);
             date.setTextColor( CustomizableScreen.getBackGColor());
             day.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     intent = new Intent(context, DayActivity.class);
@@ -422,13 +418,6 @@ public class MonthActivity extends BaseActivity {
     }
     private void setOtherTexts() {
         int color = CustomizableScreen.getBackGColor();
-        /*
-        ( ( Button)findViewById( R.id.daily_button)).setTextColor( color);
-        ( ( Button)findViewById( R.id.daily_button)).setBackgroundColor( getButtonColor());
-        ( ( Button)findViewById( R.id.weekly_button)).setTextColor( color);
-        ( ( Button)findViewById( R.id.weekly_button)).setBackgroundColor( getButtonColor());
-        ( ( Button)findViewById( R.id.monthly_button)).setTextColor( color);
-        ( ( Button)findViewById( R.id.monthly_button)).setBackgroundColor( getButtonColor());*/
         ( ( TextView)findViewById( R.id.dateText)).setTextColor( color);
     }
 }

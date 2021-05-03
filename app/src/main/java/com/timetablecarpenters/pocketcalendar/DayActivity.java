@@ -14,19 +14,15 @@ import java.util.Calendar;
 
 public class DayActivity extends BaseActivity  {
     private static final String TAG = "DayActivity";
-    public static final String EVENT_KEY = "event";
+    public final static String INTENT_KEY = "today_date";
 
-    private CalendarEvent[] events; //the events in day
+    private CalendarEvent[] events; //the events in day;
     private CalendarEvent[] orderedEventEnds; //the events in day
     // first [] for hours of day, next [] for the event starting times and end times in order.
-    private String[][] textsOfHours;
     private CalendarEvent[] allEventsChron; //chronologically all events
     private boolean[] isEventStart; //if false, event is for the ending, not starting
     private DBHelper database;
     private Calendar thisDay;
-    public final static String INTENT_KEY = "today_date";
-    public final static String MAPS_INTENT_KEY = "map_intent";
-    public final static String ACTIVITY_NAME = "day_activity";
 
 
     @Override
@@ -193,7 +189,7 @@ public class DayActivity extends BaseActivity  {
      * Creates an event arraqy with chronologically ordered event start-end times.
      * @author Alperen Utku Yalçın
      */
-    public void EventChronologyCreate() {
+    public void eventChronologyCreate() {
         setOrderedEventStarts();
         setOrderedEventEnds();
 
@@ -297,7 +293,7 @@ public class DayActivity extends BaseActivity  {
 
                 if (discriminateEvent(allEventsChron[i], isEventStart[i]).get(Calendar.HOUR_OF_DAY) == hour) {
                     TextView textView = new TextView(DayActivity.this);
-                    textView.setId((int) (Math.random() * 10000)); // It is not a very good solution
+                    textView.setId((int) (Math.random() * 1000000)); // It is not a very good solution
                     RelativeLayout.LayoutParams layoutParams = new
                             RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                     layoutParams.addRule(RelativeLayout.BELOW, recent.getId());
@@ -306,7 +302,7 @@ public class DayActivity extends BaseActivity  {
                     textView.setText(str);
                     editParagraphFont(textView);
                     if ( allEventsChron[i].color != 0) {
-                        textView.setTextColor(allEventsChron[i].color);
+                        textView.setTextColor( allEventsChron[i].color);
                     }
                     textView.setSingleLine();
                     layout.addView(textView, layoutParams);
@@ -337,12 +333,12 @@ public class DayActivity extends BaseActivity  {
      * creates insides of the RelativeLayouts.
      * @author Alperen Utku Yalçın
      */
-    private void initiateRelativeLayouts( ) {
+    private void initiateRelativeLayouts() {
         int[] hours = { R.id.hr0,  R.id.hr1, R.id.hr2, R.id.hr3, R.id.hr4, R.id.hr5, R.id.hr6, R.id.hr7,
                 R.id.hr8, R.id.hr9, R.id.hr10, R.id.hr11, R.id.hr12, R.id.hr13, R.id.hr14, R.id.hr15,
                 R.id.hr16, R.id.hr17, R.id.hr18, R.id.hr19, R.id.hr20, R.id.hr21, R.id.hr22, R.id.hr23,};
 
-        EventChronologyCreate();
+        eventChronologyCreate();
         View[] views = new View[24];
         for (int i = 0; i < 24; i++) {
             views[i] = findViewById( R.id.day_content).findViewById( hours[i]);
@@ -480,28 +476,4 @@ public class DayActivity extends BaseActivity  {
             }
         }
     }
-
-    private long compareDates(Calendar calendar1, Calendar calendar2){
-        long result;
-        result = 0;
-        long yearDifferenceInMs = 0;
-        long monthDifferenceInMs = 0;
-        long dayDifferenceInMs = 0;
-        long hourDifferenceInMs = 0;
-        long minuteDifferenceInMs =0;
-        long secondDifferenceInMs = 0;
-
-        secondDifferenceInMs = calendar1.get(Calendar.SECOND) - calendar2.get(Calendar.SECOND);
-        minuteDifferenceInMs = (calendar1.get(Calendar.MINUTE) - calendar2.get(Calendar.MINUTE)) * 60;
-        hourDifferenceInMs = (calendar1.get(Calendar.HOUR_OF_DAY) - calendar2.get(Calendar.HOUR_OF_DAY)) * 60 * 60;
-        dayDifferenceInMs = (calendar1.get(Calendar.DAY_OF_MONTH) - calendar2.get(Calendar.DAY_OF_MONTH))* 60 * 60 * 24;
-        monthDifferenceInMs = (calendar1.get(Calendar.MONTH) - calendar2.get(Calendar.MONTH))* 60 * 60 * 24 * 30;
-        yearDifferenceInMs = (calendar1.get(Calendar.YEAR) - calendar2.get(Calendar.YEAR))* 60 * 60 * 24 * 12 * 30;
-        result = secondDifferenceInMs + minuteDifferenceInMs + hourDifferenceInMs + dayDifferenceInMs
-                + monthDifferenceInMs + yearDifferenceInMs;
-
-        return result * 1000;
-
-    }
-
 }
