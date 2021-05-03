@@ -85,6 +85,8 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                 if (extras.get(MapActivity.EVENT_KEY) != null) {
                     addedEvent = (CalendarEvent) extras.get(MapActivity.EVENT_KEY);
                     Log.d(TAG, "onCreate: event called back!");
+                    Log.d(TAG, "onCreate: event name: " + addedEvent.getName() + "start: " + addedEvent.getEventStart() +
+                            " end: " + addedEvent.getEventStart() + " location " + addedEvent.getLocation());
                     setAddEventView();
                 }
             } catch (Exception e) {

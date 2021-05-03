@@ -105,6 +105,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (extras != null) {
             try {
                 event = (CalendarEvent) extras.get(EVENT_KEY);
+                Log.d(TAG, "onCreate: event name: " + event.getName() + "start: " + event.getEventStart() +
+                        " end: " + event.getEventStart() + " location " + event.getLocation());
             } catch (Exception e) {
                 Log.e(TAG, "onCreate: couldn't find an event: " + e );
             }
@@ -141,7 +143,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
-
 
             initPlacesAutoComplete();
             init();
