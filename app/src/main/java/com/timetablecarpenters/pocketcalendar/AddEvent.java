@@ -570,6 +570,10 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                         Toast.makeText(AddEvent.this, "Event already exists", Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(AddEvent.this, "Event successfully added", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(AddEvent.this, DayActivity.class);
+                    intent.putExtra(DayActivity.INTENT_KEY , thisDay);
+                    startActivity(intent);
                 }
 
                 if ( notification.isChecked()) {
@@ -578,9 +582,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                 if( repeat.isChecked()) {
                     repeatEvent();
                 }
-                Intent intent = new Intent(AddEvent.this, DayActivity.class);
-                intent.putExtra(DayActivity.INTENT_KEY , thisDay);
-                startActivity(intent);
+
             }
         });
 
