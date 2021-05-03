@@ -26,7 +26,6 @@ public class SettingsFragment extends PreferenceFragment {
     public static final String IN_TEXT_FONT_SIZE = "In_text_font_size";
     public static final String PARAGRAPH_FONT_SIZE = "Paragraph_font_size";
 
-    public static final String RESET_BUTTON = "resetButton";
     public static final String MEDIUM = "Medium";
     public static final String LARGE = "Large";
     public DBHelper dbHelper;
@@ -56,7 +55,6 @@ public class SettingsFragment extends PreferenceFragment {
                     return true;
                 }
 
-
                 });
             }
 
@@ -79,7 +77,6 @@ public class SettingsFragment extends PreferenceFragment {
                     SharedPreferences.Editor editor = inTextPref.edit();
                     editor.putString("inTextFontSize", inTextList.getValue());
                     editor.commit();
-                    //editor.apply();
                     Toast.makeText(getContext(),"Font size is selected",Toast.LENGTH_LONG).show();
 
                 }
@@ -94,7 +91,6 @@ public class SettingsFragment extends PreferenceFragment {
                     SharedPreferences.Editor editor = paragraphPref.edit();
                     editor.putString("paragraphFontSize", paragraphList.getValue());
                     editor.commit();
-                    //editor.apply();
                     Toast.makeText(getContext(),"Font size is selected",Toast.LENGTH_LONG).show();
                 }
             }
@@ -102,7 +98,7 @@ public class SettingsFragment extends PreferenceFragment {
         }
 
     /**
-     * 
+     * Continuing the app when it is paused will call these statements
      */
     @Override
     public void onResume(){
@@ -115,8 +111,11 @@ public class SettingsFragment extends PreferenceFragment {
         inText.setSummary(getPreferenceScreen().getSharedPreferences().getString(IN_TEXT_FONT_SIZE,""));
         paragraphText.setSummary(getPreferenceScreen().getSharedPreferences().getString(PARAGRAPH_FONT_SIZE,""));
     }
-    @Override
 
+    /**
+     * When Activity is in background then onPause() method will execute
+     */
+    @Override
     public void onPause(){
         super.onPause();
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(preferenceChangeListener);

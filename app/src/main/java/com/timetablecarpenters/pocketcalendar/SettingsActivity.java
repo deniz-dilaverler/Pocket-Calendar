@@ -41,6 +41,5 @@ public class SettingsActivity extends AppCompatActivity {
                 return;
             getFragmentManager().beginTransaction().add(R.id.fragment_container, new SettingsFragment()).commit();
         }
-       // SharedPreferences getPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     }
 }
