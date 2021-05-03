@@ -36,7 +36,7 @@ import java.util.Calendar;
  * @author Elifsena Öz
  */
 
-public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class AddEvent extends BaseActivity implements AdapterView.OnItemSelectedListener{
 
     public static final String DATE_KEY = "Date";
     public static final String ADD_ACTIVITY_NAME = "add_activity";
@@ -80,20 +80,19 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
             } catch (Exception e) {
                 Log.d(TAG, "onCreate: no  date came out of the intent");
             }
+            addEvent();
             try {
-                addedEvent = (CalendarEvent) extras.get(MapActivity.EVENT_KEY);
-                Log.d(TAG, "onCreate: event called back!");
-                try {
+                if (extras.get(MapActivity.EVENT_KEY) != null) {
+                    addedEvent = (CalendarEvent) extras.get(MapActivity.EVENT_KEY);
+                    Log.d(TAG, "onCreate: event called back!");
                     setAddEventView();
-                } catch (Exception e) {
-                    Log.d(TAG, "onCreate: event unsuccessful " + e);
                 }
             } catch (Exception e) {
                 Log.d(TAG, "onCreate: no event came out of intent " + e);
             }
         }
 
-        addEvent();
+
     }
 
     /**
@@ -760,9 +759,9 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
     /**
      * Edits the font sizes of textViews according to settings
      * It changes the font sizes of in-texts
-     *  text is the hour of the day
+     * @param text is the hour of the day
      */
-    /*
+
     public void editInTextFont(TextView text){
         SharedPreferences sp = getApplicationContext().getSharedPreferences("inTextPref", MODE_PRIVATE);
         String inTextFontSize = sp.getString("inTextFontSize","");
@@ -778,13 +777,13 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
         {
             text.setTextSize(18);
         }
-    }*/
+    }
 
     /**
      * Edits the font sizes of textViews according to settings
      * It changes the font sizes of paragraphs
-     *  text is the hour of the day
-     *//*
+     * @param text is the hour of the day
+     */
     public void editParagraphFont(TextView text){
         SharedPreferences sp = getApplicationContext().getSharedPreferences("paragraphPref", MODE_PRIVATE);
         String paragraphFontSize = sp.getString("paragraphFontSize","");
@@ -800,6 +799,6 @@ public class AddEvent extends AppCompatActivity implements AdapterView.OnItemSel
         {
             text.setTextSize(16);
         }
-    }*/
+    }
 
 }
