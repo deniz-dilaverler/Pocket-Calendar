@@ -106,6 +106,7 @@ public class EventActivity extends BaseActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.event_map, mapFragment).commit();
         mapFragment.addEvent(event);
 
+        // set button to open google maps
         buttonOpenMaps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
