@@ -114,4 +114,14 @@ public class EventActivity extends BaseActivity {
             }
         }
     }
+
+    /**
+     * goes to the DayActivity when the back button is pressed
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, DayActivity.class);
+        intent.putExtra(DayActivity.INTENT_KEY, event.getEventStart());
+        startActivity(intent);
+    }
 }
