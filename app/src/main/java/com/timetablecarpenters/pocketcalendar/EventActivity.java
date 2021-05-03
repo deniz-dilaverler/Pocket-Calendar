@@ -50,7 +50,6 @@ public class EventActivity extends BaseActivity {
         TextView noteContents = content.findViewById(R.id.notes_contents);
         Button buttonDelete = (Button) content.findViewById(R.id.button_delete);
         Button buttonEdit = (Button) content.findViewById(R.id.button_edit);
-        Button buttonOpenMaps = (Button) content.findViewById(R.id.to_maps_button);
         TextView dateText = (TextView) content.findViewById(R.id.date_text_view);
         TextView timeText = (TextView) content.findViewById(R.id.event_time);
 
@@ -101,27 +100,6 @@ public class EventActivity extends BaseActivity {
         MapFragment mapFragment = new MapFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.event_map, mapFragment).commit();
         mapFragment.addEvent(event);
-
-        // set button to open google maps
-        buttonOpenMaps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (event.getLocation() == null) {
-                    Toast.makeText(EventActivity.this, "Event has no registered location", Toast.LENGTH_SHORT).show();
-                } else {
-                    // opens the location in google maps
-                    // Create a Uri from an intent string. Use the result to create an Intent.
-                    Uri gmmIntentUri = Uri.parse(String.format("geo:%f,%f?%f,%f", event.location.latitude, event.location.longitude, event.location.latitude, event.location.longitude));
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    startActivity(mapIntent);
-                }
-            }
-        });
-
-
-
-
 
     }
 
