@@ -60,7 +60,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
     private Button locationSelect;
     private MapFragment mapFragment;
     LayoutInflater layoutInflater;
-    private View addEventView, repetitionView, notificationView;
+    private View addEventView, repetitionView;
     private ArrayAdapter<String> eventTypesAdapter;
     private boolean isEditView = false;
 
@@ -423,8 +423,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         final View commonItemsView = layoutInflater.inflate(R.layout.add_event_common_items, null);
 
         // initialize the spinner for notifications
-        notificationView = layoutInflater.inflate(R.layout.add_event_notification, null);
-        notification_spinner = (Spinner) notificationView.findViewById(R.id.notifications_spinner);
+        notification_spinner = (Spinner) commonItemsView.findViewById(R.id.notifications_spinner);
         ArrayAdapter<String> notificationTimesAdapter = new ArrayAdapter<>(AddEvent.this,
                 android.R.layout.simple_spinner_item,
                 getResources().getStringArray(R.array.notification_times));
@@ -432,7 +431,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         notification_spinner.setEnabled(false);
 
         // initialize the checkbox for notifications
-        notification = (CheckBox) notificationView.findViewById(R.id.notification_checkbox);
+        notification = (CheckBox) commonItemsView.findViewById(R.id.notification_checkbox);
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -572,12 +571,13 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                         Toast.makeText(AddEvent.this, "Event couldn't be saved", Toast.LENGTH_SHORT).show();
                     else if (insertResult == -2)
                         Toast.makeText(AddEvent.this, "Event already exists", Toast.LENGTH_SHORT).show();
-                    else
+                    else {
                         Toast.makeText(AddEvent.this, "Event successfully added", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(AddEvent.this, DayActivity.class);
+                        intent.putExtra(DayActivity.INTENT_KEY, event.getEventStart());
+                        startActivity(intent);
+                    }
 
-                    Intent intent = new Intent(AddEvent.this, DayActivity.class);
-                    intent.putExtra(DayActivity.INTENT_KEY , event.getEventStart());
-                    startActivity(intent);
                 }
 
                 if ( notification.isChecked()) {
@@ -590,7 +590,6 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
             }
         });
 
-        linearLayout.addView(notificationView);
         linearLayout.addView(commonItemsView);
     }
 
@@ -788,7 +787,6 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
     public void rearrangeToEdit() {
         title.setText("Edit Event");
         linearLayout.removeView(repetitionView);
-        linearLayout.removeView(notificationView);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
