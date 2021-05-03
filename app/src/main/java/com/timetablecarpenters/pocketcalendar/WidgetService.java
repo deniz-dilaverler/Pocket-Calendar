@@ -125,7 +125,7 @@ public class WidgetService extends RemoteViewsService {
             return true;
         }
 
-        // are not implemented
+        //  rest of the methods are not implemented
         @Override
         public void onDataSetChanged() {
 
