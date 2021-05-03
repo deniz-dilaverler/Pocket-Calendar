@@ -27,6 +27,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.util.Calendar;
 
 /**
@@ -69,7 +71,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         Log.d(TAG, "onCreate: Starts");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_add);
-        ( ( TextView) findViewById( R.id.add_event)).setTextColor( CustomizableScreen2.getBackGColor());
+        ( ( TextView) findViewById( R.id.add_event)).setTextColor( CustomizableScreen.getBackGColor());
 
         layoutInflater = getLayoutInflater();
 
@@ -128,6 +130,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
 
         title = linearLayout.findViewById(R.id.add_event);
         title.setText("Add Event");
+        title.setTextColor( CustomizableScreen.getBackGColor());
 
         final View typeAndNameView = layoutInflater.inflate(R.layout.add_event_type_and_name_item, null);
 
@@ -145,6 +148,14 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         // Next button removes itself from the popup if event type and name are given
         final View nextButtonView = (View) layoutInflater.inflate(R.layout.add_event_next, null);
         next = (Button) nextButtonView.findViewById(R.id.add_event_next);
+
+        // Set colors
+        findViewById( R.id.add_event_linear).setBackgroundColor( CustomizableScreen.getButtonColor());
+        findViewById( R.id.scroller_back).setBackgroundColor( CustomizableScreen.backgroundColor);
+        ( ( TextView) findViewById( R.id.type_textView)).setTextColor( CustomizableScreen.getBackGColor());
+        ( ( TextView) findViewById( R.id.name_textView)).setTextColor( CustomizableScreen.getBackGColor());
+        ( ( EditText) findViewById( R.id.add_event_name)).setTextColor( CustomizableScreen.getBackGColor());
+
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,6 +174,8 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         });
         linearLayout.addView(nextButtonView);
     }
+
+
 
     /**
      * Adds views to the popup according to the type of event chosen
@@ -189,6 +202,8 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         // Displays a dialog to pick a date
         event_date = (TextView) dueDateView.findViewById(R.id.add_due_date);
         event_date.setText(getTodaysDate());
+        event_date.setTextColor( CustomizableScreen.getBackGColor());
+        ( ( TextView) dueDateView.findViewById( R.id.add_event_due_date)).setTextColor( CustomizableScreen.getBackGColor());
         eventDate = (Calendar) thisDay.clone();
 
         event_date.setOnClickListener(new View.OnClickListener() {
@@ -216,6 +231,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
 
         // Displays a dialog to pick time
         event_due_time = (TextView) dueDateView.findViewById(R.id.add_due_time);
+        event_due_time.setTextColor( CustomizableScreen.getBackGColor());
         event_due_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -253,6 +269,8 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         // Displays a dialog to pick a date
         event_date = (TextView) intervalView.findViewById(R.id.add_event_date);
         event_date.setText(getTodaysDate());
+        event_date.setTextColor( CustomizableScreen.getBackGColor());
+        ( ( TextView) intervalView.findViewById( R.id.add_event_interval)).setTextColor( CustomizableScreen.getBackGColor());
         eventDate = (Calendar) thisDay.clone();
 
         event_date.setOnClickListener(new View.OnClickListener() {
@@ -280,6 +298,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
 
         // Displays a dialog to pick starting time
         event_start = (TextView) intervalView.findViewById(R.id.add_event_start);
+        event_start.setTextColor( CustomizableScreen.getBackGColor());
         event_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -305,6 +324,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
 
         // Displays a dialog to pick ending time
         event_end = (TextView) intervalView.findViewById(R.id.add_event_end);
+        event_end.setTextColor( CustomizableScreen.getBackGColor());
         event_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -395,6 +415,11 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
             number_of_repetitions = (EditText) repetitionView.findViewById(R.id.num_of_repetitions);
             number_of_repetitions.setEnabled(false);
 
+            // Sets the color
+            ( ( TextView)repetitionView.findViewById( R.id.add_event_repeat)).setTextColor( CustomizableScreen.getBackGColor());
+            ( ( TextView)repetitionView.findViewById( R.id.add_repetition_times)).setTextColor( CustomizableScreen.getBackGColor());
+            ( ( EditText)repetitionView.findViewById( R.id.num_of_repetitions)).setTextColor( CustomizableScreen.getBackGColor());
+
             // displays repetition options if the box is checked
             repeat = (CheckBox) repetitionView.findViewById(R.id.repeatition_checkbox);
             repeat.setOnClickListener(new View.OnClickListener() {
@@ -430,12 +455,17 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         notification_spinner.setAdapter(notificationTimesAdapter);
         notification_spinner.setEnabled(false);
 
+        // set colors
+        ( ( TextView) commonItemsView.findViewById( R.id.add_event_notification)).setTextColor( CustomizableScreen.getBackGColor());
+        notification_spinner.setOnItemSelectedListener(this);
+
+
         // initialize the checkbox for notifications
         notification = (CheckBox) commonItemsView.findViewById(R.id.notification_checkbox);
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // disable spinner when checkbox is not checked
+                // disable spinner when  is not checked
                 if (notification.isChecked())
                     notification_spinner.setEnabled(true);
                 else
@@ -456,6 +486,15 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
 
         // set default event colour
         event.setColor(R.color.primary_text);
+
+        // set all other colors
+        ( ( TextView) commonItemsView.findViewById( R.id.add_notes)).setTextColor( CustomizableScreen.getBackGColor());
+        commonItemsView.findViewById( R.id.add_notes).setBackgroundColor( CustomizableScreen.backgroundColor);
+        commonItemsView.findViewById( R.id.constraint).setBackgroundColor( CustomizableScreen.getButtonColor());
+        ( ( TextView) commonItemsView.findViewById( R.id.add_event_colour)).setTextColor( CustomizableScreen.getBackGColor());
+        ( ( TextView) commonItemsView.findViewById( R.id.add_event_notes)).setTextColor( CustomizableScreen.getBackGColor());
+        ( ( TextView) commonItemsView.findViewById( R.id.add_event_colour)).setTextColor( CustomizableScreen.getBackGColor());
+        ( ( TextView) commonItemsView.findViewById( R.id.textView2)).setTextColor( CustomizableScreen.getBackGColor());
 
         // add onclick listener to buttons
         for (Button b : colour_buttons) {
@@ -612,14 +651,16 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getId() == R.id.event_type_spinner) {
-            if (event != null)
+            if (event != null) {
                 event.setType(parent.getItemAtPosition(position).toString());
+            }
         }
         else if (parent.getId() == R.id.repetition_type) {
             repetitionType = parent.getItemAtPosition(position).toString();
         }
         if (parent.getId() == R.id.notifications_spinner)
             notifType = parent.getItemAtPosition(position).toString();
+        ((TextView) view).setTextColor( CustomizableScreen.getBackGColor());
     }
 
     @Override

@@ -93,7 +93,7 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
                 intent = new Intent(this, SettingsActivity.class);
                 break;
             case R.id.customization:
-                intent = new Intent(this, CustomizableScreen2.class);
+                intent = new Intent(this, CustomizableScreen.class);
                 break;
 
         }
