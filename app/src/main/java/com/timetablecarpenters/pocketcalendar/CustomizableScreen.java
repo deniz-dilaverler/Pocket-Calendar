@@ -1,5 +1,6 @@
 package com.timetablecarpenters.pocketcalendar;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -51,11 +52,12 @@ public class CustomizableScreen extends AppCompatActivity {
                 apply();
                 Toast.makeText(CustomizableScreen.this, "Color has been applied",
                         Toast.LENGTH_SHORT).show();
-
                 editValues.putInt( "Background_value", backgroundColor);
                 editValues.putInt( "Text_color_value", textColor);
                 editValues.putInt( "Button_color_value", buttonBackgroundColor);
                 editValues.apply();
+                Intent intent = new Intent(CustomizableScreen.this, MonthActivity.class);
+                startActivity(intent);
             }
         });
     }
