@@ -27,6 +27,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.material.dialog.MaterialDialogs;
+
 import org.w3c.dom.Text;
 
 import java.util.Calendar;
@@ -509,21 +511,23 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
 
                     // check which color is chosen
                     if (b.getId() == R.id.colour_ligth_blue)
-                        event.setColor(R.color.ligth_blue);
+                        event.setColor(Color.rgb(0, 188, 212));
                     else if (b.getId() == R.id.colour_blue)
-                        event.setColor(R.color.dark_blue);
+                        event.setColor(Color.rgb(25, 116, 189));
                     else if (b.getId() == R.id.colour_purple)
-                        event.setColor(R.color.purple);
+                        event.setColor(Color.rgb(156, 39, 176));
                     else if (b.getId() == R.id.colour_pink)
-                        event.setColor(R.color.pink);
+                        event.setColor(Color.rgb(233, 30, 99));
                     else if (b.getId() == R.id.colour_red)
-                        event.setColor(R.color.red);
+                        event.setColor(Color.rgb(232, 16, 0));
                     else if (b.getId() == R.id.colour_orange)
-                        event.setColor(R.color.orange);
+                        event.setColor(Color.rgb(255, 87, 34));
                     else if (b.getId() == R.id.colour_yellow)
-                        event.setColor(R.color.yellow);
+                        event.setColor(Color.rgb(255, 235, 59));
                     else if (b.getId() == R.id.colour_green)
-                        event.setColor(R.color.green);
+                        event.setColor(Color.rgb(76, 175, 80));
+
+                    Log.d(TAG, "onClick: event color" + event.getColor());
 
                     // create message to inform the user
                     if (event.getColor() != R.color.primary_text)
