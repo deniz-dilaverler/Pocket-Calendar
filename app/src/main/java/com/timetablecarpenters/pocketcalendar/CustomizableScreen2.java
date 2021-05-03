@@ -5,18 +5,17 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
- * User can change custom calors via customizable screen
+ * User can change background calors via customizable screen
  * @author Alpren Utku Yalçın
  * @version 30.04.21
  *
  */
 
-public class CustomizableScreen extends AppCompatActivity {
+public class CustomizableScreen2 extends AppCompatActivity {
     private static final String TAG = "CustomiseSettings";
     public static int backgroundColor;
     public static int buttonBackgroundColor;
@@ -41,8 +40,6 @@ public class CustomizableScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 apply();
-                Toast.makeText(CustomizableScreen.this, "Color has been applied",
-                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -62,12 +59,12 @@ public class CustomizableScreen extends AppCompatActivity {
      * @return int color value
      */
     public static int getBackGColor() {
-        if (CustomizableScreen.textColor != 0) {
-            return CustomizableScreen.textColor;
+        if (CustomizableScreen2.textColor != 0) {
+            return CustomizableScreen2.textColor;
         }
         else {
-            CustomizableScreen.initiate();
-            return CustomizableScreen.textColor;
+            CustomizableScreen2.initiate();
+            return CustomizableScreen2.textColor;
         }
     }
     /**
@@ -89,8 +86,6 @@ public class CustomizableScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setBackgroundAndTextColor( colorText);
-                Toast.makeText(CustomizableScreen.this, "Color is selected",
-                        Toast.LENGTH_SHORT).show();
             }
         });
     }

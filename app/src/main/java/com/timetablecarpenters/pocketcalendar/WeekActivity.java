@@ -12,6 +12,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import androidx.core.content.res.ResourcesCompat;
+
 import java.util.Calendar;
 
 /**
@@ -60,8 +62,8 @@ public class WeekActivity extends BaseActivity {
         last = (Calendar) first.clone();
         last.add(Calendar.DAY_OF_YEAR, 6);
 
-        ( ( TextView) findViewById( R.id.dateText)).setTextColor( CustomizableScreen.getBackGColor());
-        findViewById( R.id.back_week).setBackgroundColor( CustomizableScreen.backgroundColor);
+        ( ( TextView) findViewById( R.id.dateText)).setTextColor( CustomizableScreen2.getBackGColor());
+        findViewById( R.id.back_week).setBackgroundColor( CustomizableScreen2.backgroundColor);
 
         dateText = (TextView) findViewById(R.id.dateText);
         dateString = MONTH_NAMES[first.get(Calendar.MONTH)] + " " + first.get(Calendar.DATE) + "  -  " +
@@ -85,8 +87,8 @@ public class WeekActivity extends BaseActivity {
                 }
             });
             editInTextFont(weekDayName);
-            weekDayName.setTextColor( CustomizableScreen.getBackGColor());
-            row.findViewById( R.id.events_of_day_list).setBackgroundColor( CustomizableScreen.getButtonColor());
+            weekDayName.setTextColor( CustomizableScreen2.getBackGColor());
+            row.findViewById( R.id.events_of_day_list).setBackgroundColor( CustomizableScreen2.getButtonColor());
             Log.d(TAG, "onCreate: day = " + day.get(Calendar.YEAR)+ " " + day.get(Calendar.MONTH)+ " " + day.get(Calendar.DAY_OF_MONTH));
             cursor = dbHelper.getEventsInAnInterval(day, day);
             // check if there are any events on that day
