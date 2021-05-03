@@ -97,22 +97,13 @@ public class SettingsFragment extends PreferenceFragment {
                     //editor.apply();
                     Toast.makeText(getContext(),"Font size is selected",Toast.LENGTH_LONG).show();
                 }
-                if(key.equals(RESET_BUTTON))
-                {
-                    Preference reset = findPreference(key);
-
-
-                    SharedPreferences resetPref;
-                    resetPref = getContext().getSharedPreferences("resetPref", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = resetPref.edit();
-                    editor.putString("resetCalendar","yusuf");
-                    editor.commit();
-                    Toast.makeText(getContext(),"Calendar is reset",Toast.LENGTH_LONG).show();
-                }
             }
             };
         }
 
+    /**
+     * 
+     */
     @Override
     public void onResume(){
         super.onResume();
@@ -123,12 +114,6 @@ public class SettingsFragment extends PreferenceFragment {
 
         inText.setSummary(getPreferenceScreen().getSharedPreferences().getString(IN_TEXT_FONT_SIZE,""));
         paragraphText.setSummary(getPreferenceScreen().getSharedPreferences().getString(PARAGRAPH_FONT_SIZE,""));
-
-
-        dbHelper = new DBHelper(getContext(),DBHelper.DB_NAME, null);
-        dbHelper.resetDb(null);
-
-
     }
     @Override
 
