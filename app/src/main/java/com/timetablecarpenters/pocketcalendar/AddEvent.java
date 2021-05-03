@@ -58,11 +58,10 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private Button[] colour_buttons;
     private CalendarEvent event;
-    private int startHour, startMinute, endHour, endMinute, eventTypePosition;
+    private int startHour, startMinute, endHour, endMinute;
     private Calendar eventDate, thisDay;
     private long eventID;
     private Button locationSelect;
-    private MapFragment mapFragment;
     LayoutInflater layoutInflater;
     private View addEventView, repetitionView;
     private ArrayAdapter<String> eventTypesAdapter;
@@ -917,7 +916,4 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
             text.setTextSize(16);
         }
     }
-
-
-
 }
