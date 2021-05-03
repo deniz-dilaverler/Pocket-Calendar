@@ -23,12 +23,11 @@ import java.util.Calendar;
  */
 public class SettingsFragment extends PreferenceFragment {
     private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
-    public static final String IN_TEXT_FONT_SIZE = "In_text_font_size";
-    public static final String PARAGRAPH_FONT_SIZE = "Paragraph_font_size";
-
-    public static final String MEDIUM = "Medium";
-    public static final String LARGE = "Large";
-    public DBHelper dbHelper;
+    private static final String IN_TEXT_FONT_SIZE = "In_text_font_size";
+    private static final String PARAGRAPH_FONT_SIZE = "Paragraph_font_size";
+    private static final String MEDIUM = "Medium";
+    private static final String LARGE = "Large";
+    private DBHelper dbHelper;
 
     /**
      * listens to the inputs of the settings items
