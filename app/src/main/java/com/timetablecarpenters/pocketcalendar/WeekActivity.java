@@ -76,6 +76,16 @@ public class WeekActivity extends BaseActivity {
             View row = content.findViewById(rowIds[i]);
             TextView weekDayName = (row.findViewById(R.id.text_date_name));
             weekDayName.setText(DATE_NAMES[i]);
+            int finalI = i;
+            weekDayName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(WeekActivity.this, DayActivity.class);
+                    first.add(Calendar.DATE, finalI);
+                    intent.putExtra(DayActivity.INTENT_KEY,first);
+                    startActivity(intent);
+                }
+            });
             editInTextFont(weekDayName);
             weekDayName.setTextColor( getBackGColor());
             row.findViewById( R.id.events_of_day_list).setBackgroundColor( getButtonColor());
@@ -85,9 +95,11 @@ public class WeekActivity extends BaseActivity {
             if (cursor.getColumnCount() > 0) {
                 ListView list = row.findViewById(R.id.events_of_day_list);
                 list.setAdapter(new WeekViewAdapter(this, cursor));
+
                 list.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
+                        // check if the input is a slide gesture, if not open day view
                         return onTouchEvent(event);
                     }
                 });
