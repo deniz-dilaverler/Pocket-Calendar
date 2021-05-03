@@ -1,7 +1,5 @@
 package com.timetablecarpenters.pocketcalendar;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
@@ -55,7 +53,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
     private String notifType, repetitionType;
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private Button[] colour_buttons;
-    private CalendarEvent addedEvent;
+    private CalendarEvent event;
     private int startHour, startMinute, endHour, endMinute, eventTypePosition;
     private Calendar eventDate, thisDay;
     private long eventID;
@@ -85,10 +83,10 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
             addEvent();
             try {
                 if (extras.get(MapActivity.EVENT_KEY) != null) {
-                    addedEvent = (CalendarEvent) extras.get(MapActivity.EVENT_KEY);
+                    event = (CalendarEvent) extras.get(MapActivity.EVENT_KEY);
                     Log.d(TAG, "onCreate: event called back!");
-                    Log.d(TAG, "onCreate: event name: " + addedEvent.getName() + " start: " + addedEvent.getEventStart() +
-                            " end: " + addedEvent.getEventStart() + " location " + addedEvent.getLocation());
+                    Log.d(TAG, "onCreate: event name: " + event.getName() + " start: " + event.getEventStart() +
+                            " end: " + event.getEventStart() + " location " + event.getLocation());
                     setAddEventView();
                 }
             } catch (Exception e) {
@@ -98,12 +96,12 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
             try {
                 if (extras.get(EDIT_EVENT_KEY) != null) {
                     isEditView = true;
-                    addedEvent = (CalendarEvent) extras.get(EDIT_EVENT_KEY);
+                    event = (CalendarEvent) extras.get(EDIT_EVENT_KEY);
                     Log.d(TAG, "onCreate: event to be edited");
-                    Log.d(TAG, "onCreate: event name: " + addedEvent.getName() + " start: " + addedEvent.getEventStart() +
-                            " end: " + addedEvent.getEventStart() + " location " + addedEvent.getLocation());
+                    Log.d(TAG, "onCreate: event name: " + event.getName() + " start: " + event.getEventStart() +
+                            " end: " + event.getEventStart() + " location " + event.getLocation());
                     DBHelper dpHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME, null);
-                    dpHelper.deleteEvent(addedEvent);
+                    dpHelper.deleteEvent(event);
                     setAddEventView();
                     rearrangeToEdit();
                 }
@@ -111,8 +109,6 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                 Log.d(TAG, "onCreate: no event came out of edit event intent " + e);
             }
         }
-
-
     }
 
     /**
@@ -123,9 +119,9 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         addEventView = (View) layoutInflater.inflate(R.layout.activity_event_add, null);
         linearLayout = (LinearLayout) findViewById(R.id.add_event_linear);
 
-        if (addedEvent == null) {
-            addedEvent = new CalendarEvent(null, null, null, eventID, null);
-        addedEvent.setColor(R.color.primary_text);
+        if (event == null) {
+            event = new CalendarEvent(null, null, null, eventID, null);
+        event.setColor(R.color.primary_text);
         }
 
         title = linearLayout.findViewById(R.id.add_event);
@@ -150,8 +146,8 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!event_name.getText().toString().equals("") && addedEvent.getType() != null) {
-                    addedEvent.setName(event_name.getText().toString());
+                if (!event_name.getText().toString().equals("") && event.getType() != null) {
+                    event.setName(event_name.getText().toString());
                     event_name.setEnabled(false);
                     event_type_spinner.setEnabled(false);
                     linearLayout.removeView(nextButtonView);
@@ -171,7 +167,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
      * @author Elifsena Öz
      */
     private void updatePopupView() {
-        if (addedEvent.getType().equals("Assignment")) {
+        if (event.getType().equals("Assignment")) {
             addDueDate();
         }
         else {
@@ -232,8 +228,8 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                                 Calendar dueTime = Calendar.getInstance();
                                 dueTime.set(eventDate.get(Calendar.YEAR), eventDate.get(Calendar.MONTH),
                                         eventDate.get(Calendar.DATE), endHour, endMinute);
-                                addedEvent.setEventEnd(dueTime);
-                                addedEvent.setEventStart(dueTime);
+                                event.setEventEnd(dueTime);
+                                event.setEventStart(dueTime);
                                 event_due_time.setText(endHour + ":" + endMinute);
                             }
                         },24,0,true
@@ -295,7 +291,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                                 Calendar eventStart = Calendar.getInstance();
                                 eventStart.set(eventDate.get(Calendar.YEAR), eventDate.get(Calendar.MONTH),
                                         eventDate.get(Calendar.DAY_OF_MONTH), startHour, startMinute);
-                                addedEvent.setEventStart(eventStart);
+                                event.setEventStart(eventStart);
                                 event_start.setText("Start: " + startHour + ":" + startMinute);
                             }
                         },24,0,true
@@ -320,7 +316,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                                 Calendar eventEnd = Calendar.getInstance();
                                 eventEnd.set(eventDate.get(Calendar.YEAR), eventDate.get(Calendar.MONTH),
                                         eventDate.get(Calendar.DATE), endHour, endMinute);
-                                addedEvent.setEventEnd(eventEnd);
+                                event.setEventEnd(eventEnd);
                                 event_end.setText("End: " + endHour + ":" + endMinute);
                             }
                         },24,0,true
@@ -384,7 +380,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
      * @author Elifsena Öz
      */
     private void addRepetition() {
-        if (!addedEvent.getType().equals("Exam")) {
+        if (!event.getType().equals("Exam")) {
             repetitionView = layoutInflater.inflate(R.layout.add_event_repetition_item, null);
 
             repetition_type = (Spinner) repetitionView.findViewById(R.id.repetition_type);
@@ -457,7 +453,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         colour_buttons[7] = commonItemsView.findViewById(R.id.colour_green);
 
         // set default event colour
-        addedEvent.setColor(R.color.primary_text);
+        event.setColor(R.color.primary_text);
 
         // add onclick listener to buttons
         for (Button b : colour_buttons) {
@@ -472,24 +468,24 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
 
                     // check which color is chosen
                     if (b.getId() == R.id.colour_ligth_blue)
-                        addedEvent.setColor(R.color.ligth_blue);
+                        event.setColor(R.color.ligth_blue);
                     else if (b.getId() == R.id.colour_blue)
-                        addedEvent.setColor(R.color.dark_blue);
+                        event.setColor(R.color.dark_blue);
                     else if (b.getId() == R.id.colour_purple)
-                        addedEvent.setColor(R.color.purple);
+                        event.setColor(R.color.purple);
                     else if (b.getId() == R.id.colour_pink)
-                        addedEvent.setColor(R.color.pink);
+                        event.setColor(R.color.pink);
                     else if (b.getId() == R.id.colour_red)
-                        addedEvent.setColor(R.color.red);
+                        event.setColor(R.color.red);
                     else if (b.getId() == R.id.colour_orange)
-                        addedEvent.setColor(R.color.orange);
+                        event.setColor(R.color.orange);
                     else if (b.getId() == R.id.colour_yellow)
-                        addedEvent.setColor(R.color.yellow);
+                        event.setColor(R.color.yellow);
                     else if (b.getId() == R.id.colour_green)
-                        addedEvent.setColor(R.color.green);
+                        event.setColor(R.color.green);
 
                     // create message to inform the user
-                    if (addedEvent.getColor() != R.color.primary_text)
+                    if (event.getColor() != R.color.primary_text)
                         Toast.makeText(AddEvent.this, "Colour chosen",
                                 Toast.LENGTH_SHORT).show();
                 }
@@ -503,12 +499,12 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         // initialize Location editing UI elements
         MapFragment mapFragment = new MapFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.map_container, mapFragment).commit();
-        mapFragment.addEvent(addedEvent);
+        mapFragment.addEvent(event);
 
         locationSelect = (Button) commonItemsView.findViewById(R.id.open_map);
         // show the location on the map if the user has chosen one
-        if(addedEvent.getLocation()!= null) {
-            mapFragment.moveToLocation(addedEvent.getLocation());
+        if(event.getLocation()!= null) {
+            mapFragment.moveToLocation(event.getLocation());
         }
 
         if(GoogleMapsAvailability.isServicesOK(AddEvent.this)) {
@@ -516,12 +512,12 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                 @Override
                 public void onClick(View v) {
                     if (notes.getText() !=  null) {
-                        addedEvent.setNotes(notes.getText().toString());
+                        event.setNotes(notes.getText().toString());
                     }
                     Intent intent = new Intent(AddEvent.this, MapActivity.class);
-                    intent.putExtra(MapActivity.EVENT_KEY, addedEvent);
+                    intent.putExtra(MapActivity.EVENT_KEY, event);
                     if (isEditView)
-                        intent.putExtra(MapActivity.EVENT_KEY, EDIT_ACTIVITY_NAME);
+                        intent.putExtra(MapActivity.INTENT_ID_KEY, EDIT_ACTIVITY_NAME);
                     else
                         intent.putExtra(MapActivity.INTENT_ID_KEY, ADD_ACTIVITY_NAME);
                     startActivity(intent);
@@ -534,22 +530,22 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: eventToAdd: " + addedEvent.getEventStart() + " end: " + addedEvent.getEventEnd());
+                Log.d(TAG, "onClick: eventToAdd: " + event.getEventStart() + " end: " + event.getEventEnd());
 
                 // Check if event interval is given for events except assignment
-                if (!addedEvent.getType().equals("Assignment") &&  (addedEvent.getEventEnd() == null || addedEvent.getEventEnd() == null)) {
+                if (!event.getType().equals("Assignment") &&  (event.getEventEnd() == null || event.getEventEnd() == null)) {
                     Log.d(TAG, "onClick: error message 1");
                     Toast.makeText(AddEvent.this, "Please  choose event interval",
                             Toast.LENGTH_LONG).show();
                 }
                 // check if due time is given for assignment
-                else if (addedEvent.getType().equals("Assignment") && addedEvent.getEventEnd() == null) {
+                else if (event.getType().equals("Assignment") && event.getEventEnd() == null) {
                     Log.d(TAG, "onClick: error message 2");
                     Toast.makeText(AddEvent.this, "Please choose due time",
                             Toast.LENGTH_LONG).show();
                 }
                 // check event start and event end
-                else if (addedEvent.getEventStart().compareTo(addedEvent.getEventEnd()) > 0) {
+                else if (event.getEventStart().compareTo(event.getEventEnd()) > 0) {
                     Log.d(TAG, "onClick: error message 3");
                     Toast.makeText(AddEvent.this, "Event start cannot be after event end",
                             Toast.LENGTH_LONG).show();
@@ -561,12 +557,12 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                     loadData();
 
                     if (notes.getText() !=  null) {
-                        addedEvent.setNotes(notes.getText().toString());
+                        event.setNotes(notes.getText().toString());
                     }
 
                     DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME, null);
                     Log.d(TAG, "onClick: Right before event inserted");
-                    long insertResult = dbHelper.insertEvent(addedEvent);
+                    long insertResult = dbHelper.insertEvent(event);
 
                     // report the user if the event is saved
                     if (insertResult == -1)
@@ -614,8 +610,8 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getId() == R.id.event_type_spinner) {
-            if (addedEvent != null)
-                addedEvent.setType(parent.getItemAtPosition(position).toString());
+            if (event != null)
+                event.setType(parent.getItemAtPosition(position).toString());
         }
         else if (parent.getId() == R.id.repetition_type) {
             repetitionType = parent.getItemAtPosition(position).toString();
@@ -643,7 +639,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         Intent intent = new Intent(AddEvent.this, ReminderBroadCast.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(AddEvent.this, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        long dueTimeInMs = addedEvent.getEventStart().getTimeInMillis() ;
+        long dueTimeInMs = event.getEventStart().getTimeInMillis() ;
         long differenceToDue;
         if( notificationSpinner.equalsIgnoreCase("5 minutes prior"))
         {
@@ -671,7 +667,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         }
         Log.d(TAG, "dueTimeInMs - differenceToDue " + (dueTimeInMs - differenceToDue) );
         Log.d(TAG, "dueTimeInMs - differenceToDue " + (dueTimeInMs + "-" + differenceToDue) );
-        Log.d(TAG, "dueTimeInMs - differenceToDue " + addedEvent.getEventStart().toString() );
+        Log.d(TAG, "dueTimeInMs - differenceToDue " + event.getEventStart().toString() );
 
         alarmManager.set(AlarmManager.RTC_WAKEUP, dueTimeInMs - differenceToDue, pendingIntent);
     }
@@ -684,26 +680,26 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
             Log.d(TAG, "onClick: repetition number " + number );
 
             if (repetitionType.equalsIgnoreCase("Monthly")) {
-                Calendar newEventStart = addedEvent.getEventStart();
-                Calendar newEventEnd = addedEvent.getEventEnd();
+                Calendar newEventStart = event.getEventStart();
+                Calendar newEventEnd = event.getEventEnd();
                 DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
                 for (int i = 0; i< number;i++) {
                     newEventStart.add(Calendar.MONTH, 1);
                     newEventEnd.add(Calendar.MONTH, 1);
                     saveData();
                     loadData();
-                    CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
-                            eventID, addedEvent.getType());
-                    newEvent.setColor(addedEvent.getColor());
-                    newEvent.setLocation(addedEvent.getLocation());
-                    newEvent.setNotes(addedEvent.getNotes());
-                    newEvent.setNotifTime(addedEvent.getNotifTime());
+                    CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, event.getName(),
+                            eventID, event.getType());
+                    newEvent.setColor(event.getColor());
+                    newEvent.setLocation(event.getLocation());
+                    newEvent.setNotes(event.getNotes());
+                    newEvent.setNotifTime(event.getNotifTime());
                     dbHelper.insertEvent(newEvent);
                 }
             }
             else if (repetitionType.equalsIgnoreCase("Daily")) {
-                Calendar newEventStart = addedEvent.getEventStart();
-                Calendar newEventEnd = addedEvent.getEventEnd();
+                Calendar newEventStart = event.getEventStart();
+                Calendar newEventEnd = event.getEventEnd();
                 DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
                 Log.d(TAG, "onClick: database helper intialized");
                 for (int i = 0; i< number;i++) {
@@ -711,48 +707,48 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                     newEventEnd.add(Calendar.DAY_OF_MONTH, 1);
                     saveData();
                     loadData();
-                    CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
-                            eventID, addedEvent.getType());
-                    newEvent.setColor(addedEvent.getColor());
-                    newEvent.setLocation(addedEvent.getLocation());
-                    newEvent.setNotes(addedEvent.getNotes());
-                    newEvent.setNotifTime(addedEvent.getNotifTime());
+                    CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, event.getName(),
+                            eventID, event.getType());
+                    newEvent.setColor(event.getColor());
+                    newEvent.setLocation(event.getLocation());
+                    newEvent.setNotes(event.getNotes());
+                    newEvent.setNotifTime(event.getNotifTime());
                     dbHelper.insertEvent(newEvent);
                 }
             }
             else if (repetitionType.equalsIgnoreCase("Annually")) {
-                Calendar newEventStart = addedEvent.getEventStart();
-                Calendar newEventEnd = addedEvent.getEventEnd();
+                Calendar newEventStart = event.getEventStart();
+                Calendar newEventEnd = event.getEventEnd();
                 DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
                 for (int i = 0; i< number;i++) {
                     newEventStart.add(Calendar.YEAR, 7);
                     newEventEnd.add(Calendar.YEAR, 7);
                     saveData();
                     loadData();
-                    CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
-                            eventID, addedEvent.getType());
-                    newEvent.setColor(addedEvent.getColor());
-                    newEvent.setLocation(addedEvent.getLocation());
-                    newEvent.setNotes(addedEvent.getNotes());
-                    newEvent.setNotifTime(addedEvent.getNotifTime());
+                    CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, event.getName(),
+                            eventID, event.getType());
+                    newEvent.setColor(event.getColor());
+                    newEvent.setLocation(event.getLocation());
+                    newEvent.setNotes(event.getNotes());
+                    newEvent.setNotifTime(event.getNotifTime());
                     dbHelper.insertEvent(newEvent);
                 }
             }
             else if (repetitionType.equalsIgnoreCase("Weekly")) {
-                Calendar newEventStart = addedEvent.getEventStart();
-                Calendar newEventEnd = addedEvent.getEventEnd();
+                Calendar newEventStart = event.getEventStart();
+                Calendar newEventEnd = event.getEventEnd();
                 DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
                 for (int i = 0; i< number;i++) {
                     newEventStart.add(Calendar.DAY_OF_MONTH,7);
                     newEventEnd.add(Calendar.DAY_OF_MONTH,7);
                     saveData();
                     loadData();
-                    CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, addedEvent.getName(),
-                            eventID, addedEvent.getType());
-                    newEvent.setColor(addedEvent.getColor());
-                    newEvent.setLocation(addedEvent.getLocation());
-                    newEvent.setNotes(addedEvent.getNotes());
-                    newEvent.setNotifTime(addedEvent.getNotifTime());
+                    CalendarEvent newEvent = new CalendarEvent(newEventStart, newEventEnd, event.getName(),
+                            eventID, event.getType());
+                    newEvent.setColor(event.getColor());
+                    newEvent.setLocation(event.getLocation());
+                    newEvent.setNotes(event.getNotes());
+                    newEvent.setNotifTime(event.getNotifTime());
                     dbHelper.insertEvent( newEvent);
                 }
             }
@@ -764,25 +760,25 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
      */
     public void setAddEventView() {
         Log.d(TAG, "setAddEventView: setting the view");
-        event_type_spinner.setSelection(eventTypesAdapter.getPosition(addedEvent.getType()));
-        event_name.setText(addedEvent.getName());
+        event_type_spinner.setSelection(eventTypesAdapter.getPosition(event.getType()));
+        event_name.setText(event.getName());
         next.performClick();
-        if (addedEvent.getEventStart() != null) {
-            Log.d(TAG, "setAddEventView: event start " + addedEvent.getEventStart());
-            event_date.setText(formattedMonth(addedEvent.getEventStart().get(Calendar.MONTH))
-                    + " " + addedEvent.getEventStart().get(Calendar.DAY_OF_MONTH)
-                    + " " + addedEvent.getEventStart().get(Calendar.YEAR));
+        if (event.getEventStart() != null) {
+            Log.d(TAG, "setAddEventView: event start " + event.getEventStart());
+            event_date.setText(formattedMonth(event.getEventStart().get(Calendar.MONTH))
+                    + " " + event.getEventStart().get(Calendar.DAY_OF_MONTH)
+                    + " " + event.getEventStart().get(Calendar.YEAR));
         }
-        if (addedEvent.getType().equals("Assignment") && addedEvent.getEventStartTime() != null)
-            event_due_time.setText(addedEvent.getEventStartTime());
-        else if (addedEvent.getEventStartTime() != null && addedEvent.getEventEndTime() != null) {
-            event_start.setText("Start: " + addedEvent.getEventStartTime());
-            event_end.setText("End: " + addedEvent.getEventEndTime());
+        if (event.getType().equals("Assignment") && event.getEventStartTime() != null)
+            event_due_time.setText(event.getEventStartTime());
+        else if (event.getEventStartTime() != null && event.getEventEndTime() != null) {
+            event_start.setText("Start: " + event.getEventStartTime());
+            event_end.setText("End: " + event.getEventEndTime());
         }
-        Log.d(TAG, "onClick: notes" + addedEvent.getNotes());
-        if (addedEvent.getNotes() != null)
-            Log.d(TAG, "setAddEventView: event notes " + addedEvent.getNotes());
-            notes.setText(addedEvent.getNotes());
+        Log.d(TAG, "onClick: notes" + event.getNotes());
+        if (event.getNotes() != null)
+            Log.d(TAG, "setAddEventView: event notes " + event.getNotes());
+            notes.setText(event.getNotes());
     }
 
     public void rearrangeToEdit() {
@@ -792,16 +788,16 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addedEvent.setName(event_name.getText().toString());
+                event.setName(event_name.getText().toString());
                 saveData();
                 loadData();
 
                 if (notes.getText() !=  null) {
-                    addedEvent.setNotes(notes.getText().toString());
+                    event.setNotes(notes.getText().toString());
                 }
 
                 DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
-                long insertResult = dbHelper.insertEvent(addedEvent);
+                long insertResult = dbHelper.insertEvent(event);
 
                 // report the user if the event is saved
                 if (insertResult == -1)
@@ -812,7 +808,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                     Toast.makeText(AddEvent.this, "Changes made", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(AddEvent.this, EventActivity.class);
-                intent.putExtra(EventActivity.EVENT_VIEW_INTENT_KEY , addedEvent);
+                intent.putExtra(EventActivity.EVENT_VIEW_INTENT_KEY , event);
                 startActivity(intent);
             }
         });
