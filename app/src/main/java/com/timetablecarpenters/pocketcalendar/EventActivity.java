@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -70,12 +71,7 @@ public class EventActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-        buttonEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //todo: edit view open
-            }
-        });
+        buttonEdit.setOnClickListener(new EventActivity.ViewChangeClickListener());
 
 
         //set name and type text
@@ -128,5 +124,25 @@ public class EventActivity extends BaseActivity {
 
 
 
+    }
+
+    public class ViewChangeClickListener implements View.OnClickListener {
+        /**
+         * when clicked creates an intent of the desired activity and starts the activity
+         *
+         * @param v
+         */
+        @Override
+        public void onClick(View v) {
+            Intent intent;
+            switch (v.getId()) {
+                case R.id.button_edit:
+                    Log.d("EventActivity", "onClick: edit event opening");
+                    intent = new Intent(EventActivity.this, AddEvent.class);
+                    intent.putExtra(AddEvent.EDIT_EVENT_KEY, event);
+                    startActivity(intent);
+                    break;
+            }
+        }
     }
 }

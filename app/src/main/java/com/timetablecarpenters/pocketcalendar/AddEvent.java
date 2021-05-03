@@ -39,13 +39,14 @@ import java.util.Calendar;
 public class AddEvent extends BaseActivity implements AdapterView.OnItemSelectedListener{
 
     public static final String DATE_KEY = "Date";
+    public static final String EDIT_EVENT_KEY = "edit_event";
     public static final String ADD_ACTIVITY_NAME = "add_activity";
     public static final String TAG = "AddEventActivity";
     public static final String EVENT_ID_PREF = "eventID";
     public static final String EVENT_ID_VALUE = "value";
     private Spinner event_type_spinner, notification_spinner;
     private Spinner repetition_type;
-    private TextView event_due_time, event_date, event_start, event_end;
+    private TextView title, event_due_time, event_date, event_start, event_end;
     private EditText event_name, number_of_repetitions, notes;
     private LinearLayout linearLayout;
     private Button next, save;
@@ -60,7 +61,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
     private Button locationSelect;
     private MapFragment mapFragment;
     LayoutInflater layoutInflater;
-    private View addEventView;
+    private View addEventView, repetitionView;
     private ArrayAdapter<String> eventTypesAdapter;
     private boolean oldEvent = false;
 
@@ -85,13 +86,27 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                 if (extras.get(MapActivity.EVENT_KEY) != null) {
                     addedEvent = (CalendarEvent) extras.get(MapActivity.EVENT_KEY);
                     Log.d(TAG, "onCreate: event called back!");
-                    Log.d(TAG, "onCreate: event name: " + addedEvent.getName() + "start: " + addedEvent.getEventStart() +
+                    Log.d(TAG, "onCreate: event name: " + addedEvent.getName() + " start: " + addedEvent.getEventStart() +
                             " end: " + addedEvent.getEventStart() + " location " + addedEvent.getLocation());
                     setAddEventView();
                 }
             } catch (Exception e) {
                 Log.d(TAG, "onCreate: no event came out of intent " + e);
                 e.printStackTrace();
+            }
+            try {
+                if (extras.get(EDIT_EVENT_KEY) != null) {
+                    addedEvent = (CalendarEvent) extras.get(EDIT_EVENT_KEY);
+                    Log.d(TAG, "onCreate: event to be edited");
+                    Log.d(TAG, "onCreate: event name: " + addedEvent.getName() + " start: " + addedEvent.getEventStart() +
+                            " end: " + addedEvent.getEventStart() + " location " + addedEvent.getLocation());
+                    DBHelper dpHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME, null);
+                    dpHelper.deleteEvent(addedEvent);
+                    setAddEventView();
+                    rearrangeToEdit();
+                }
+            } catch (Exception e ) {
+                Log.d(TAG, "onCreate: no event came out of edit event intent " + e);
             }
         }
 
@@ -106,9 +121,13 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         addEventView = (View) layoutInflater.inflate(R.layout.activity_event_add, null);
         linearLayout = (LinearLayout) findViewById(R.id.add_event_linear);
 
-        if(addedEvent == null)
+        if (addedEvent == null) {
             addedEvent = new CalendarEvent(null, null, null, eventID, null);
-            addedEvent.setColor(R.color.primary_text);
+        addedEvent.setColor(R.color.primary_text);
+        }
+
+        title = linearLayout.findViewById(R.id.add_event);
+        title.setText("Add Event");
 
         final View typeAndNameView = layoutInflater.inflate(R.layout.add_event_type_and_name_item, null);
 
@@ -364,7 +383,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
      */
     private void addRepetition() {
         if (!addedEvent.getType().equals("Exam")) {
-            final View repetitionView = layoutInflater.inflate(R.layout.add_event_repetition_item, null);
+            repetitionView = layoutInflater.inflate(R.layout.add_event_repetition_item, null);
 
             repetition_type = (Spinner) repetitionView.findViewById(R.id.repetition_type);
             ArrayAdapter<String> repetitionTypesAdapter = new ArrayAdapter<>(AddEvent.this,
@@ -756,6 +775,39 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         if (addedEvent.getNotes() != null)
             Log.d(TAG, "setAddEventView: event notes " + addedEvent.getNotes());
             notes.setText(addedEvent.getNotes());
+    }
+
+    public void rearrangeToEdit() {
+        title.setText("Edit Event");
+        linearLayout.removeView(repetitionView);
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addedEvent.setName(event_name.getText().toString());
+                saveData();
+                loadData();
+
+                if (notes.getText() !=  null) {
+                    addedEvent.setNotes(notes.getText().toString());
+                }
+
+                DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
+                long insertResult = dbHelper.insertEvent(addedEvent);
+
+                // report the user if the event is saved
+                if (insertResult == -1)
+                    Toast.makeText(AddEvent.this, "Event couldn't be saved", Toast.LENGTH_SHORT).show();
+                else if (insertResult == -2)
+                    Toast.makeText(AddEvent.this, "Event already exists", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(AddEvent.this, "Changes made", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(AddEvent.this, EventActivity.class);
+                intent.putExtra(EventActivity.EVENT_VIEW_INTENT_KEY , addedEvent);
+                startActivity(intent);
+            }
+        });
     }
 
     private int ConvertIntoNumeric(String xVal)
