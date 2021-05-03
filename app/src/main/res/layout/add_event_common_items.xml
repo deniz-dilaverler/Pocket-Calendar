@@ -97,33 +97,6 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/add_event_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Notfication"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/colour_green" />
-
-    <CheckBox
-        android:id="@+id/notification_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBaseline_toBaselineOf="@+id/add_event_notification"
-        app:layout_constraintStart_toEndOf="@+id/add_event_notification" />
-
-    <Spinner
-        android:id="@+id/notifications_spinner"
-        android:layout_width="154dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/colour_yellow" />
-
-    <TextView
         android:id="@+id/add_event_notes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -132,7 +105,7 @@
         android:text="Notes"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_event_notification" />
+        app:layout_constraintTop_toBottomOf="@+id/colour_green" />
 
     <EditText
         android:id="@+id/add_notes"
