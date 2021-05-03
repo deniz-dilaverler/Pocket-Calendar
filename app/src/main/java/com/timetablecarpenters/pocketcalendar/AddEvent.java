@@ -63,7 +63,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
     LayoutInflater layoutInflater;
     private View addEventView, repetitionView;
     private ArrayAdapter<String> eventTypesAdapter;
-    private boolean oldEvent = false;
+    private boolean isEditView = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +96,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
             }
             try {
                 if (extras.get(EDIT_EVENT_KEY) != null) {
+                    isEditView = true;
                     addedEvent = (CalendarEvent) extras.get(EDIT_EVENT_KEY);
                     Log.d(TAG, "onCreate: event to be edited");
                     Log.d(TAG, "onCreate: event name: " + addedEvent.getName() + " start: " + addedEvent.getEventStart() +
