@@ -573,7 +573,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                         Toast.makeText(AddEvent.this, "Event successfully added", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(AddEvent.this, DayActivity.class);
-                    intent.putExtra(DayActivity.INTENT_KEY , thisDay);
+                    intent.putExtra(DayActivity.INTENT_KEY , event.getEventStart());
                     startActivity(intent);
                 }
 

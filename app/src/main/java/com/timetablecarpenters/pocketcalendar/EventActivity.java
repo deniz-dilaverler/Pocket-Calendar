@@ -111,7 +111,7 @@ public class EventActivity extends BaseActivity {
                 } else {
                     // opens the location in google maps
                     // Create a Uri from an intent string. Use the result to create an Intent.
-                    Uri gmmIntentUri = Uri.parse(String.format("geo:%f,%f", event.location.latitude, event.location.longitude));
+                    Uri gmmIntentUri = Uri.parse(String.format("geo:%f,%f?%f,%f", event.location.latitude, event.location.longitude, event.location.latitude, event.location.longitude));
                     Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                     mapIntent.setPackage("com.google.android.apps.maps");
                     startActivity(mapIntent);
@@ -128,7 +128,6 @@ public class EventActivity extends BaseActivity {
     public class ViewChangeClickListener implements View.OnClickListener {
         /**
          * when clicked creates an intent of the desired activity and starts the activity
-         *
          * @param v
          */
         @Override
