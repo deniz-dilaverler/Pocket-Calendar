@@ -554,7 +554,6 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                 }
                 // finalize the event and add to the database
                 else {
-                    linearLayout.removeView(commonItemsView);
                     saveData();
                     loadData();
 
