@@ -608,7 +608,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         Intent intent = new Intent(AddEvent.this, ReminderBroadCast.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(AddEvent.this, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        long dueTimeInMs = addedEvent.getEventStart().getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+        long dueTimeInMs = addedEvent.getEventStart().getTimeInMillis() ;
         long differenceToDue;
         if( notificationSpinner.equalsIgnoreCase("5 minutes prior"))
         {
