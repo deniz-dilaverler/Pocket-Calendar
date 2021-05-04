@@ -987,7 +987,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
      */
     public String notificationDate(Calendar date) {
         String result;
-        int year = date.get(Calendar.HOUR_OF_DAY);
+        int year = date.get(Calendar.YEAR);
         int day = date.get(Calendar.DAY_OF_MONTH);
         int month = date.get(Calendar.MONTH);
 
@@ -1001,7 +1001,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         else {
             result = result + "/" + month;
         }
-        result = result + year;
+        result = result + "/" + year;
 
         return result;
     }
