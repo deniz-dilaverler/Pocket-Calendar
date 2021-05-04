@@ -696,6 +696,8 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         PendingIntent pendingIntent = PendingIntent.getBroadcast(AddEvent.this, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
+
+
         long dueTimeInMs = event.getEventStart().getTimeInMillis() ;
         long differenceToDue;
 
@@ -730,6 +732,10 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         Log.d(TAG, "dueTimeInMs - differenceToDue " + event.getEventStart().toString() );
 
         alarmManager.set(AlarmManager.RTC_WAKEUP, dueTimeInMs - differenceToDue, pendingIntent);
+
+        Calendar notificationDate = Calendar.getInstance();
+        notificationDate.setTimeInMillis(dueTimeInMs - differenceToDue);
+        event.setNotifTime( notificationDate(notificationDate) + " " + notificationHourMinute(notificationDate));
     }
 
 
@@ -951,5 +957,53 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         {
             text.setTextSize(16);
         }
+    }
+    /**
+     * Returns the notification hour and minute as a String
+     * @return notification time
+     * @param date
+     */
+    public String notificationHourMinute( Calendar date) {
+        String result;
+        int hour = date.get(Calendar.HOUR_OF_DAY);
+        int minute = date.get(Calendar.MINUTE);
+
+        result = hour+"";
+        // making sure that the result is in HH:MM format
+        if(hour < 10)
+            result = 0 + result;
+        if (minute < 10) {
+            result = result + ":0" + minute;
+        } else {
+            result = result + ":" + minute;
+        }
+
+        return result;
+    }
+
+    /**
+     * Returns the notification day, month and year as a String
+     * @return notification time
+     * @param date
+     */
+    public String notificationDate(Calendar date) {
+        String result;
+        int year = date.get(Calendar.HOUR_OF_DAY);
+        int day = date.get(Calendar.DAY_OF_MONTH);
+        int month = date.get(Calendar.MONTH);
+
+        result = day+"";
+        // making sure that the result is in HH:MM format
+        if(day < 10)
+            result = 0 + result;
+        if (month < 10) {
+            result = result + "/0" + month;
+        }
+        else {
+            result = result + "/" + month;
+        }
+        result = result + year;
+
+        return result;
     }
 }
