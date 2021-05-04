@@ -1004,7 +1004,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
             result = result + "/0" + month;
         }
         else {
-            result = result + "/" + month;
+            result = result + "/" + (month + 1);
         }
         result = result + "/" + year;
 
