@@ -114,8 +114,9 @@ public class EventActivity extends BaseActivity {
         }
         // set mapview
         MapFragment mapFragment = new MapFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.event_map, mapFragment).commit();
         mapFragment.addEvent(event);
+
+        getSupportFragmentManager().beginTransaction().add(R.id.event_map, mapFragment).commit();
 
     }
 
