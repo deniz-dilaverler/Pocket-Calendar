@@ -90,8 +90,6 @@ public class DayActivity extends BaseActivity  {
         someView.setBackgroundColor( CustomizableScreen.getButtonColor());
         setOtherTexts();
 
-        System.out.println( "aaaaaaaaaaaaaaaa00000000000000" + events.length + "  " + orderedEventEnds.length + " " + allEventsChron.length );
-
         editInTextFont( findViewById( R.id.textView8));
 
         FloatingActionButton fab = findViewById(R.id.add_event_button);
@@ -247,7 +245,6 @@ public class DayActivity extends BaseActivity  {
                 }
             }
 
-            System.out.println( "PPPPPPPPPPPPPPPPPPPPPPPPPPPP            PPPPPPPPP " + (clockToInt( current2.getEventStart()) == clockToInt( events[eventsSmallest].getEventStart())));
             if ( counter1 < events.length && clockToInt( current2.getEventStart()) == clockToInt( events[eventsSmallest].getEventStart())) {
                 allEventsChron[i] = events[eventsSmallest];
                 CalendarEvent calev = events[counter1];
@@ -257,7 +254,6 @@ public class DayActivity extends BaseActivity  {
                 counter1++;
             }
             else if ( counter2 < orderedEventEnds.length && clockToInt( current1.getEventEnd()) == clockToInt( orderedEventEnds[orderedSmallest].getEventEnd())) {
-                System.out.println( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA            AAAAAAAAAAAAAAA " + counter2);
                 allEventsChron[i] = orderedEventEnds[orderedSmallest];
                 CalendarEvent calEv = orderedEventEnds[counter2];
                 orderedEventEnds[counter2] = orderedEventEnds[orderedSmallest];
@@ -291,11 +287,9 @@ public class DayActivity extends BaseActivity  {
 
         View recent = layout;
         // i is a global variable so that the clickListener can see the value
-        System.out.println( "OOOOOOOOOOO         ooooooooo " + allEventsChron.length);
         for ( int i = 0; i < allEventsChron.length ; i++) {
             if ( allEventsChron[i] != null) {
 
-                System.out.println( "OOOOOOOOOOO    AAAAAAAAAA     ooooooooo " + i);
                 if (isEventStart[i]) {
                     str = "[Start] " + allEventsChron[i].getEventStartTime();
                 } else {
