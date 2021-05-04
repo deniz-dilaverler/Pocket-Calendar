@@ -1,6 +1,8 @@
 package com.timetablecarpenters.pocketcalendar;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.widget.CursorAdapter;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import static android.content.Context.MODE_PRIVATE;
 
 
 import java.util.Calendar;
@@ -25,6 +28,7 @@ public class UpComingEventsAdapter extends CursorAdapter {
     private static final String TAG = "UpComingEventsAdapter";
     public final static int MAX_DAYS = 14;
     public Calendar today;
+    public Context context;
 
     /**
      * Today's date is saved for time comparrasant.
@@ -36,6 +40,7 @@ public class UpComingEventsAdapter extends CursorAdapter {
     public UpComingEventsAdapter(Context context, Cursor c, Calendar today) {
         super(context, c, 0);
         this.today = today;
+        this.context = context;
 
     }
 
@@ -65,6 +70,10 @@ public class UpComingEventsAdapter extends CursorAdapter {
         TextView timeText =  cardViewContents.findViewById(R.id.hour_text);
         TextView remainingTimeText = cardViewContents.findViewById(R.id.remaining_text);
         TextView eventDescText =  cardViewContents.findViewById(R.id.event_desc_text);
+        editParagraphFont(dateText);
+        editParagraphFont(timeText);
+        editParagraphFont(remainingTimeText);
+        editParagraphFont(eventDescText);
         ProgressBar progressBar = cardViewContents.findViewById(R.id.progressBar);
         RelativeLayout relativeLayout = cardViewContents.findViewById(R.id.upcoming_background);
 
@@ -132,5 +141,26 @@ public class UpComingEventsAdapter extends CursorAdapter {
         progressBar.setMax(todayToMax);
         progressBar.setProgress(todayToMax - minuteDifference);
         Log.d(TAG, "bindView: End");
+    }
+    /**
+     * Edits the font sizes of textViews according to settings
+     * It changes the font sizes of paragraphs
+     * @param text is the TextView
+     */
+    public void editParagraphFont(TextView text){
+        SharedPreferences sp = context.getApplicationContext().getSharedPreferences("paragraphPref", MODE_PRIVATE);
+        String paragraphFontSize = sp.getString("paragraphFontSize","");
+        if (paragraphFontSize.equals("Small"))
+        {
+            text.setTextSize(10);
+        }
+        if (paragraphFontSize.equals("Medium"))
+        {
+            text.setTextSize(12);
+        }
+        if (paragraphFontSize.equals("Large"))
+        {
+            text.setTextSize(14);
+        }
     }
 }

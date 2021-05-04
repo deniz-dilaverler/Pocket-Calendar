@@ -6,9 +6,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.google.android.gms.maps.model.LatLng;
-
 import 	java.util.Calendar;
 
 /**
@@ -105,82 +103,163 @@ public class CalendarEvent implements Parcelable {
     }
 
 
+    /**
+     * Returns event start
+     * @return eventStart
+     */
     public Calendar getEventStart() {
         return eventStart;
     }
 
+    /**
+     * Sets the event start
+     * @param eventStart
+     */
     public void setEventStart(Calendar eventStart) {
         this.eventStart = eventStart;
     }
 
+    /**
+     * Returns event end
+     * @return eventEnd
+     */
     public Calendar getEventEnd() {
         return eventEnd;
     }
 
+    /**
+     * Sets the event end
+     * @param eventEnd
+     */
     public void setEventEnd(Calendar eventEnd) {
         this.eventEnd = eventEnd;
     }
 
+    /**
+     * Returns event name
+     * @return name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the event name
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns event location
+     * @return location
+     */
     public LatLng getLocation() {
         return location;
     }
 
+    /**
+     * Sets the event location
+     * @param location
+     */
     public void setLocation(LatLng location) {
         this.location = location;
     }
 
+    /**
+     * Returns event notes
+     * @return notes
+     */
     public String getNotes() {
         return notes;
     }
 
+    /**
+     * Sets the event notes
+     * @param notes
+     */
     public void setNotes(String notes) {
         this.notes = notes;
     }
 
+    /**
+     * Returns event notification time
+     * @return notifTime
+     */
     public String getNotifTime() {
         return notifTime;
     }
 
+    /**
+     * Sets the event notifTime
+     * @param notifTime
+     */
     public void setNotifTime(String notifTime) {
         this.notifTime = notifTime;
     }
 
+    /**
+     * Returns event id
+     * @return id
+     */
     public long getId() {
         return id;
     }
 
+    /**
+     * Sets the event id
+     * @param id
+     */
     public void setId(long id) {
         this.id = id;
     }
 
+    /**
+     * Returns event type
+     * @return type
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Sets the event type
+     * @param type
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * Returns event start day as integer
+     * @return eventStart day
+     */
     public int getDay(){
         return eventStart.get(Calendar.DATE);
     }
 
+    /**
+     * Returns event start month as integer
+     * @return eventStart month
+     */
     public int getMonth(){
         return eventStart.get(Calendar.MONTH);
     }
 
+    /**
+     * Returns event start year as integer
+     * @return eventStart year
+     */
     public int getYear(){
         return eventStart.get(Calendar.YEAR);
     }
 
+
+    /**
+     * Returns the event start time as a String
+     * @return event start time
+     */
     public String getEventStartTime() {
         String result;
         int hour = eventStart.get(Calendar.HOUR_OF_DAY);
@@ -199,6 +278,10 @@ public class CalendarEvent implements Parcelable {
         return result;
     }
 
+    /**
+     * Returns the event end time as a String
+     * @return event end time
+     */
     public String getEventEndTime() {
         String result;
         int hour = eventEnd.get(Calendar.HOUR_OF_DAY);
@@ -217,13 +300,27 @@ public class CalendarEvent implements Parcelable {
         return result;
     }
 
-    //TODO: ADDED BY ALPEREN TEMPORARILY
+    /**
+     * Sets the event color
+     * @param c
+     */
     public void setColor(int c) {
         color = c;
     }
+
+    /**
+     * Returns event color
+     * @return color
+     */
     public int getColor() {
         return this.color;
     }
+
+    /**
+     * Compares two events in terms of names
+     * @param anEvent
+     * @return if the events are equal in terms of name
+     */
     public boolean equals2( CalendarEvent anEvent) {
         if ( anEvent.getName().equals( this.getName())) {
             return true;
@@ -232,8 +329,5 @@ public class CalendarEvent implements Parcelable {
             return false;
         }
     }
-
-
-
 }
 

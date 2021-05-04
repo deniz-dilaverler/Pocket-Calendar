@@ -234,7 +234,6 @@ public class BaseActivity extends AppCompatActivity implements GestureDetector.O
             weeklyButton.setTextSize(18);
             dailyButton.setTextSize(18);
         }
-        //Toast.makeText(BaseActivity.this,"is selected",Toast.LENGTH_LONG).show();
     }
 
 

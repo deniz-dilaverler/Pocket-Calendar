@@ -158,29 +158,5 @@ public class WeekActivity extends BaseActivity {
             weekDayName.setTextSize(18);
         }
     }
-    /**
-     * Edits the font sizes of textViews according to settings
-     * It changes the font sizes of paragraphs
-     * @param weekDayName is the day name of the week
-     */
-    public void editParagraphFont(TextView weekDayName){
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("paragraphPref", MODE_PRIVATE);
-        String paragraphFontSize = sp.getString("paragraphFontSize","");
-        if (paragraphFontSize.equals(SMALL))
-        {
-
-        }
-        if (paragraphFontSize.equals(MEDIUM))
-        {
-
-        }
-        if (paragraphFontSize.equals(LARGE))
-        {
-
-        }
-
-
-    }
-
 
 }

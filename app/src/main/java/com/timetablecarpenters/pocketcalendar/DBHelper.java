@@ -149,6 +149,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
             try {
                 cv.put(NOTIF_TIME, event.getNotifTime());
+                if (event.getNotifTime() == null) {
+                    Log.d(TAG, "insertEvent: event has no notif time");
+                }
             } catch (Exception e) {
                 Log.e(TAG, "insertEvent: NotifTime " + e);
             }
@@ -275,7 +278,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 int color;
                 String notifTime;
                 CalendarEvent eventToAdd;
-                //TODO: add code for setting the notifTime
+
                 Calendar eventStart = Calendar.getInstance();
                 eventStart.set(Calendar.YEAR, cursor.getInt(cursor.getColumnIndex(DBHelper.YEAR)));
                 eventStart.set(Calendar.MONTH, cursor.getInt(cursor.getColumnIndex(DBHelper.MONTH)));
@@ -327,6 +330,16 @@ public class DBHelper extends SQLiteOpenHelper {
                 } catch (Exception e) {
                     Log.e(TAG, "getEventsInAnIntervalInArray: ", e );
                 }
+
+                try {
+                    eventToAdd.setNotifTime(cursor.getString(cursor.getColumnIndex(NOTIF_TIME)));
+                    if (cursor.getString(cursor.getColumnIndex(NOTIF_TIME)) == null)
+                        Log.d(TAG, "getEventsInAnIntervalInArray: no notif time returned");
+                } catch (Exception e) {
+                    Log.e(TAG, "getEventsInAnIntervalInArray: ", e );
+                }
+
+
 
                events.add(eventToAdd);
 
