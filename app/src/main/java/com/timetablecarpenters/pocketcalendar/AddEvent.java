@@ -672,7 +672,12 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
 
     }
 
+    /**
+     * Creates a notification channel through which notifications could be sent
+     */
     public void createNotificationChannel() {
+
+        // notification channels are a must for Android level higher than or equal to Oreo.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("channel", "channel1", NotificationManager.IMPORTANCE_HIGH);
             channel.setDescription("simple channel");
@@ -681,13 +686,19 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         }
     }
 
+    /**
+     * Adds notification to the event present as a field in the AddEvent class
+     */
     public void addNotificationToEvent() {
         String notificationSpinner = notification_spinner.getSelectedItem().toString();
         Intent intent = new Intent(AddEvent.this, ReminderBroadCast.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(AddEvent.this, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
         long dueTimeInMs = event.getEventStart().getTimeInMillis() ;
         long differenceToDue;
+
+        // arranges the time of difference between notification and time of event
         if( notificationSpinner.equalsIgnoreCase("5 minutes prior"))
         {
             differenceToDue = 5 * 60 * 1000;
@@ -712,6 +723,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         {
             differenceToDue = 12 * 60 * 60 * 1000;
         }
+
         Log.d(TAG, "dueTimeInMs - differenceToDue " + (dueTimeInMs - differenceToDue) );
         Log.d(TAG, "dueTimeInMs - differenceToDue " + (dueTimeInMs + "-" + differenceToDue) );
         Log.d(TAG, "dueTimeInMs - differenceToDue " + event.getEventStart().toString() );
@@ -719,9 +731,15 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         alarmManager.set(AlarmManager.RTC_WAKEUP, dueTimeInMs - differenceToDue, pendingIntent);
     }
 
+
+    /**
+     * Repeats the event present as a field in the AddEvent class
+     */
     public void repeatEvent() {
         repetition_type.setEnabled(false);
         number_of_repetitions.setEnabled(false);
+
+
         if (number_of_repetitions != null && repetitionType != null) {
             int number = ConvertIntoNumeric(number_of_repetitions.getText().toString());
             Log.d(TAG, "onClick: repetition number " + number );
@@ -730,6 +748,8 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                 Calendar newEventStart = event.getEventStart();
                 Calendar newEventEnd = event.getEventEnd();
                 DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
+
+                // adding the repeated events with the same properties
                 for (int i = 0; i< number;i++) {
                     newEventStart.add(Calendar.MONTH, 1);
                     newEventEnd.add(Calendar.MONTH, 1);
@@ -744,11 +764,14 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                     dbHelper.insertEvent(newEvent);
                 }
             }
+
             else if (repetitionType.equalsIgnoreCase("Daily")) {
                 Calendar newEventStart = event.getEventStart();
                 Calendar newEventEnd = event.getEventEnd();
                 DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
                 Log.d(TAG, "onClick: database helper intialized");
+
+                // adding the repeated events with the same properties
                 for (int i = 0; i< number;i++) {
                     newEventStart.add(Calendar.DAY_OF_MONTH, 1);
                     newEventEnd.add(Calendar.DAY_OF_MONTH, 1);
@@ -763,10 +786,13 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                     dbHelper.insertEvent(newEvent);
                 }
             }
+
             else if (repetitionType.equalsIgnoreCase("Annually")) {
                 Calendar newEventStart = event.getEventStart();
                 Calendar newEventEnd = event.getEventEnd();
                 DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
+
+                // adding the repeated events with the same properties
                 for (int i = 0; i< number;i++) {
                     newEventStart.add(Calendar.YEAR, 7);
                     newEventEnd.add(Calendar.YEAR, 7);
@@ -781,10 +807,13 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                     dbHelper.insertEvent(newEvent);
                 }
             }
+
             else if (repetitionType.equalsIgnoreCase("Weekly")) {
                 Calendar newEventStart = event.getEventStart();
                 Calendar newEventEnd = event.getEventEnd();
                 DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME,null);
+
+                // adding the repeated events with the same properties
                 for (int i = 0; i< number;i++) {
                     newEventStart.add(Calendar.DAY_OF_MONTH,7);
                     newEventEnd.add(Calendar.DAY_OF_MONTH,7);
@@ -861,6 +890,11 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         });
     }
 
+    /**
+     * Converts String to numeric by checking for the null pointer exception
+     * @param xVal
+     * @return
+     */
     private int ConvertIntoNumeric(String xVal)
     {
         try
