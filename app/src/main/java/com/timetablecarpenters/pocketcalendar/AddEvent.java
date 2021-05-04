@@ -603,9 +603,19 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                         event.setNotes(notes.getText().toString());
                     }
 
+                    if ( notification.isChecked()) {
+                        addNotificationToEvent();
+                    }
+
                     DBHelper dbHelper = new DBHelper(AddEvent.this, DBHelper.DB_NAME, null);
                     Log.d(TAG, "onClick: Right before event inserted");
                     long insertResult = dbHelper.insertEvent(event);
+
+                    if (!event.getType().equals("Assignment")) {
+                        if (repeat.isChecked()) {
+                            repeatEvent();
+                        }
+                    }
 
                     // report the user if the event is saved
                     if (insertResult == -1)
@@ -617,17 +627,6 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                         Intent intent = new Intent(AddEvent.this, DayActivity.class);
                         intent.putExtra(DayActivity.INTENT_KEY, event.getEventStart());
                         startActivity(intent);
-                    }
-
-                }
-
-                if ( notification.isChecked()) {
-                    addNotificationToEvent();
-                }
-
-                if (!event.getType().equals("Assignment")) {
-                    if (repeat.isChecked()) {
-                        repeatEvent();
                     }
                 }
             }
