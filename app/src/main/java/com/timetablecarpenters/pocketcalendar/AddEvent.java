@@ -863,10 +863,15 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
             notes.setText(event.getNotes());
     }
 
+    /**
+     * Arranges add event view to be edit event view
+     */
     public void rearrangeToEdit() {
         title.setText("Edit Event");
         linearLayout.removeView(repetitionView);
+        notification.setEnabled(false);
 
+        // reset the clicklistener for the save button
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -987,7 +992,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
      */
     public String notificationDate(Calendar date) {
         String result;
-        int year = date.get(Calendar.HOUR_OF_DAY);
+        int year = date.get(Calendar.YEAR);
         int day = date.get(Calendar.DAY_OF_MONTH);
         int month = date.get(Calendar.MONTH);
 
@@ -1001,7 +1006,7 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
         else {
             result = result + "/" + month;
         }
-        result = result + year;
+        result = result + "/" + year;
 
         return result;
     }
