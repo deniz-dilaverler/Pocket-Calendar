@@ -59,8 +59,10 @@ public class MapFragment extends Fragment {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_LOCATION, INITIAL_ZOOM));
             mapReady = true;
 
-            if (event != null && event.location != null)
+            if (event != null && event.getLocation() != null && (event.getLocation().latitude != 0 && event.getLocation().longitude != 0)) {
+                Log.d(TAG, "onMapReady: setting location on map");
                 moveToLocation(event.getLocation());
+            }    
 
 
         }
