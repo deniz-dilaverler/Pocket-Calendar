@@ -19,6 +19,7 @@ import java.util.Calendar;
  * @version 03.05.2021
  */
 public class EventActivity extends BaseActivity {
+    private static final String TAG = "EventActivity";
     public final static String EVENT_VIEW_INTENT_KEY ="get_event";
     private CalendarEvent event;
     private Toolbar toolbar;
@@ -108,6 +109,8 @@ public class EventActivity extends BaseActivity {
         String notifTime = event.getNotifTime();
         if(notifTime != null) {
             notificationText.setText("Notifications: " + notifTime);
+        } else {
+            Log.d(TAG, "initEventView: notification not found ");
         }
         // set mapview
         MapFragment mapFragment = new MapFragment();
