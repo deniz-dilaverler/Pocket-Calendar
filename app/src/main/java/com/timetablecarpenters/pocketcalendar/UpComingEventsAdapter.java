@@ -28,7 +28,7 @@ public class UpComingEventsAdapter extends CursorAdapter {
     private static final String TAG = "UpComingEventsAdapter";
     public final static int MAX_DAYS = 14;
     public Calendar today;
-    Context context;
+    public Context context;
 
     /**
      * Today's date is saved for time comparrasant.
