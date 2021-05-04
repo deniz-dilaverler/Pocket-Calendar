@@ -51,7 +51,7 @@
         <activity android:name=".EventActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.PocketCalendar.NoActionBar"
-            android:label="EventView"/>
+            android:label="Event View"/>
         <activity
             android:screenOrientation="portrait"
             android:name=".CustomizableScreen"

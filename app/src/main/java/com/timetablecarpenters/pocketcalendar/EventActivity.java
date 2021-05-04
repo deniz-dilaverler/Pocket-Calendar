@@ -2,12 +2,15 @@ package com.timetablecarpenters.pocketcalendar;
 
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
+
 import java.util.Calendar;
 
 /**
@@ -18,10 +21,13 @@ import java.util.Calendar;
 public class EventActivity extends BaseActivity {
     public final static String EVENT_VIEW_INTENT_KEY ="get_event";
     private CalendarEvent event;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+        toolbar = (Toolbar) findViewById(R.id.settingsToolbar);
+        setSupportActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
         if(extras != null)
@@ -124,4 +130,5 @@ public class EventActivity extends BaseActivity {
         intent.putExtra(DayActivity.INTENT_KEY, event.getEventStart());
         startActivity(intent);
     }
+
 }

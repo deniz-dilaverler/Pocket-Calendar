@@ -3,8 +3,11 @@ package com.timetablecarpenters.pocketcalendar;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import java.util.Calendar;
+import android.view.ViewGroup;
 
 /**
  * An activity that shows the user events coming up on the next 14 days
@@ -15,6 +18,7 @@ public class UpcomingEvents extends BaseActivity {
     private static final String TAG = "UpcomingEvents";
     public Calendar today;
     public final int TOTAL_DAYS = 14;
+
 
     /**
      * calls when the Activity is started, receives data from the db about the events on the next 14 days.
