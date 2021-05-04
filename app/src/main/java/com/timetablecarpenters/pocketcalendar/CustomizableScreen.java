@@ -42,8 +42,9 @@ public class CustomizableScreen extends AppCompatActivity {
         recordedValues = PreferenceManager.getDefaultSharedPreferences( this);
         editValues = recordedValues.edit();
 
-
-
+        setEditTexts( findViewById( R.id.rgb1), buttonBackgroundColorUn);
+        setEditTexts( findViewById( R.id.rgb2), textColorUnapplied);
+        setEditTexts( findViewById( R.id.rgb3), backgroundColorUnapplied);
 
         checkSharedPreferences();
         apply();
@@ -123,8 +124,16 @@ public class CustomizableScreen extends AppCompatActivity {
                 setBackgroundAndTextColor( colorText);
                 Toast.makeText(CustomizableScreen.this, "Color is selected",
                         Toast.LENGTH_SHORT).show();
+                setEditTexts( findViewById( R.id.rgb1), buttonBackgroundColorUn);
+                setEditTexts( findViewById( R.id.rgb2), textColorUnapplied);
+                setEditTexts( findViewById( R.id.rgb3), backgroundColorUnapplied);
             }
         });
+    }
+    private void setEditTexts( View rGB, int color) {
+        ((EditText) rGB.findViewById(R.id.editTextNumber)).setText( "" + Color.red(color));
+        ((EditText) rGB.findViewById(R.id.editTextNumber1)).setText( "" + Color.green(color));
+        ((EditText) rGB.findViewById(R.id.editTextNumber2)).setText( "" + Color.blue(color));
     }
     private int createRGBReceiver( View rGB) {
         int t1,t2,t3;
