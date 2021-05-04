@@ -863,10 +863,15 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
             notes.setText(event.getNotes());
     }
 
+    /**
+     * Arranges add event view to be edit event view
+     */
     public void rearrangeToEdit() {
         title.setText("Edit Event");
         linearLayout.removeView(repetitionView);
+        notification.setEnabled(false);
 
+        // reset the clicklistener for the save button
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
