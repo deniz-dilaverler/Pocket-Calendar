@@ -15,9 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </RelativeLayout>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/date_text"
@@ -50,15 +48,6 @@
         android:text="TextView"
         app:layout_constraintStart_toStartOf="@+id/date_text"
         app:layout_constraintTop_toBottomOf="@+id/date_text" />
-
-    <TextView
-        android:id="@+id/remaining_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="136dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/progressBar"
-        app:layout_constraintStart_toEndOf="@+id/hour_text" />
 
     <ProgressBar
         android:id="@+id/progressBar"

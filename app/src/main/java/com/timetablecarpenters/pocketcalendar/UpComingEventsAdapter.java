@@ -68,11 +68,11 @@ public class UpComingEventsAdapter extends CursorAdapter {
 
         TextView dateText =  cardViewContents.findViewById(R.id.date_text);
         TextView timeText =  cardViewContents.findViewById(R.id.hour_text);
-        TextView remainingTimeText = cardViewContents.findViewById(R.id.remaining_text);
+        //TextView remainingTimeText = cardViewContents.findViewById(R.id.remaining_text);
         TextView eventDescText =  cardViewContents.findViewById(R.id.event_desc_text);
         editParagraphFont(dateText);
         editParagraphFont(timeText);
-        editParagraphFont(remainingTimeText);
+        //editParagraphFont(remainingTimeText);
         editParagraphFont(eventDescText);
         ProgressBar progressBar = cardViewContents.findViewById(R.id.progressBar);
         RelativeLayout relativeLayout = cardViewContents.findViewById(R.id.upcoming_background);
@@ -92,7 +92,7 @@ public class UpComingEventsAdapter extends CursorAdapter {
         relativeLayout.setBackgroundColor( CustomizableScreen.getButtonColor());
         dateText.setTextColor( CustomizableScreen.getBackGColor());
         timeText.setTextColor( CustomizableScreen.getBackGColor());
-        remainingTimeText.setTextColor( CustomizableScreen.getBackGColor());
+        //remainingTimeText.setTextColor( CustomizableScreen.getBackGColor());
         eventDescText.setTextColor( CustomizableScreen.getBackGColor());
         progressBar.setDrawingCacheBackgroundColor( CustomizableScreen.getBackGColor());
 
@@ -112,9 +112,10 @@ public class UpComingEventsAdapter extends CursorAdapter {
 
         eventDate.set(year, month, day, Integer.parseInt(endTime.substring(0, 2)), Integer.parseInt(endTime.substring(3)));
         int minuteDifference = (int) TimeUnit.MINUTES.convert(eventDate.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS);
-        int minuteDifferenceEventEnd = (int) TimeUnit.MINUTES.convert(eventDateEnd.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS);
+        // int minuteDifferenceEventEnd = (int) TimeUnit.MINUTES.convert(eventDateEnd.getTime().getTime() - today.getTime().getTime(), TimeUnit.MILLISECONDS);
 
         //formats the "Time remaining" text according to how much time left until the event
+        /*
         if (minuteDifference <= 0) {
             if (minuteDifferenceEventEnd > 0)
                 remainingTimeTextString = "Event Has Started!";
@@ -130,7 +131,9 @@ public class UpComingEventsAdapter extends CursorAdapter {
         else
             remainingTimeTextString = "";
 
-        remainingTimeText.setText(remainingTimeTextString);
+         */
+
+        //remainingTimeText.setText(remainingTimeTextString);
         Calendar max = (Calendar) today.clone();
         max.add(Calendar.DATE, MAX_DAYS + 1);
         max.set(Calendar.HOUR, 0);
