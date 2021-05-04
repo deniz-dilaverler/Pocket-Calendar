@@ -181,7 +181,6 @@ public class CustomizableScreen extends AppCompatActivity {
                 Math.min(b, 255));
     }
     public static void apply() {
-
         backgroundColor = backgroundColorUnapplied;
         textColor = textColorUnapplied;
         buttonBackgroundColor = buttonBackgroundColorUn;

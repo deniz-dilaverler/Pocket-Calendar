@@ -29,6 +29,20 @@ public class EventActivity extends BaseActivity {
         toolbar = (Toolbar) findViewById(R.id.settingsToolbar);
         setSupportActionBar(toolbar);
 
+
+        // set colors
+        ( (TextView) findViewById( R.id.event_name)).setTextColor( CustomizableScreen.getBackGColor());
+        ( (TextView) findViewById( R.id.event_type)).setTextColor( CustomizableScreen.getBackGColor());
+        ( (TextView) findViewById( R.id.date_text_view)).setTextColor( CustomizableScreen.getBackGColor());
+        ( (TextView) findViewById( R.id.event_time)).setTextColor( CustomizableScreen.getBackGColor());
+        ( (TextView) findViewById( R.id.event_notifications)).setTextColor( CustomizableScreen.getBackGColor());
+        ( (TextView) findViewById( R.id.event_notes)).setTextColor( CustomizableScreen.getBackGColor());
+        ( (TextView) findViewById( R.id.event_location)).setTextColor( CustomizableScreen.getBackGColor());
+        ( (TextView) findViewById( R.id.notes_contents)).setTextColor( CustomizableScreen.getBackGColor());
+        ( findViewById( R.id.notes_contents)).setBackgroundColor( CustomizableScreen.getButtonColor());
+        ( findViewById( R.id.event_view_back)).setBackgroundColor( CustomizableScreen.backgroundColor);
+
+
         Bundle extras = getIntent().getExtras();
         if(extras != null)
             event = (CalendarEvent) extras.get(EVENT_VIEW_INTENT_KEY);
