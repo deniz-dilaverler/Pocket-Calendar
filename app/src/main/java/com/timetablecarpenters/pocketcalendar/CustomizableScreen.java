@@ -140,7 +140,12 @@ public class CustomizableScreen extends AppCompatActivity {
         if ( t1 == 0 && t2 == 0 && t3 == 0) {
             return 1000000;
         }
-        return android.graphics.Color.rgb( t1, t2, t3);
+        if ( t1 > 255 || t2 > 255 || t3 > 255) {
+            Toast.makeText(CustomizableScreen.this, "Please select values from 0 to 255 for RGB",
+                    Toast.LENGTH_SHORT).show();
+        }
+        return android.graphics.Color.rgb( Math.min( 255, t1), Math.min( 255, t2), Math.min( 255, t3));
+
     }
     public static void setBackgroundAndTextColor( TextView input) {
         ColorDrawable cd = (ColorDrawable) input.getBackground();
