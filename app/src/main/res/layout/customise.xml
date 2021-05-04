@@ -279,7 +279,7 @@
         app:layout_constraintStart_toEndOf="@+id/default6" />
 
     <include
-        android:id="@+id/month_content"
+        android:id="@+id/rgb1"
         layout="@layout/customise_rgb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -291,7 +291,7 @@
         app:layout_constraintTop_toBottomOf="@+id/backgroundColor3" />
 
     <include
-        android:id="@+id/month_content"
+        android:id="@+id/rgb2"
         layout="@layout/customise_rgb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -304,7 +304,7 @@
         app:layout_constraintTop_toBottomOf="@+id/backgroundColor5" />
 
     <include
-        android:id="@+id/month_content"
+        android:id="@+id/rgb3"
         layout="@layout/customise_rgb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

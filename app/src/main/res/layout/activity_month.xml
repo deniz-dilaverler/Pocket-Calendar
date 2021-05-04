@@ -22,7 +22,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
-        android:id="@+id/month_content"
+        android:id="@+id/rgb1"
         layout="@layout/content_month" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

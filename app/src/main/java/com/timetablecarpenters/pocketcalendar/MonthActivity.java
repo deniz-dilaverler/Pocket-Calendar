@@ -49,7 +49,7 @@ public class MonthActivity extends BaseActivity {
             Log.d(TAG, "onCreate: SA" );
             today = Calendar.getInstance();
         }
-        TextView date = findViewById( R.id.month_content).findViewById( R.id.dateText);
+        TextView date = findViewById( R.id.rgb1).findViewById( R.id.dateText);
         date.setText( today.get( Calendar.YEAR) + " " + formattedMonth( today.get(
                 Calendar.MONTH)));
         //Create two calendar instances to get the events in a such interval from the database.

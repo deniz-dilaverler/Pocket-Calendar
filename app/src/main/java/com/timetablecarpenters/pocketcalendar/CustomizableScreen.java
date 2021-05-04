@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,9 @@ public class CustomizableScreen extends AppCompatActivity {
         recordedValues = PreferenceManager.getDefaultSharedPreferences( this);
         editValues = recordedValues.edit();
 
+
+
+
         checkSharedPreferences();
         apply();
         for ( int i : ids) {
@@ -49,9 +53,23 @@ public class CustomizableScreen extends AppCompatActivity {
         findViewById( R.id.button3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (createRGBReceiver( findViewById( R.id.rgb1)) != 1000000) {
+                    buttonBackgroundColorUn = createRGBReceiver( findViewById( R.id.rgb1));
+                }
+                if (createRGBReceiver( findViewById( R.id.rgb2)) != 1000000) {
+                    textColorUnapplied = createRGBReceiver( findViewById( R.id.rgb2));
+                }
+                if (createRGBReceiver( findViewById( R.id.rgb3)) != 1000000) {
+                    backgroundColorUnapplied = createRGBReceiver( findViewById( R.id.rgb3));
+                }
+
+
                 apply();
                 Toast.makeText(CustomizableScreen.this, "Color has been applied",
                         Toast.LENGTH_SHORT).show();
+
+
+
                 editValues.putInt( "Background_value", backgroundColor);
                 editValues.putInt( "Text_color_value", textColor);
                 editValues.putInt( "Button_color_value", buttonBackgroundColor);
@@ -108,7 +126,22 @@ public class CustomizableScreen extends AppCompatActivity {
             }
         });
     }
-
+    private int createRGBReceiver( View rGB) {
+        int t1,t2,t3;
+        if (! (((EditText) rGB.findViewById( R.id.editTextNumber)).getText().toString()).equals( "")) {
+            t1 = Integer.parseInt(((EditText) rGB.findViewById(R.id.editTextNumber)).getText().toString());
+        } else { t1 = 0;}
+        if (! (((EditText) rGB.findViewById( R.id.editTextNumber1)).getText().toString()).equals( "")) {
+            t2 = Integer.parseInt(((EditText) rGB.findViewById(R.id.editTextNumber1)).getText().toString());
+        } else { t2 = 0;}
+        if (! (((EditText) rGB.findViewById( R.id.editTextNumber2)).getText().toString()).equals( "")) {
+            t3 = Integer.parseInt(((EditText) rGB.findViewById(R.id.editTextNumber2)).getText().toString());
+        } else { t3 = 0;}
+        if ( t1 == 0 && t2 == 0 && t3 == 0) {
+            return 1000000;
+        }
+        return android.graphics.Color.rgb( t1, t2, t3);
+    }
     public static void setBackgroundAndTextColor( TextView input) {
         ColorDrawable cd = (ColorDrawable) input.getBackground();
         backgroundColorUnapplied = cd.getColor();
@@ -148,6 +181,7 @@ public class CustomizableScreen extends AppCompatActivity {
                 Math.min(b, 255));
     }
     public static void apply() {
+
         backgroundColor = backgroundColorUnapplied;
         textColor = textColorUnapplied;
         buttonBackgroundColor = buttonBackgroundColorUn;
