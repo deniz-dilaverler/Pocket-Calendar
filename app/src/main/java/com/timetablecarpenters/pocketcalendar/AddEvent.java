@@ -612,8 +612,10 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                     long insertResult = dbHelper.insertEvent(event);
 
                     if (!event.getType().equals("Assignment")) {
-                        if (repeat.isChecked()) {
-                            repeatEvent();
+                        if ( repeat != null) {
+                            if (repeat.isChecked()) {
+                                repeatEvent();
+                            }
                         }
                     }
 

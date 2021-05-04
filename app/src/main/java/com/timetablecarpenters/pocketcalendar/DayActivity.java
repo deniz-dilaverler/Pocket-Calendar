@@ -33,6 +33,11 @@ public class DayActivity extends BaseActivity  {
 
         Bundle extras;
 
+        allEventsChron = null;
+        orderedEventEnds = null;
+        events = null;
+        isEventStart = null;
+
         //initiate...
         extras = getIntent().getExtras();
         if ( extras != null) {
@@ -63,14 +68,14 @@ public class DayActivity extends BaseActivity  {
         calendar1.set( Calendar.MONTH, thisDay.get( Calendar.MONTH));
         calendar1.set( Calendar.YEAR, thisDay.get( Calendar.YEAR));
         calendar1.set( Calendar.DATE, thisDay.get( Calendar.DATE));
-        calendar1.add( Calendar.DATE, -1);
+        calendar1.add( Calendar.DATE, 0);
         calendar1.set( Calendar.HOUR_OF_DAY, 0);
         calendar1.set( Calendar.MINUTE, 0);
         Calendar calendar2 = Calendar.getInstance();
         calendar2.set( Calendar.MONTH, thisDay.get( Calendar.MONTH));
         calendar2.set( Calendar.YEAR, thisDay.get( Calendar.YEAR));
         calendar2.set( Calendar.DATE, thisDay.get( Calendar.DATE));
-        calendar2.add( Calendar.DATE, 1);
+        calendar2.add( Calendar.DATE, 0);
         calendar2.set( Calendar.HOUR_OF_DAY, 23);
         calendar2.set( Calendar.MINUTE, 59);
         pullEventsOfDay( database.getEventsInAnIntervalInArray( calendar1, calendar2));
@@ -84,6 +89,8 @@ public class DayActivity extends BaseActivity  {
         someView = findViewById( R.id.day_back_color2);
         someView.setBackgroundColor( CustomizableScreen.getButtonColor());
         setOtherTexts();
+
+        System.out.println( "aaaaaaaaaaaaaaaa00000000000000" + events.length + "  " + orderedEventEnds.length + " " + allEventsChron.length );
 
         editInTextFont( findViewById( R.id.textView8));
 
@@ -220,10 +227,10 @@ public class DayActivity extends BaseActivity  {
         }
 
         for( int i = 0; i < events.length + orderedEventEnds.length; i++) {
-            current1 = new CalendarEvent( calendar2000, calendar2000,
-                    "dsladjas" + calendar2000.get( Calendar.MINUTE), 0, ".");
-            current2 = new CalendarEvent( calendar1000, calendar1000,
-                    "dsladjas" + calendar1000.get( Calendar.MINUTE), 1, ".");
+            current1 = new CalendarEvent( calendar1000, calendar1000,
+                    "dsladjas" + calendar1000.get( Calendar.MINUTE), 0, ".");
+            current2 = new CalendarEvent( calendar2000, calendar2000,
+                    "dsladjas" + calendar2000.get( Calendar.MINUTE), 1, ".");
 
             for ( int a = counter2; a < orderedEventEnds.length; a++) {
                 if ( clockToInt( orderedEventEnds[a].getEventEnd())
@@ -240,7 +247,8 @@ public class DayActivity extends BaseActivity  {
                 }
             }
 
-            if ( counter1 < events.length && clockToInt( current1.getEventEnd()) > clockToInt( current2.getEventStart())) {
+            System.out.println( "PPPPPPPPPPPPPPPPPPPPPPPPPPPP            PPPPPPPPP " + (clockToInt( current2.getEventStart()) == clockToInt( events[eventsSmallest].getEventStart())));
+            if ( counter1 < events.length && clockToInt( current2.getEventStart()) == clockToInt( events[eventsSmallest].getEventStart())) {
                 allEventsChron[i] = events[eventsSmallest];
                 CalendarEvent calev = events[counter1];
                 events[counter1] = events[eventsSmallest];
@@ -248,7 +256,8 @@ public class DayActivity extends BaseActivity  {
                 isEventStart[i] = true;
                 counter1++;
             }
-            else if ( counter2 < orderedEventEnds.length && clockToInt( current1.getEventEnd()) < clockToInt( current2.getEventStart())) {
+            else if ( counter2 < orderedEventEnds.length && clockToInt( current1.getEventEnd()) == clockToInt( orderedEventEnds[orderedSmallest].getEventEnd())) {
+                System.out.println( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA            AAAAAAAAAAAAAAA " + counter2);
                 allEventsChron[i] = orderedEventEnds[orderedSmallest];
                 CalendarEvent calEv = orderedEventEnds[counter2];
                 orderedEventEnds[counter2] = orderedEventEnds[orderedSmallest];
@@ -282,8 +291,11 @@ public class DayActivity extends BaseActivity  {
 
         View recent = layout;
         // i is a global variable so that the clickListener can see the value
+        System.out.println( "OOOOOOOOOOO         ooooooooo " + allEventsChron.length);
         for ( int i = 0; i < allEventsChron.length ; i++) {
             if ( allEventsChron[i] != null) {
+
+                System.out.println( "OOOOOOOOOOO    AAAAAAAAAA     ooooooooo " + i);
                 if (isEventStart[i]) {
                     str = "[Start] " + allEventsChron[i].getEventStartTime();
                 } else {
