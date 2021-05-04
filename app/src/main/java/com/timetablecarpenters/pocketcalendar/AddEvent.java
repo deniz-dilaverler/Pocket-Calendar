@@ -624,10 +624,12 @@ public class AddEvent extends BaseActivity implements AdapterView.OnItemSelected
                 if ( notification.isChecked()) {
                     addNotificationToEvent();
                 }
-                if( repeat.isChecked()) {
-                    repeatEvent();
-                }
 
+                if (!event.getType().equals("Assignment") && !event.getType().equals("Birthday")) {
+                    if (repeat.isChecked()) {
+                        repeatEvent();
+                    }
+                }
             }
         });
 
