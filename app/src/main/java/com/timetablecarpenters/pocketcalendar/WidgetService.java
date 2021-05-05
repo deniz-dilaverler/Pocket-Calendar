@@ -78,7 +78,7 @@ public class WidgetService extends RemoteViewsService {
             Log.d(TAG, "getViewAt: current event: " + event.getName());
             views.setTextViewText(R.id.widget_event_title, event.getName());
 
-            String dateString = String.format("%d.%d.%d", event.getDay(), event.getMonth() , event.getYear());
+            String dateString = String.format("%d.%d.%d", event.getDay(), event.getMonth() + 1 , event.getYear());
             views.setTextViewText(R.id.widget_date_text, dateString );
 
             String timeText = event.getEventStartTime();
