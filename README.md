@@ -1,2 +1,2 @@
 # Pocket-Calendar
-Simple Calendar Application on Android
+Simple Calendar Application on Android - Freshman group project
